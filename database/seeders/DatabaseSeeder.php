@@ -57,7 +57,7 @@ class DatabaseSeeder extends Seeder
             'is_active' => 0,
             'is_admin' => 1,
             'email' => 'admin1@gmail.com',
-            'role_1' => 'admin',
+            'idrole' => 1,
             'password' => Hash::make('123456'),
             'adresse'=>'Makepe',
             'phone'=>'660041366',
