@@ -11,6 +11,7 @@
                             <div class="col-xl-12">
                                 <div class="auth-form">
 {{--                                    <h4 class="text-center mb-4"></h4>--}}
+                                    @include('_partial._flash-message')
                                     <form method="POST" action="{{ route('login') }}">
                                         <div class="form-group">
                                             @csrf

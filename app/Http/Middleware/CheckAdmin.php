@@ -19,7 +19,7 @@ class CheckAdmin
     {
         $is_superAdmin = Auth::user()->is_admin;
 //        $superAdmin = Auth::user()->role;
-        if ($is_superAdmin ==1){
+        if ($is_superAdmin ==0){
             return redirect()->back()->with('danger','Désolé vous ne pouvez pas accèder à ce menu.');
         }
         return $next($request);

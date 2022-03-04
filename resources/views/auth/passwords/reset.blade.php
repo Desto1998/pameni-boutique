@@ -11,6 +11,7 @@
                             <div class="col-xl-12">
                                 <div class="auth-form">
                                     <h4 class="text-center mb-4">Recuperer mon compte</h4>
+                                    @include('_partial._flash-message')
                                     <form  method="POST" action="{{ route('password.update') }}">
                                         <div class="form-group">
                                             @csrf

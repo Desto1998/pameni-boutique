@@ -25,4 +25,10 @@ class HomeController extends Controller
     {
         return view('home');
     }
+
+    public function text()
+    {
+        return redirect(route('home'))->with('warning','Un bon test reuissi toujours!');
+    }
+
 }

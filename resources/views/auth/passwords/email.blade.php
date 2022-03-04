@@ -10,6 +10,7 @@
                         <div class="row no-gutters">
                             <div class="col-xl-12">
                                 <div class="auth-form">
+                                    @include('_partial._flash-message')
                                     <h4 class="text-center mb-4">Recuperer mon compte</h4>
                                     <form method="POST" action="{{ route('password.email') }}">
                                         <div class="form-group">
