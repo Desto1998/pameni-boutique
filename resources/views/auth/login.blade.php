@@ -2,15 +2,15 @@
 
 @section('content')
 
-    <div class="authincation h-100">
+    <div class="authincation h-100 mt-5">
         <div class="container-fluid h-100">
             <div class="row justify-content-center h-100 align-items-center">
-                <div class="col-md-5">
+                <div class="col-md-4">
                     <div class="authincation-content">
                         <div class="row no-gutters">
                             <div class="col-xl-12">
                                 <div class="auth-form">
-                                    <h4 class="text-center mb-4"></h4>
+{{--                                    <h4 class="text-center mb-4"></h4>--}}
                                     <form method="POST" action="{{ route('login') }}">
                                         <div class="form-group">
                                             @csrf

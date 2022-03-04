@@ -21,7 +21,8 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{{('template/images/favicon.png')}}">
     <link href="{{asset('template/css/style.css')}}" rel="stylesheet">
 </head>
-<body class="h-100 mt-5">
+<body class="h-100 mt-5" style="background-image: url('{{ asset('images/bg/bg1.jpg') }}');
+    background-size: 1500px; background-repeat: no-repeat">
 <!--*******************
        Preloader start
    ********************-->
@@ -36,9 +37,9 @@
     Preloader end
 ********************-->
 {{--<div id="">--}}
-<div id="main-wrapper">
+<div id="main-wrapper" class="auth-layout" >
 
-    <main class="py-4">
+    <main class="">
         @yield('content')
     </main>
 </div>
