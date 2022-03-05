@@ -15,5 +15,7 @@ class Taches extends Model
         'date_ajout',
         'raison',
         'iduser',
+        'staut',
+        'idcharge',
     ];
 }

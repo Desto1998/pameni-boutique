@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\GestionController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\AccountValidation;
@@ -44,6 +45,16 @@ Route::prefix('dashboard')->group(function () {
             Route::post('user/updateInfos', [UserController::class, 'updateInfos'])->name('user.edit.infos');
             Route::post('user/updatepassword', [UserController::class, 'updatePassword'])->name('user.edit.password');
             Route::post('user/profile/image', [UserController::class, 'UpdateImage'])->name('user.profil.image');
+
+            Route::get('gestion/charges', [GestionController::class, 'charge'])->name('gestion.index');
+            Route::post('gestion/charges/add', [GestionController::class, 'storeCharge'])->name('gestion.charge.add');
+            Route::post('gestion/charges/delete', [GestionController::class, 'deleteCharge'])->name('gestion.charge.delete');
+
+            Route::get('gestion/tasks', [UserController::class, 'UpdateImage'])->name('gestion.tache');
+            Route::post('gestion/tasks/add', [UserController::class, 'UpdateImage'])->name('gestion.taches.add');
+            Route::post('gestion/tasks/edit', [UserController::class, 'UpdateImage'])->name('gestion.taches.edit');
+            Route::post('gestion/tasks/delete', [UserController::class, 'UpdateImage'])->name('gestion.taches.delete');
+            Route::post('gestion/calendar', [UserController::class, 'UpdateImage'])->name('gestion.calendrier');
         });
 
 
@@ -58,7 +69,8 @@ Route::prefix('dashboard')->group(function () {
             Route::get('user/edit/{id}', [UserController::class, 'editUser'])->name('user.edit');
             Route::post('user/edit/store', [UserController::class, 'updateUser'])->name('user.edit.store');
             Route::post('user/delete', [UserController::class, 'deleteUser'])->name('user.delete');
-
+            Route::get('user/activate/{id}', [UserController::class, 'activate'])->name('activate_compte');
+            Route::get('user/block/{id}', [UserController::class, 'block'])->name('block_compte');
             });
         });
     });

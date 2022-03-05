@@ -59,8 +59,8 @@ create table fournisseurs
     idpays            int null,
     ville_fr          varchar(255) null,
     adresse_fr        varchar(255) null,
-    logo_fr       varchar(255),
-    date_ajout_fr        date         not null,
+    logo_fr           varchar(255),
+    date_ajout_fr     date         not null,
     contribuable      varchar(100) default null,
     slogan            varchar(500),
     siteweb           varchar(500) null,
@@ -91,7 +91,7 @@ create table produits
     reference           varchar(20)  not null,
     titre_produit       varchar(255) not null,
     description_produit varchar(1000) null,
-    idcategorie         int          not null,
+    idcategorie         int           null,
     created_at          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at          DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -103,10 +103,8 @@ create table charges
     titre       varchar(20) not null,
     description varchar(1000) null,
     iduser      int,
-    created_at
-                TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at  DATETIME  DEFAULT CURRENT_TIMESTAMP ON
-        UPDATE CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at  DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 drop table if exists taches;
@@ -117,23 +115,13 @@ create table taches
     date_fin   date not null,
     date_ajout date not null,
     raison     varchar(1000) null,
-    iduser     int not null,
+    idcharge     int  not null,
+    iduser     int  not null,
+    staut     int  default 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-drop table if exists taches;
-create table taches
-(
-    tache_id   int primary key AUTO_INCREMENT,
-    date_debut date not null,
-    date_fin   date not null,
-    date_ajout date not null,
-    raison     varchar(1000) null,
-    statut     int       default 0,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 drop table if exists devis;
 create table devis
@@ -148,9 +136,41 @@ create table devis
     disponibilite        varchar(1000) null,
     garentie             varchar(1000) null,
     condition_financiere varchar(1000) null,
+    date_paie            date null,
     iduser               int         not null,
     created_at           TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at           DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+drop table if exists factures;
+create table factures
+(
+    facture_id           int primary key AUTO_INCREMENT,
+    reference_fact       varchar(20) not null,
+    date_fact            date        not null,
+    statut               int       default 0,
+    idclient             int         not null,
+    objet                varchar(1000) null,
+    disponibilite        varchar(1000) null,
+    garentie             varchar(1000) null,
+    condition_financiere varchar(1000) null,
+    iduser               int         not null,
+    created_at           TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at           DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+drop table if exists produit_factures;
+create table produit_factures
+(
+    produit_f_id int primary key AUTO_INCREMENT,
+    quantite    int   not null,
+    prix        float not null,
+    remise      float null,
+    idfacture  int   not null,
+    idproduit   int   not null,
+    iduser      int   not null,
+    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at  DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 drop table if exists commentaires;
@@ -162,9 +182,26 @@ create table commentaires
     statut_commentaire int       default 0,
     idcommande         int null,
     iddevis            int null,
+    idfacture          int null,
     iduser             int           not null,
     created_at         TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at         DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+drop table if exists paiements;
+create table paiements
+(
+    paiement_id   int primary key AUTO_INCREMENT,
+    mode          varchar(255)  not null,
+    date_paiement date          not null,
+    description   varchar(1000) not null,
+    statut        int       default 1,
+    idcommande    int null,
+    iddevis       int null,
+    idfacture     int null,
+    iduser        int           not null,
+    created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at    DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 drop table if exists pocedes;
@@ -239,8 +276,8 @@ create table complements
     complement_id int primary key AUTO_INCREMENT,
     quantite      int   not null,
     prix          float not null,
-    idproduit int not null,
-    iddevis    int not null,
+    idproduit     int   not null,
+    iddevis       int   not null,
     iduser        int   not null,
     created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at    DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

@@ -20,9 +20,9 @@ class DatabaseSeeder extends Seeder
             'firstname' => 'admin',
             'lastname' => 'super',
             'is_active' => 1,
-            'is_admin' => 2,
+            'is_admin' => 1,
             'email' => 'admin@gmail.com',
-            'idrole' => 2,
+            'idrole' => 1,
             'password' => Hash::make('123456'),
             'adresse'=>'logpom',
             'phone'=>'679353205',
@@ -32,9 +32,9 @@ class DatabaseSeeder extends Seeder
             'firstname' => 'Desto',
             'lastname' => 'super text',
             'is_active' => 1,
-            'is_admin' => 2,
+            'is_admin' => 1,
             'email' => 'desto237@gmail.com',
-            'idrole' => 2,
+            'idrole' => 1,
             'password' => Hash::make('123456'),
             'adresse'=>'logpom',
             'phone'=>'679353205',
@@ -45,7 +45,7 @@ class DatabaseSeeder extends Seeder
             'is_active' => 1,
             'is_admin' => 1,
             'email' => 'admin2@gmail.com',
-            'idrole' => 2,
+            'idrole' => 1,
             'password' => Hash::make('123456'),
             'adresse'=>'Makepe',
             'phone'=>'660041366',
@@ -69,7 +69,7 @@ class DatabaseSeeder extends Seeder
             'is_active' => 1,
             'is_admin' => 0,
             'email' => 'user1@gmail.com',
-            'idrole' => 1,
+            'idrole' => 2,
             'password' => Hash::make('123456'),
             'adresse'=>'Douala',
             'phone'=>'660041366',
@@ -81,7 +81,7 @@ class DatabaseSeeder extends Seeder
             'is_active' => 0,
             'is_admin' => 0,
             'email' => 'user2@gmail.com',
-            'idrole' => 1,
+            'idrole' => 2,
             'password' => Hash::make('123456'),
             'adresse'=>'Douala',
             'phone'=>'660041366',
@@ -93,17 +93,18 @@ class DatabaseSeeder extends Seeder
             'is_active' => 1,
             'is_admin' => 0,
             'email' => 'user3@gmail.com',
-            'idrole' => 1,
+            'idrole' => 2,
             'password' => Hash::make('123456'),
             'adresse'=>'Douala',
             'phone'=>'660041366',
         ]);
 
         DB::table('roles')->insert([
-            'title' => 'Utilisateur',
-        ]);
-        DB::table('roles')->insert([
             'title' => 'administrateur',
         ]);
+        DB::table('roles')->insert([
+            'title' => 'Utilisateur',
+        ]);
+
     }
 }

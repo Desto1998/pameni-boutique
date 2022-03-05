@@ -5,22 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Devis extends Model
+class Factures extends Model
 {
     use HasFactory;
-    protected $primaryKey = 'devis_id';
+
+    protected $primaryKey = 'facture_id';
     protected $fillable = [
-        'reference_devis',
-        'date_devis',
+
+        'reference_fact',
+        'date_fact',
         'statut',
         'idclient',
-        'validite',
         'objet',
         'disponibilite',
         'garentie',
         'condition_financiere',
-        'iduser',
-        'date_paie',
-
+        'iduser'
     ];
 }

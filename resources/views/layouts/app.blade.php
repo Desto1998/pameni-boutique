@@ -206,6 +206,17 @@
                     {{--                        <li><a href="./index.html">Dashboard 1</a></li>--}}
                     {{--                        <li><a href="./index2.html">Dashboard 2</a></li></ul>--}}
                 </li>
+{{--                <li class="nav-label">GESTION DES UTILISATEURS</li>--}}
+                <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false"><i
+                            class="icon icon-payment"></i><span class="nav-text">Gestions</span></a>
+                    <ul aria-expanded="false">
+                        <li><a href="{{ route('gestion.index') }}">Charges</a></li>
+
+                        <li><a href="{{ route('gestion.tache') }}">Taches</a></li>
+                        <li><a href="{{ route('gestion.calendrier') }}">Calendrier</a></li>
+                        <li><a href="{{ route('gestion.calendrier') }}">Rapport</a></li>
+                    </ul>
+                </li>
                 @if (Auth::user()->is_admin==1)
                     <li class="nav-label">GESTION DES UTILISATEURS</li>
                     <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false"><i

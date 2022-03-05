@@ -213,4 +213,25 @@ class UserController extends Controller
             return redirect()->back()->with('danger',"Désolé une erreur s'est produit! Veillez reéssayer.");
         }
     }
+
+
+    public function activate($id)
+    {
+        $data = "";
+        $data = User::where('id', $id)->update(['is_active' => 1]);
+//        return Response()->json($data);
+        return redirect()->back()->with('success','Le compte a été activé avec succès!');
+
+    }
+
+
+    public function block($id)
+    {
+        $data = "";
+        $data = User::where('id', $id)->update(['is_active' => 0]);
+//        return Response()->json($data);
+        return redirect()->back()->with('success','Le compte a été bloqué avec succès!');
+
+    }
+
 }

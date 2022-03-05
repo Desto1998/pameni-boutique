@@ -15,7 +15,7 @@
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="javascript:void(0)">Dashboard</a></li>
-                                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Users</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0)">Users</a></li>
                 </ol>
             </div>
         </div>
@@ -23,7 +23,8 @@
             <div class="col-md-12">
                 <div class="card px-3">
                     <div class="card-body">
-                        <a href="{{ route('user.add') }}" title="Ajouter un utilisateur" class="btn btn-primary mb-3 float-right">
+                        <a href="{{ route('user.add') }}" title="Ajouter un utilisateur"
+                           class="btn btn-primary mb-3 float-right">
                             <i class="fa fa-plus"></i>&nbsp;&nbsp;Nouveau
                         </a>
                         <div class="table-responsive">
@@ -36,6 +37,7 @@
                                     <th>Email</th>
                                     <th>Téléphone</th>
                                     <th>Role</th>
+                                    <th>Statut</th>
                                     <th>Crée le</th>
                                     <th>Action</th>
                                 </tr>
@@ -53,14 +55,49 @@
                                                 <span class="p-2 text-info">Administrateur</span>
                                             @endif
                                             @if($value->is_admin==0)
-                                                <span class="p-2 text-danger">Utilisateur</span>
+                                                <span class="p-2 text-success">Utilisateur</span>
+                                            @endif
+
+                                        </td>
+                                        <td>
+                                            @if($value->is_active>=1)
+                                                <span class="p-2 text-info">Actif</span>
+                                            @endif
+                                            @if($value->is_active==0)
+                                                <span class="p-2 text-danger">Bloqué</span>
                                             @endif
 
                                         </td>
                                         <td>{{ $value->created_at }}</td>
                                         <td class="d-flex">
-                                            <a href="{{ route('user.edit', ['id'=>$value->id]) }}" class="btn btn-warning btn-sm" title="Modifier le compte" ><i class="fa fa-edit"></i></a>
-                                            <button class="btn btn-danger btn-sm ml-2 " title="Supprimer" onclick="deleteUser({{ $value->id }})"><i class="fa fa-trash"></i></button>
+                                            @if(Auth::user()->id != $value->id)
+                                                <a href="{{ route('user.edit', ['id'=>$value->id]) }}"
+                                                   class="btn btn-warning btn-sm" title="Modifier le compte"><i
+                                                        class="fa fa-edit"></i></a>
+                                                <button class="btn btn-danger btn-sm ml-1 " title="Supprimer"
+                                                        onclick="deleteUser({{ $value->id }})"><i
+                                                        class="fa fa-trash"></i></button>
+
+                                                @if($value->is_active==1)
+
+                                                    <a type="button" class="btn btn-dark ml-1 btn-sm"
+                                                       href="{{ route('block_compte', ['id'=>$value->id]) }}"
+                                                       title="Bloquer le compte">
+                                                        <i class="fa fa-fw fa-lock"></i>
+                                                    </a>
+
+                                                @endif
+                                                @if($value->is_active==0)
+
+                                                    <a title="Activer le compte"
+                                                       class="btn btn-success btn-sm ml-1"
+                                                       href="{{ route('activate_compte', ['id'=>$value->id]) }}"
+                                                       id="activate-user">
+                                                        <i class="fa fa-fw fa-check"></i>
+                                                    </a>
+
+                                                @endif
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
@@ -73,6 +110,7 @@
                                     <th>Email</th>
                                     <th>Téléphone</th>
                                     <th>Role</th>
+                                    <th>Statut</th>
                                     <th>Crée le</th>
                                     <th>Action</th>
                                 </tr>
@@ -90,8 +128,7 @@
 @endsection
 @section('script')
     <script>
-        function deleteUser(id)
-        {
+        function deleteUser(id) {
             if (confirm("Supprimer cet utilisateur?") == true) {
                 $.ajaxSetup({
                     headers: {
@@ -116,6 +153,65 @@
                 });
             }
         }
+        {{--function blockFunc(id) {--}}
+        {{--    $('#success').addClass('hidden');--}}
+        {{--    $('#error').addClass('hidden');--}}
+        {{--    $.ajaxSetup({--}}
+        {{--        headers: {--}}
+        {{--            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')--}}
+        {{--        }--}}
+        {{--    });--}}
+        {{--    $.ajax({--}}
+        {{--        type: "POST",--}}
+        {{--        url: "{{ route('block_compte') }}",--}}
+        {{--        data: {id: id},--}}
+        {{--        dataType: 'json',--}}
+        {{--        success: function (res) {--}}
+        {{--            if (res) {--}}
+
+        {{--                $('#success').removeClass('hidden');--}}
+        {{--                $('#error').addClass('hidden');--}}
+        {{--                $('#succesActionModal').show(50);--}}
+        {{--                window.location.reload(200);--}}
+
+        {{--            } else {--}}
+        {{--                $('#success').addClass('hidden');--}}
+        {{--                $('#error').removeClass('hidden');--}}
+        {{--            }--}}
+
+        {{--        }--}}
+        {{--    });--}}
+        {{--}--}}
+
+        {{--function activateFunc(id) {--}}
+        {{--    $('#success').addClass('hidden');--}}
+        {{--    $('#error').addClass('hidden');--}}
+        {{--    $.ajaxSetup({--}}
+        {{--        headers: {--}}
+        {{--            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')--}}
+        {{--        }--}}
+        {{--    });--}}
+        {{--    $.ajax({--}}
+        {{--        type: "POST",--}}
+        {{--        url: "{{ route('activate_compte') }}",--}}
+        {{--        data: {id: id},--}}
+        {{--        dataType: 'json',--}}
+        {{--        success: function (res) {--}}
+        {{--            if (res) {--}}
+
+        {{--                $('#success').removeClass('hidden');--}}
+        {{--                $('#error').addClass('hidden');--}}
+        {{--                $('#succesActionModal').removeClass('hidden');--}}
+        {{--                window.location.reload(200);--}}
+
+        {{--            } else {--}}
+        {{--                $('#success').addClass('hidden');--}}
+        {{--                $('#error').removeClass('hidden');--}}
+        {{--            }--}}
+
+        {{--        }--}}
+        {{--    });--}}
+        {{--}--}}
 
     </script>
     <!-- Datatable -->
