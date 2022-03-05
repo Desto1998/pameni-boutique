@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('css_before')
     <link href="{{asset('template/vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">
+    <link href="{{asset('template/vendor/sweetalert2/dist/sweetalert2.min.css')}}" rel="stylesheet">
 
 @endsection
 @section('content')
@@ -70,11 +71,11 @@
                                         </td>
                                         <td>{{ $value->created_at }}</td>
                                         <td class="d-flex">
-                                            <a href="{{ route('user.edit', ['id'=>$value->id]) }}"
 
+                                            <a href="{{ route('user.edit', ['id'=>$value->id]) }}"                     class="btn btn-warning btn-sm" title="Modifier le compte"><i
+                                                    class="fa fa-edit"></i></a>
                                                @if(Auth::user()->id != $value->id)
-                                                   class="btn btn-warning btn-sm" title="Modifier le compte"><i
-                                                        class="fa fa-edit"></i></a>
+
                                                 <button class="btn btn-danger btn-sm ml-1 " title="Supprimer"
                                                         onclick="deleteUser({{ $value->id }})"><i
                                                         class="fa fa-trash"></i></button>
@@ -118,93 +119,54 @@
 @section('script')
     <script>
         function deleteUser(id) {
-            if (confirm("Supprimer cet utilisateur?") == true) {
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    type: "POST",
-                    url: "{{ route('user.delete') }}",
-                    data: {id: id},
-                    dataType: 'json',
-                    success: function (res) {
-                        if (res) {
-                            alert("Supprimé avec succès!");
-                            window.location.reload(200);
+                swal.fire({
+                    title: "Supprimer cette compte?",
+                    icon: 'question',
+                    text: "Ce compte sera supprimé de façon définitive.",
+                    type: "warning",
+                    showCancelButton: !0,
+                    confirmButtonText: "Oui, supprimer!",
+                    cancelButtonText: "Non, annuler !",
+                    reverseButtons: !0
+                }).then(function (e) {
+                    if (e.value === true) {
+                        // if (confirm("Supprimer cette tâches?") == true) {
+                        $.ajaxSetup({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            }
+                        });
+                        $.ajax({
+                            type: "POST",
+                            url: "{{ route('user.delete') }}",
+                            data: {id: id},
+                            dataType: 'json',
+                            success: function (res) {
+                                if (res) {
+                                    swal.fire("Effectué!", "Supprimé avec succès!", "success")
+                                    window.location.reload(200);
 
-                        } else {
-                            alert("Une erreur s'est produite!");
-                        }
+                                } else {
+                                    sweetAlert("Désolé!", "Erreur lors de la suppression!", "error")
+                                }
 
+                            },
+                            error: function (resp) {
+                                sweetAlert("Désolé!", "Une erreur s'est produite.", "error");
+                            }
+                        });
+                    } else {
+                        e.dismiss;
                     }
-                });
-            }
+                }, function (dismiss) {
+                    return false;
+                })
+                // }
         }
-        {{--function blockFunc(id) {--}}
-        {{--    $('#success').addClass('hidden');--}}
-        {{--    $('#error').addClass('hidden');--}}
-        {{--    $.ajaxSetup({--}}
-        {{--        headers: {--}}
-        {{--            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')--}}
-        {{--        }--}}
-        {{--    });--}}
-        {{--    $.ajax({--}}
-        {{--        type: "POST",--}}
-        {{--        url: "{{ route('block_compte') }}",--}}
-        {{--        data: {id: id},--}}
-        {{--        dataType: 'json',--}}
-        {{--        success: function (res) {--}}
-        {{--            if (res) {--}}
-
-        {{--                $('#success').removeClass('hidden');--}}
-        {{--                $('#error').addClass('hidden');--}}
-        {{--                $('#succesActionModal').show(50);--}}
-        {{--                window.location.reload(200);--}}
-
-        {{--            } else {--}}
-        {{--                $('#success').addClass('hidden');--}}
-        {{--                $('#error').removeClass('hidden');--}}
-        {{--            }--}}
-
-        {{--        }--}}
-        {{--    });--}}
-        {{--}--}}
-
-        {{--function activateFunc(id) {--}}
-        {{--    $('#success').addClass('hidden');--}}
-        {{--    $('#error').addClass('hidden');--}}
-        {{--    $.ajaxSetup({--}}
-        {{--        headers: {--}}
-        {{--            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')--}}
-        {{--        }--}}
-        {{--    });--}}
-        {{--    $.ajax({--}}
-        {{--        type: "POST",--}}
-        {{--        url: "{{ route('activate_compte') }}",--}}
-        {{--        data: {id: id},--}}
-        {{--        dataType: 'json',--}}
-        {{--        success: function (res) {--}}
-        {{--            if (res) {--}}
-
-        {{--                $('#success').removeClass('hidden');--}}
-        {{--                $('#error').addClass('hidden');--}}
-        {{--                $('#succesActionModal').removeClass('hidden');--}}
-        {{--                window.location.reload(200);--}}
-
-        {{--            } else {--}}
-        {{--                $('#success').addClass('hidden');--}}
-        {{--                $('#error').removeClass('hidden');--}}
-        {{--            }--}}
-
-        {{--        }--}}
-        {{--    });--}}
-        {{--}--}}
-
     </script>
     <!-- Datatable -->
     <script src="{{asset('template/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
     <script src="{{asset('template/js/plugins-init/datatables.init.js')}}"></script>
+    <script src="{{asset('template/vendor/sweetalert2/dist/sweetalert2.min.js')}}"></script>
 
 @endsection
