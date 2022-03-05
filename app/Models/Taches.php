@@ -17,5 +17,7 @@ class Taches extends Model
         'iduser',
         'staut',
         'idcharge',
+        'prix',
+        'nombre',
     ];
 }

@@ -70,8 +70,9 @@
                                         </td>
                                         <td>{{ $value->created_at }}</td>
                                         <td class="d-flex">
-                                            @if(Auth::user()->id != $value->id)
-                                                <a href="{{ route('user.edit', ['id'=>$value->id]) }}"
+                                            <a href="{{ route('user.edit', ['id'=>$value->id]) }}"
+
+                                               @if(Auth::user()->id != $value->id)
                                                    class="btn btn-warning btn-sm" title="Modifier le compte"><i
                                                         class="fa fa-edit"></i></a>
                                                 <button class="btn btn-danger btn-sm ml-1 " title="Supprimer"
@@ -102,19 +103,7 @@
                                     </tr>
                                 @endforeach
                                 </tbody>
-                                <tfoot>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Nom</th>
-                                    <th>Prénom</th>
-                                    <th>Email</th>
-                                    <th>Téléphone</th>
-                                    <th>Role</th>
-                                    <th>Statut</th>
-                                    <th>Crée le</th>
-                                    <th>Action</th>
-                                </tr>
-                                </tfoot>
+
                             </table>
                         </div>
 

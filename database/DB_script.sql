@@ -91,7 +91,7 @@ create table produits
     reference           varchar(20)  not null,
     titre_produit       varchar(255) not null,
     description_produit varchar(1000) null,
-    idcategorie         int           null,
+    idcategorie         int null,
     created_at          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at          DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -103,7 +103,7 @@ create table charges
     titre       varchar(20) not null,
     description varchar(1000) null,
     iduser      int,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at  DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -115,9 +115,11 @@ create table taches
     date_fin   date not null,
     date_ajout date not null,
     raison     varchar(1000) null,
-    idcharge     int  not null,
+    nombre     int  not null,
+    prix       float  not null,
+    idcharge   int  not null,
     iduser     int  not null,
-    staut     int  default 1,
+    staut      int       default 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -163,14 +165,14 @@ drop table if exists produit_factures;
 create table produit_factures
 (
     produit_f_id int primary key AUTO_INCREMENT,
-    quantite    int   not null,
-    prix        float not null,
-    remise      float null,
-    idfacture  int   not null,
-    idproduit   int   not null,
-    iduser      int   not null,
-    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at  DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    quantite     int   not null,
+    prix         float not null,
+    remise       float null,
+    idfacture    int   not null,
+    idproduit    int   not null,
+    iduser       int   not null,
+    created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at   DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 drop table if exists commentaires;

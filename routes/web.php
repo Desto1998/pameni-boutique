@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\GestionController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\RapportController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\AccountValidation;
 use App\Http\Middleware\CheckAdmin;
@@ -38,27 +39,35 @@ Route::prefix('dashboard')->group(function () {
 
     Route::group(['middleware' => 'auth'], function () {
 
+        //Route for user only for active user
         Route::middleware([AccountValidation::class])->group(function () {
             Route::get('home', [HomeController::class, 'index'])->name('home');
 
+            //Route for for profile account
             Route::get('user/profile', [UserController::class, 'showProfile'])->name('user.profile');
             Route::post('user/updateInfos', [UserController::class, 'updateInfos'])->name('user.edit.infos');
             Route::post('user/updatepassword', [UserController::class, 'updatePassword'])->name('user.edit.password');
             Route::post('user/profile/image', [UserController::class, 'UpdateImage'])->name('user.profil.image');
 
+            // Route for charges
             Route::get('gestion/charges', [GestionController::class, 'charge'])->name('gestion.index');
             Route::post('gestion/charges/add', [GestionController::class, 'storeCharge'])->name('gestion.charge.add');
             Route::post('gestion/charges/delete', [GestionController::class, 'deleteCharge'])->name('gestion.charge.delete');
 
-            Route::get('gestion/tasks', [UserController::class, 'UpdateImage'])->name('gestion.tache');
-            Route::post('gestion/tasks/add', [UserController::class, 'UpdateImage'])->name('gestion.taches.add');
-            Route::post('gestion/tasks/edit', [UserController::class, 'UpdateImage'])->name('gestion.taches.edit');
-            Route::post('gestion/tasks/delete', [UserController::class, 'UpdateImage'])->name('gestion.taches.delete');
+            // Route for taches
+            Route::get('gestion/tasks', [GestionController::class, 'taches'])->name('gestion.tache');
+            Route::post('gestion/tasks/add', [GestionController::class, 'storeTask'])->name('gestion.taches.add');
+            Route::post('gestion/tasks/delete', [GestionController::class, 'deleteTache'])->name('gestion.taches.delete');
+
             Route::post('gestion/calendar', [UserController::class, 'UpdateImage'])->name('gestion.calendrier');
+
+            //Route for rapport
+            Route::get('rapport/charge', [RapportController::class, 'showChargeForm'])->name('rapport.charge');
+            Route::get('rapport/charge/print', [RapportController::class, 'printCharge'])->name('rapport.charge.print');
         });
 
 
-
+        //Route for admin prefix with admin depend on  middleware to allow only admin
         Route::prefix('admin')->group(function () {
             Route::middleware([CheckAdmin::class])->group(function () {
 

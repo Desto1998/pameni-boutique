@@ -203,18 +203,25 @@
                 <li><a class="" href="{{ route('home') }}" aria-expanded="false"><i
                             class="icon icon-home"></i><span class="nav-text">Tableau de bord</span></a>
                     {{--                    <ul aria-expanded="false">--}}
-                    {{--                        <li><a href="./index.html">Dashboard 1</a></li>--}}
+                    {{--                       <li><a href="./index.html">Dashboard 1</a></li>--}}
                     {{--                        <li><a href="./index2.html">Dashboard 2</a></li></ul>--}}
                 </li>
-{{--                <li class="nav-label">GESTION DES UTILISATEURS</li>--}}
+                <li class="nav-label">GESTION DE L'ENTREPRISE</li>
                 <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false"><i
                             class="icon icon-payment"></i><span class="nav-text">Gestions</span></a>
                     <ul aria-expanded="false">
                         <li><a href="{{ route('gestion.index') }}">Charges</a></li>
 
-                        <li><a href="{{ route('gestion.tache') }}">Taches</a></li>
-                        <li><a href="{{ route('gestion.calendrier') }}">Calendrier</a></li>
-                        <li><a href="{{ route('gestion.calendrier') }}">Rapport</a></li>
+                        <li><a href="{{ route('gestion.tache') }}">Tâches</a></li>
+{{--                        <li><a href="{{ route('gestion.calendrier') }}">Calendrier</a></li>--}}
+{{--                        <li><a href="{{ route('gestion.calendrier') }}">Rapport</a></li>--}}
+                    </ul>
+                </li>
+                <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false"><i
+                            class="fa fa-file-pdf-o"></i><span class="nav-text">Rapports</span></a>
+                    <ul aria-expanded="false">
+                        <li><a href="{{ route('rapport.charge') }}">Rapport des charges</a></li>
+                        <li><a href="{{ route('gestion.index') }}">Rapport d'activités clients</a></li>
                     </ul>
                 </li>
                 @if (Auth::user()->is_admin==1)
