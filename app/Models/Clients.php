@@ -10,8 +10,11 @@ class Clients extends Model
     use HasFactory;
     protected $primaryKey = 'client_id';
     protected $fillable = [
-        'raison_sociale_client',
+        'raison_s_client',
         'email_client',
+        'prenom_client',
+        'nom_client',
+        'type_client',
         'phone_1_client',
         'phone_2_client',
         'idpays',

@@ -166,10 +166,10 @@
                                     <i class="icon-user"></i>
                                     <span class="ml-2">Profil </span>
                                 </a>
-                                <a href="./email-inbox.html" class="dropdown-item">
-                                    <i class="icon-envelope-open"></i>
-                                    <span class="ml-2">Inbox </span>
-                                </a>
+{{--                                <a href="./email-inbox.html" class="dropdown-item">--}}
+{{--                                    <i class="icon-envelope-open"></i>--}}
+{{--                                    <span class="ml-2">Inbox </span>--}}
+{{--                                </a>--}}
 
                                 <form action="{{ route('logout') }}" method="post" id="logout-form">
                                     @csrf
@@ -202,19 +202,31 @@
                 </li> -->
                 <li><a class="" href="{{ route('home') }}" aria-expanded="false"><i
                             class="icon icon-home"></i><span class="nav-text">Tableau de bord</span></a>
-                    {{--                    <ul aria-expanded="false">--}}
-                    {{--                       <li><a href="./index.html">Dashboard 1</a></li>--}}
-                    {{--                        <li><a href="./index2.html">Dashboard 2</a></li></ul>--}}
+                </li>
+
+                <li><a class="" href="{{ route('client.all') }}" aria-expanded="false"><i
+                            class="fa fa-users"></i><span class="nav-text">Clients</span></a>
+                </li>
+                <li><a class="" href="{{ route('fournisseur.all') }}" aria-expanded="false"><i
+                            class="mdi mdi-nature-people"></i><span class="nav-text">Fournisseurs</span></a>
+                </li>
+{{--                <li class="nav-label">PRODUITS</li>--}}
+                <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false"><i
+                            class="fa fa-product-hunt"></i><span class="nav-text">Produits</span></a>
+                    <ul aria-expanded="false">
+                        <li><a href="{{ route('produit.all') }}">Gestion des produits</a></li>
+
+                        <li><a href="{{ route('categorie.all') }}">Gestion des catégories</a></li>
+                        {{--                        <li><a href="{{ route('gestion.calendrier') }}">Calendrier</a></li>--}}
+                        {{--                        <li><a href="{{ route('gestion.calendrier') }}">Rapport</a></li>--}}
+                    </ul>
                 </li>
                 <li class="nav-label">GESTION DE L'ENTREPRISE</li>
                 <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false"><i
                             class="icon icon-payment"></i><span class="nav-text">Gestions</span></a>
                     <ul aria-expanded="false">
                         <li><a href="{{ route('gestion.index') }}">Charges</a></li>
-
                         <li><a href="{{ route('gestion.tache') }}">Tâches</a></li>
-{{--                        <li><a href="{{ route('gestion.calendrier') }}">Calendrier</a></li>--}}
-{{--                        <li><a href="{{ route('gestion.calendrier') }}">Rapport</a></li>--}}
                     </ul>
                 </li>
                 <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false"><i

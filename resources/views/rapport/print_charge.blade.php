@@ -7,6 +7,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 </head>
 <style>
+    *{
+      font-family: "Roboto", sans-serif;
+    }
     .forhead {
         display: flex;
         justify-content: center;
@@ -123,7 +126,7 @@
         </tr>
     </table>
 </div>
-<h3 style="text-align: center; margin: 20px;">{{ $titre }}</h3>
+<h3 style="text-align: center; margin: 20px;text-transform: capitalize">{{ $titre }}</h3>
 <label><i>Période:</i> <strong>{{ $debut }}</strong> au <strong>{{ $fin }}</strong></label><br>
 <label><i>Date d'émission:</i> <strong>
         <?= date('d F, Y');?></strong></label>

@@ -16,7 +16,7 @@ class RapportController extends Controller
         return view('rapport.charge_form',compact('charges'));
     }
 
-    // MAke pdf for charge
+    // Make pdf for charge
     protected function printCharge(Request $request){
         $request->validate([
            'debut'=>['required'],

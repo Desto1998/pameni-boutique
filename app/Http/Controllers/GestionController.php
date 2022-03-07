@@ -15,7 +15,7 @@ class GestionController extends Controller
     //Fontion pour les charges
     public function charge()
     {
-        $charges = Charges::join('users','users.id','charges.iduser')->get();
+        $charges = Charges::join('users','users.id','charges.iduser')->orderBy('charges.created_at','desc' )->get();
         return view('gestion.charges', compact('charges'));
     }
     // Store or edit function
@@ -35,8 +35,11 @@ class GestionController extends Controller
 
             ])
         ;
-        return redirect()->back()->with('success','Enregistré avec succès!');
+        if ($save) {
+            return redirect()->back()->with('success','Enregistré avec succès!');
 
+        }
+        return redirect()->back()->with('danger', "Désolé une erreur s'est produite. Veillez recommencer!");
     }
     protected function deleteCharge(Request $request){
         $delete = Charges::where('charge_id',$request->id)->delete();
@@ -48,6 +51,7 @@ class GestionController extends Controller
     {
         $taches = taches::join('charges','charges.charge_id','taches.idcharge')
             ->join('users','users.id','charges.iduser')
+            ->orderBy('taches.date_ajout','desc' )
             ->get();
         $charges = Charges::all();
         return view('gestion.taches', compact('charges','taches'));
@@ -80,8 +84,11 @@ class GestionController extends Controller
 
             ])
         ;
-        return redirect()->back()->with('success','Enregistré avec succès!');
+        if ($save) {
+            return redirect()->back()->with('success','Enregistré avec succès!');
 
+        }
+        return redirect()->back()->with('danger', "Désolé une erreur s'est produite. Veillez recommencer!");
     }
     protected function deleteTache(Request $request){
         $delete = Taches::where('tache_id',$request->id)->delete();

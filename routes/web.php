@@ -2,12 +2,16 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\ClientController;
+use App\Http\Controllers\FournisserController;
 use App\Http\Controllers\GestionController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProduitController;
 use App\Http\Controllers\RapportController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\AccountValidation;
 use App\Http\Middleware\CheckAdmin;
+use App\Models\Fournisseurs;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -64,6 +68,29 @@ Route::prefix('dashboard')->group(function () {
             //Route for rapport
             Route::get('rapport/charge', [RapportController::class, 'showChargeForm'])->name('rapport.charge');
             Route::get('rapport/charge/print', [RapportController::class, 'printCharge'])->name('rapport.charge.print');
+
+            //Route for categorie
+            Route::get('categorie/index',[ProduitController::class,'listCategories'])->name('categorie.all');
+            Route::post('categorie/store',[ProduitController::class,'storeCategorie'])->name('categorie.store');
+            Route::post('categorie/delete',[ProduitController::class,'deleteCategore'])->name('categorie.delete');
+
+            //Routes for produit
+            Route::get('product/index',[ProduitController::class,'listproduct'])->name('produit.all');
+            Route::post('product/store',[ProduitController::class,'storeProduct'])->name('produit.store');
+            Route::post('product/delete',[ProduitController::class,'deleteProduct'])->name('produit.delete');
+
+            //Routes for client
+            Route::get('client/index',[ClientController::class,'index'])->name('client.all');
+            Route::post('client/store',[ClientController::class,'store'])->name('client.store');
+            Route::post('client/delete',[ClientController::class,'delete'])->name('client.delete');
+            Route::get('client/edit/{id}',[ClientController::class,'showEditForm'])->name('client.edit');
+            Route::get('client/details/{id}',[ClientController::class,'view'])->name('client.view');
+
+            //Routes for fournisseur
+            Route::get('fournisseur/index',[FournisserController::class,'index'])->name('fournisseur.all');
+            Route::post('fournisseur/store',[FournisserController::class,'store'])->name('fournisseur.store');
+            Route::post('fournisseur/delete',[FournisserController::class,'delete'])->name('fournisseur.delete');
+            Route::post('fournisseur/details/{id}',[FournisserController::class,'view'])->name('fournisseur.view');
         });
 
 

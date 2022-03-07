@@ -24,52 +24,59 @@ create table pays
     updated_at DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
 drop table if exists clients;
 create table clients
 (
-    client_id             int primary key AUTO_INCREMENT,
-    raison_sociale_client varchar(255) not null,
-    email_client          varchar(255),
-    phone_1_client        varchar(20)  not null,
-    phone_2_client        varchar(20) null,
-    idpays                int null,
-    ville_client          varchar(255) null,
-    adresse_client        varchar(255) null,
-    logo_client           varchar(255),
-    date_ajout            date         not null,
-    contribuable          varchar(100) default null,
-    slogan                varchar(500),
-    siteweb               varchar(500) null,
-    rcm                   varchar(500) null,
-    postale               varchar(50) null,
-    iduser                int null,
-    iddevise              int null,
-    created_at            TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
-    updated_at            DATETIME     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    client_id       int primary key AUTO_INCREMENT,
+    raison_s_client varchar(1000) null,
+    nom_client      varchar(255) null,
+    prenom_client   varchar(255) null,
+    email_client    varchar(255) null ,
+    phone_1_client  varchar(20) not null,
+    phone_2_client  varchar(20) null,
+    idpays          int null,
+    ville_client    varchar(255) null,
+    adresse_client  varchar(255) null,
+    logo_client     varchar(255),
+    date_ajout      date        not null,
+    contribuable    varchar(100) default null,
+    slogan          varchar(500) null ,
+    siteweb         varchar(500) null,
+    rcm             varchar(500) null,
+    postale         varchar(50) null,
+    type_client     varchar(50) null,
+    iduser          int null,
+    iddevise        int null,
+    created_at      TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
+    updated_at      DATETIME     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 drop table if exists fournisseurs;
 create table fournisseurs
 (
-    fournisseur_id    int primary key AUTO_INCREMENT,
-    raison_sociale_fr varchar(255) not null,
-    email_fr          varchar(255),
-    phone_1_fr        varchar(20)  not null,
-    phone_2_fr        varchar(20) null,
-    idpays            int null,
-    ville_fr          varchar(255) null,
-    adresse_fr        varchar(255) null,
-    logo_fr           varchar(255),
-    date_ajout_fr     date         not null,
-    contribuable      varchar(100) default null,
-    slogan            varchar(500),
-    siteweb           varchar(500) null,
-    rcm               varchar(500) null,
-    postale           varchar(50) null,
-    iduser            int null,
-    iddevise          int null,
-    created_at        TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
-    updated_at        DATETIME     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    fournisseur_id int primary key AUTO_INCREMENT,
+    raison_s_fr    varchar(255)  null,
+    nom_fr         varchar(255) null,
+    prenom_fr      varchar(255) null,
+    email_fr       varchar(255) null ,
+    phone_1_fr     varchar(20)  not null,
+    phone_2_fr     varchar(20) null,
+    idpays         int null,
+    ville_fr       varchar(255) null,
+    adresse_fr     varchar(255) null,
+    logo_fr        varchar(255) null ,
+    date_ajout_fr  date         not null,
+    contribuable   varchar(100) default null,
+    slogan         varchar(500) null ,
+    siteweb        varchar(500) null,
+    rcm            varchar(500) null,
+    postale        varchar(50) null,
+    type_fr        varchar(50) null,
+    iduser         int not null,
+    iddevise       int null,
+    created_at     TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
+    updated_at     DATETIME     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 drop table if exists categories;
@@ -92,6 +99,7 @@ create table produits
     titre_produit       varchar(255) not null,
     description_produit varchar(1000) null,
     idcategorie         int null,
+    iduser              int          not null,
     created_at          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at          DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -111,14 +119,14 @@ drop table if exists taches;
 create table taches
 (
     tache_id   int primary key AUTO_INCREMENT,
-    date_debut date not null,
-    date_fin   date not null,
-    date_ajout date not null,
+    date_debut date  not null,
+    date_fin   date  not null,
+    date_ajout date  not null,
     raison     varchar(1000) null,
-    nombre     int  not null,
-    prix       float  not null,
-    idcharge   int  not null,
-    iduser     int  not null,
+    nombre     int   not null,
+    prix       float not null,
+    idcharge   int   not null,
+    iduser     int   not null,
     staut      int       default 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

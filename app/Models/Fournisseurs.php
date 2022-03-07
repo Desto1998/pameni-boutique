@@ -10,7 +10,10 @@ class Fournisseurs extends Model
     use HasFactory;
     protected $primaryKey = 'fournisseur_id';
     protected $fillable = [
-        'raison_sociale_fr',
+        'raison_s_fr',
+        'nom_fr',
+        'prenom_fr',
+        'type_fr',
         'email_fr',
         'phone_1_fr',
         'phone_2_fr',

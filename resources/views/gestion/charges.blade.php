@@ -49,7 +49,7 @@
                                         <td>{{ $value->description }}</td>
                                         <td>{{ $value->firstname }}</td>
                                         <td class="d-flex">
-                                            <a href="#" class="btn btn-warning btn-sm" title="Modifier la charge"
+                                            <a href="javascript:void(0);" class="btn btn-warning btn-sm" title="Modifier la charge"
                                                data-toggle="modal" data-target="#chargesModal{{ $value->charge_id }}"><i
                                                     class="fa fa-edit"></i></a>
                                             @if (Auth::user()->is_admin==1)

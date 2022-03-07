@@ -2,6 +2,8 @@
 @section('css_before')
     <link href="{{asset('template/vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">
     <link href="{{asset('template/vendor/sweetalert2/dist/sweetalert2.min.css')}}" rel="stylesheet">
+    <link href="{{asset('template/vendor/sweetalert2/dist/sweetalert2.min.css')}}" rel="stylesheet">
+
 @endsection
 @section('content')
     <div class="container-fluid">
@@ -67,7 +69,7 @@
                                         {{--                                        <td>{{ $value->date_ajout }}</td>--}}
                                         <td>{{ $value->firstname }}</td>
                                         <td class="d-flex">
-                                            <a href="#" class="btn btn-warning btn-sm" title="Modifier la tâches"
+                                            <a href="javascript:void(0);" class="btn btn-warning btn-sm" title="Modifier la tâches"
                                                data-toggle="modal" data-target="#tachesModal{{ $value->tache_id }}"><i
                                                     class="fa fa-edit"></i></a>
                                             @if (Auth::user()->is_admin==1)
@@ -193,7 +195,7 @@
 
                         <div class="form-group">
                             <label for="charge">Charges <span class="text-danger">*</span></label>
-                            <select class="form-control" required name="idcharge" id="charge">
+                            <select class="form-control" required name="idcharge" id="single-select">
                                 <option disabled="disabled" selected>Sélectionner une charge</option>
                                 @foreach($charges as $item)
                                     <option value="{{ $item->charge_id }}">{{ $item->titre }}</option>
@@ -270,4 +272,7 @@
     <script src="{{asset('template/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
     <script src="{{asset('template/js/plugins-init/datatables.init.js')}}"></script>
     <script src="{{asset('template/vendor/sweetalert2/dist/sweetalert2.min.js')}}"></script>
+    <!-- Selet search -->
+    <script src="{{asset('template/vendor/select2/js/select2.full.min.js')}}"></script>
+    <script src="{{asset('template/js/plugins-init/select2-init.js')}}"></script>
 @endsection
