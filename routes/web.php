@@ -89,8 +89,9 @@ Route::prefix('dashboard')->group(function () {
             //Routes for fournisseur
             Route::get('fournisseur/index',[FournisserController::class,'index'])->name('fournisseur.all');
             Route::post('fournisseur/store',[FournisserController::class,'store'])->name('fournisseur.store');
+            Route::get('fournisseur/edit/{id}',[FournisserController::class,'showEditForm'])->name('fournisseur.edit');
             Route::post('fournisseur/delete',[FournisserController::class,'delete'])->name('fournisseur.delete');
-            Route::post('fournisseur/details/{id}',[FournisserController::class,'view'])->name('fournisseur.view');
+            Route::get('fournisseur/details/{id}',[FournisserController::class,'view'])->name('fournisseur.view');
         });
 
 

@@ -20,7 +20,6 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Styles -->
-    <link rel="icon" type="image/png" sizes="16x16" href="{{('template/images/favicon.png')}}">
     <link href="{{asset('template/css/style.css')}}" rel="stylesheet">
     <!-- Toastr -->
     <link href="{{asset('template/vendor/plugins/toastr/css/toastr.min.css')}}" rel="stylesheet">

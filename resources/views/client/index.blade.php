@@ -56,7 +56,7 @@
                                     <tr>
                                         <td>{{ $key+1 }}</td>
                                         <td>{{ $value->nom_client }} {{ $value->prenom_client }} {{ $value->raison_s_client }}</td>
-                                        <td>{{ $value->phone_1_client }}</td>
+                                        <td>{{ $value->phone_1_client }} / {{ $value->phone_2_client }}</td>
                                         <td>{{ $value->email_client }}</td>
                                         <td>
                                             @foreach($pays as $p)
@@ -69,11 +69,13 @@
                                         <td>{{ $value->adresse_client }}</td>
                                         <td>{{ $value->postale }}</td>
                                         <td class="d-flex">
-                                            <a href="{{ route('client.edit',['id' =>$value->client_id]) }}" class="btn btn-warning btn-sm" title="Modifier le client"><i
+                                            <a href="{{ route('client.view',['id' =>$value->client_id]) }}" class="btn btn-success btn-sm" title="Visualiser le client"><i
+                                                    class="fa fa-eye"></i></a>
+                                            <a href="{{ route('client.edit',['id' =>$value->client_id]) }}" class="btn btn-warning btn-sm ml-1" title="Modifier le client"><i
                                                     class="fa fa-edit"></i></a>
                                             @if (Auth::user()->is_admin==1)
                                                 <button class="btn btn-danger btn-sm ml-1 "
-                                                        title="Supprimer ce produit"
+                                                        title="Supprimer ce client"
                                                         onclick="deleteFun({{ $value->client_id }})"><i
                                                         class="fa fa-trash"></i></button>
                                                 {{--                                            Auth::user()->id--}}
@@ -104,11 +106,14 @@
                 <div class="modal-body">
                     <form action="{{ route('client.store') }}" method="post">
                         @csrf
-                        <label for="type_client">Sélectionner le type du client</label>
-                        <select class="form-control" onchange="filterFormInput()" required name="type_client" id="type_client">
-                            <option value="0">Personne physique</option>
-                            <option value="1">Entreprise</option>
-                        </select>
+                        <div class="form-group">
+                            <label for="type_client">Sélectionner le type du client</label>
+                            <select class="form-control" onchange="filterFormInput()" required name="type_client" id="type_client">
+                                <option value="0">Personne physique</option>
+                                <option value="1">Entreprise</option>
+                            </select>
+                        </div>
+
                         <div class="row">
                             <div class="form-group col-md-6 clienthide">
                                 <label for="nom_client">Nom<span class="text-danger">*</span></label>
@@ -145,7 +150,7 @@
 
                         <div class="form-group">
                             <label for="categorie">Pays</label>
-                            <select class="form-control" required name="idcategorie" id="single-select">
+                            <select class="form-control" required name="idpays" id="single-select">
                                 <option disabled="disabled" selected>Sélectionner un pays</option>
                                 @foreach($pays as $item)
                                     <option value="{{ $item->pays_id }}">{{ $item->nom_pays }} </option>
@@ -252,6 +257,8 @@
                 $('#rcm').attr('disabled',false)
                 $('#contribuabe').attr('disabled',false)
             }else {
+                $('#raison_s_client').prop('required',false)
+                $('#raison_s_client').attr('disabled',true)
                 $('.enterprisehide').hide(200)
                 $('.clienthide').show(200)
                 $('#nom_client').prop('required',true)
