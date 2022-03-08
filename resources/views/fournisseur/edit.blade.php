@@ -1,7 +1,5 @@
 @extends('layouts.app')
 @section('css_before')
-    <link href="{{asset('template/vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">
-    <link href="{{asset('template/vendor/sweetalert2/dist/sweetalert2.min.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('template/vendor/select2/css/select2.min.css')}}">
     <style>
         .enterprisehide{
@@ -186,10 +184,7 @@
 
         }
     </script>
-    <!-- Datatable -->
-    <script src="{{asset('template/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
-    <script src="{{asset('template/js/plugins-init/datatables.init.js')}}"></script>
-    <script src="{{asset('template/vendor/sweetalert2/dist/sweetalert2.min.js')}}"></script>
+
     <!-- Selet search -->
     <script src="{{asset('template/vendor/select2/js/select2.full.min.js')}}"></script>
     <script src="{{asset('template/js/plugins-init/select2-init.js')}}"></script>

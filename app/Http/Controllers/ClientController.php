@@ -71,7 +71,7 @@ class ClientController extends Controller
             ])
         ;
         if ($save) {
-            return redirect()->back()->with('success','Enregistré avec succès!');
+            return redirect()->route('client.all')->with('success','Enregistré avec succès!');
 
         }
         return redirect()->back()->with('danger', "Désolé une erreur s'est produite. Veillez recommencer!");
