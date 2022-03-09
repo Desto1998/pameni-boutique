@@ -20,6 +20,7 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Styles -->
+    <link rel="stylesheet" href="{{ asset('app.css') }}">
     <link href="{{asset('template/css/style.css')}}" rel="stylesheet">
     <!-- Toastr -->
     <link href="{{asset('template/vendor/plugins/toastr/css/toastr.min.css')}}" rel="stylesheet">
@@ -202,7 +203,31 @@
                 <li><a class="" href="{{ route('home') }}" aria-expanded="false"><i
                             class="icon icon-home"></i><span class="nav-text">Tableau de bord</span></a>
                 </li>
+                <li class="nav-label">GESTION DE LA FACTURATION</li>
 
+                <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false"><i
+                            class="fa fa-database"></i><span class="nav-text">Dévis</span></a>
+                    <ul aria-expanded="false">
+                        <li><a href="{{ route('devis.add') }}">Créer un dévis</a></li>
+                        <li><a href="{{ route('devis.all') }}">Gestion des dévis</a></li>
+                    </ul>
+                </li>
+
+                <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false"><i
+                            class="fa fa-file"></i><span class="nav-text">Factures</span></a>
+                    <ul aria-expanded="false">
+                        <li><a href="{{ route('factures.add') }}">Créer une facture</a></li>
+                        <li><a href="{{ route('factures.all') }}">Gestion des factures</a></li>
+                    </ul>
+                </li>
+
+                <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false"><i
+                            class="fa fa-cart-plus"></i><span class="nav-text">Commandes</span></a>
+                    <ul aria-expanded="false">
+                        <li><a href="{{ route('commandes.all') }}">Créer une commande</a></li>
+                        <li><a href="{{ route('commandes.all') }}">Gestion des commandes</a></li>
+                    </ul>
+                </li>
                 <li><a class="" href="{{ route('client.all') }}" aria-expanded="false"><i
                             class="fa fa-users"></i><span class="nav-text">Clients</span></a>
                 </li>

@@ -1,0 +1,40 @@
+#example>thead>tr>th{
+    color: white;
+    border:1px solid #eaeaea;
+}
+#example{
+    border-collapse: collapse;
+}
+#example>tbody>tr>td{
+    color: black;
+    border:1px solid #eaeaea;
+}
+#example>tbody>tr>td{
+    color: black;
+
+}
+/*#eaeaea*/
+/*#593bdb*/
+#example tr.selected {
+    color: #593bdb!important;
+}
+
+#example tr.selected {
+    color: #593bdb!important;
+}
+#example tr.selected:active {
+    color: #593bdb!important;
+}
+#example tr.selected:hover {
+    color: #593bdb!important;
+}
+#example tr.selected:before {
+    color: #593bdb!important;
+}
+#example tr.selected:after {
+    color: #593bdb!important;
+}
+
+#example tr.selected:focus {
+    color: #593bdb!important;
+}

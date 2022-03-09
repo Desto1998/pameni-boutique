@@ -3,6 +3,9 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\CommandeController;
+use App\Http\Controllers\DevisController;
+use App\Http\Controllers\FactureController;
 use App\Http\Controllers\FournisserController;
 use App\Http\Controllers\GestionController;
 use App\Http\Controllers\HomeController;
@@ -77,6 +80,7 @@ Route::prefix('dashboard')->group(function () {
             //Routes for produit
             Route::get('product/index',[ProduitController::class,'listproduct'])->name('produit.all');
             Route::post('product/store',[ProduitController::class,'storeProduct'])->name('produit.store');
+            Route::post('product/update',[ProduitController::class,'updateProduct'])->name('produit.update');
             Route::post('product/delete',[ProduitController::class,'deleteProduct'])->name('produit.delete');
 
             //Routes for client
@@ -92,7 +96,35 @@ Route::prefix('dashboard')->group(function () {
             Route::get('fournisseur/edit/{id}',[FournisserController::class,'showEditForm'])->name('fournisseur.edit');
             Route::post('fournisseur/delete',[FournisserController::class,'delete'])->name('fournisseur.delete');
             Route::get('fournisseur/details/{id}',[FournisserController::class,'view'])->name('fournisseur.view');
+
+            //Route for devis
+            Route::get('devis/index',[DevisController::class,'index'])->name('devis.all');
+            Route::get('devis/add',[DevisController::class,'showAddForm'])->name('devis.add');
+            Route::post('devis/store',[DevisController::class,'store'])->name('devis.store');
+            Route::get('devis/edit/{id}',[DevisController::class,'showEditForm'])->name('devis.edit');
+            Route::post('devis/edit/store',[DevisController::class,'edit'])->name('devis.edit.store');
+            Route::post('devis/delete',[DevisController::class,'delete'])->name('devis.delete');
+            Route::get('devis/details/{id}',[DevisController::class,'view'])->name('devis.view');
+
+            //Route for factures
+            Route::get('factures/index',[FactureController::class,'index'])->name('factures.all');
+            Route::get('factures/add',[DevisController::class,'showAddForm'])->name('factures.add');
+            Route::post('factures/store',[FactureController::class,'store'])->name('factures.store');
+            Route::get('factures/edit/{id}',[FactureController::class,'showEditForm'])->name('factures.edit');
+            Route::post('factures/edit/store',[FactureController::class,'edit'])->name('factures.edit.store');
+            Route::post('factures/delete',[FactureController::class,'delete'])->name('factures.delete');
+            Route::get('factures/details/{id}',[FactureController::class,'view'])->name('factures.view');
+
+            //Route for commandes
+            Route::get('commandes/index',[CommandeController::class,'index'])->name('commandes.all');
+            Route::get('commandes/add',[DevisController::class,'showAddForm'])->name('commandes.add');
+            Route::post('commandes/store',[CommandeController::class,'store'])->name('commandes.store');
+            Route::get('commandes/edit/{id}',[CommandeController::class,'showEditForm'])->name('commandes.edit');
+            Route::post('commandes/edit/store',[CommandeController::class,'edit'])->name('commandes.edit.store');
+            Route::post('commandes/delete',[CommandeController::class,'delete'])->name('commandes.delete');
+            Route::get('commandes/details/{id}',[CommandeController::class,'view'])->name('commandes.view');
         });
+
 
 
         //Route for admin prefix with admin depend on  middleware to allow only admin

@@ -31,14 +31,14 @@
                 <div class="card px-3">
                     <div class="card-body">
                         <!-- Button trigger modal -->
-                        <h4 class="w-50">Liste des Fournisseurs</h4>
+                        <span class="h4 float-left">Liste des Fournisseurs</span>
                         <button type="button" class="btn btn-primary float-right mb-3" data-toggle="modal"
                                 data-target="#fournisseursModal"><i class="fa fa-plus">&nbsp; Ajouter</i></button>
 
                         <div class="table-responsive">
-                            <table id="example" class="display" style="min-width: 845px">
-                                <thead>
-                                <tr>
+                            <table id="example" class="display text-center" style="min-width: 845px">
+                                <thead class="bg-primary">
+
                                 <tr>
                                     <th>#</th>
                                     <th>Nom</th>

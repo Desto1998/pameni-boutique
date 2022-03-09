@@ -29,8 +29,8 @@
                             <i class="fa fa-plus"></i>&nbsp;&nbsp;Nouveau
                         </a>
                         <div class="table-responsive">
-                            <table id="example" class="display" style="min-width: 845px">
-                                <thead>
+                            <table id="example" class="display text-center" style="min-width: 845px">
+                                <thead class="bg-primary">
                                 <tr>
                                     <th>#</th>
                                     <th>Nom</th>

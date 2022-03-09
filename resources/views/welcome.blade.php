@@ -35,7 +35,69 @@
                     @endauth
                 </div>
             @endif
+                <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Ajouter des produit</h5>
+                                <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{{ route('produit.store') }}" method="post">
+                                    @csrf
+                                    <div class="form-group">
+                                        <label for="titre_produit">Titre du produit<span class="text-danger">*</span></label>
+                                        <input type="text" name="titre_produit" id="titre_produit" placeholder="Titre"
+                                               class="form-control"
+                                               required>
+                                    </div>
 
+                                    <div class="form-group">
+                                        <label for="categorie">Catégorie <span class="text-danger">*</span></label>
+                                        <select class="form-control" required name="idcategorie" id="single-select">
+                                            <option disabled="disabled" selected>Sélectionner une catégorie</option>
+                                            @foreach($categories as $item)
+                                                <option value="{{ $item->categorie_id }}">{{ $item->titre_cat }}
+                                                    => {{ $item->code_cat }} </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <label for="quantite_produit">Quantité<span
+                                                    class="text-danger">*</span></label>
+                                            <input type="number" name="quantite_produit"
+                                                   id="quantite_produit"
+                                                   value="" required
+                                                   class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="prix_produit">Prix
+                                                unitaire<span
+                                                    class="text-danger">*</span></label>
+                                            <input type="number" name="prix_produit"
+                                                   id="prix_produit" required
+                                                   value=""
+                                                   class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="description_produit">Description du produit </label>
+                                        <textarea name="description_produit" id="description_produit" placeholder="Description"
+                                                  class="form-control"></textarea>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
             <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
                 <div class="flex justify-center pt-8 sm:justify-start sm:pt-0">
                     <svg viewBox="0 0 651 192" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-16 w-auto text-gray-700 sm:h-20">

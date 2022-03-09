@@ -13,6 +13,7 @@ class Categories extends Model
         'titre_cat',
         'code_cat',
         'description_cat',
+        'actualNum',
         'iduser',
     ];
 }

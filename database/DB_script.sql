@@ -32,7 +32,7 @@ create table clients
     raison_s_client varchar(1000) null,
     nom_client      varchar(255) null,
     prenom_client   varchar(255) null,
-    email_client    varchar(255) null ,
+    email_client    varchar(255) null,
     phone_1_client  varchar(20) not null,
     phone_2_client  varchar(20) null,
     idpays          int null,
@@ -41,7 +41,7 @@ create table clients
     logo_client     varchar(255),
     date_ajout      date        not null,
     contribuable    varchar(100) default null,
-    slogan          varchar(500) null ,
+    slogan          varchar(500) null,
     siteweb         varchar(500) null,
     rcm             varchar(500) null,
     postale         varchar(50) null,
@@ -56,29 +56,30 @@ drop table if exists fournisseurs;
 create table fournisseurs
 (
     fournisseur_id int primary key AUTO_INCREMENT,
-    raison_s_fr    varchar(255)  null,
+    raison_s_fr    varchar(255) null,
     nom_fr         varchar(255) null,
     prenom_fr      varchar(255) null,
-    email_fr       varchar(255) null ,
-    phone_1_fr     varchar(20)  not null,
+    email_fr       varchar(255) null,
+    phone_1_fr     varchar(20) not null,
     phone_2_fr     varchar(20) null,
     idpays         int null,
     ville_fr       varchar(255) null,
     adresse_fr     varchar(255) null,
-    logo_fr        varchar(255) null ,
-    date_ajout_fr  date         not null,
+    logo_fr        varchar(255) null,
+    date_ajout_fr  date        not null,
     contribuable   varchar(100) default null,
-    slogan         varchar(500) null ,
+    slogan         varchar(500) null,
     siteweb        varchar(500) null,
     rcm            varchar(500) null,
     postale        varchar(50) null,
     type_fr        varchar(50) null,
-    iduser         int not null,
+    iduser         int         not null,
     iddevise       int null,
     created_at     TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
     updated_at     DATETIME     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- actuaNum will increment when product is added is use to generate product reference
 drop table if exists categories;
 create table categories
 (
@@ -86,6 +87,7 @@ create table categories
     titre_cat       varchar(255) not null,
     code_cat        varchar(10)  not null,
     description_cat varchar(1000) null,
+    actualNum       int default 0,
     iduser          int,
     created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at      DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -95,11 +97,13 @@ drop table if exists produits;
 create table produits
 (
     produit_id          int primary key AUTO_INCREMENT,
-    reference           varchar(20)  not null,
-    titre_produit       varchar(255) not null,
+    reference           varchar(20)   not null,
+    titre_produit       varchar(1000) not null,
     description_produit varchar(1000) null,
+    quantite_produit    int           not null,
+    prix_produit        float         not null,
     idcategorie         int null,
-    iduser              int          not null,
+    iduser              int           not null,
     created_at          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at          DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
