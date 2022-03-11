@@ -1,11 +1,14 @@
 @extends('layouts.app')
 @section('css_before')
-    <link href="{{asset('template/vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">
+{{--    <link href="{{asset('template/vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">--}}
     <link href="{{asset('template/vendor/sweetalert2/dist/sweetalert2.min.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('template/vendor/select2/css/select2.min.css')}}">
 {{--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"/>--}}
 {{--    <link href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet">--}}
 {{--    <link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet">--}}
+ <!-- datatable css -->
+    <link href="{{ asset('datatable/css/jquery.dataTables.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('datatable/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
 @endsection
 @section('content')
     <div class="container-fluid">
@@ -310,8 +313,7 @@
                         // swal.fire("Effectué!", "Enregistré avec succès!", "success")
                         // on recharge le tableau de produit
                         toastr.success("Enregistré avec succès!");
-                        $('#example').dataTable().fnClearTable();
-                        $('#example').dataTable().fnDestroy();
+
                         loadProducts();
                         // on reinitialise le formulaire qui contient les produits
                         $('#product-form-value .btn-primary').attr("disabled", false).html("Enregistrer")
@@ -335,6 +337,8 @@
         })
         // fonction qui charge les produits : les elements du tableau
         function loadProducts() {
+            $('#example').dataTable().fnClearTable();
+            $('#example').dataTable().fnDestroy();
             // $("#example").DataTable.destroy();
             $("#example").DataTable({
                 Processing: true,
@@ -372,7 +376,6 @@
 
         $(document).ready(function () {
             loadProducts()
-            $('#example').DataTable().draw();
         });
 
         // edit product
@@ -424,8 +427,14 @@
 
     <!-- Datatable -->
 {{--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>--}}
-{{--    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>--}}
-    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
+
+    {{--    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>--}}
+{{--    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>--}}
+{{--    <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>--}}
+
+    <script src="{{ asset('datatable/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('datatable/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('datatable/js/dataTables.bootstrap4.min.js') }}"></script>
+
 @endsection

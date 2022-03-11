@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CommandeController;
 use App\Http\Controllers\DevisController;
@@ -73,9 +74,10 @@ Route::prefix('dashboard')->group(function () {
             Route::get('rapport/charge/print', [RapportController::class, 'printCharge'])->name('rapport.charge.print');
 
             //Route for categorie
-            Route::get('categorie/index',[ProduitController::class,'listCategories'])->name('categorie.all');
-            Route::post('categorie/store',[ProduitController::class,'storeCategorie'])->name('categorie.store');
-            Route::post('categorie/delete',[ProduitController::class,'deleteCategore'])->name('categorie.delete');
+            Route::get('categorie/index',[CategorieController::class,'listCategories'])->name('categorie.all');
+            Route::get('categorie/load',[CategorieController::class,'loadCategorie'])->name('categorie.load');
+            Route::post('categorie/store',[CategorieController::class,'storeCategorie'])->name('categorie.store');
+            Route::post('categorie/delete',[CategorieController::class,'deleteCategore'])->name('categorie.delete');
 
             //Routes for produit
             Route::get('product/index',[ProduitController::class,'listproduct'])->name('produit.all');

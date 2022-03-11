@@ -45,7 +45,7 @@
                                 </thead>
                                 <tbody>
                                 @foreach($users as $key=> $value)
-                                    <tr>
+                                    <tr id="table-row-{{ $value->id }}">
                                         <td>{{ $key+1 }}</td>
                                         <td>{{ $value->lastname }}</td>
                                         <td>{{ $value->firstname }}</td>
@@ -144,7 +144,7 @@
                             success: function (res) {
                                 if (res) {
                                     swal.fire("Effectué!", "Supprimé avec succès!", "success")
-                                    window.location.reload(200);
+                                    $('#table-row-'+id).hide(100)
 
                                 } else {
                                     sweetAlert("Désolé!", "Erreur lors de la suppression!", "error")
