@@ -11,6 +11,9 @@ use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use phpDocumentor\Reflection\Types\AbstractList;
+use phpDocumentor\Reflection\Types\Array_;
+use Yajra\DataTables\DataTables;
 
 class ProduitController extends Controller
 {
@@ -71,7 +74,68 @@ class ProduitController extends Controller
         $categories = Categories::all();
         return view('produit.produit', compact('data', 'categories', 'saleDevis', 'sateFacture'));
     }
+    public function loadProducts() {
+        if (request()->ajax()) {
 
+            $product2  = [];
+            $data  = [];
+            $saleDevis = Pocedes::all();
+            $sateFacture = Produit_Factures::all();
+            $products = Produits::join('categories', 'categories.categorie_id', 'produits.idcategorie')
+                ->join('users', 'users.id', 'produits.iduser')
+                ->orderBy('produits.created_at', 'desc')
+                ->get();
+            $categories = Categories::all();
+
+            $stock = 0;
+//            $data = [];
+            $username = '';
+            foreach ($products as $key =>$value){
+                $product  = new Array_();
+
+                foreach ($saleDevis as $sd){
+                    if ($sd->idproduit==$value->produit_id) {
+                        $stock += $sd->quantite ;
+                    }
+                }
+
+                foreach ($sateFacture as $sf){
+                    if ($sf->idproduit==$value->produit_id) {
+                        $stock += $sf->quantite ;
+                    }
+                }
+                $product->key = $key;
+                $product->produit_id = $value->produit_id;
+                $product->reference = $value->reference;
+                $product->titre_produit = $value->titre_produit;
+                $product->quantite = $value->quantite_produit;
+                $product->prix = $value->prix_produit;
+                $product->description = $value->description_produit;
+                $product->categorie = $value->titre_cat;
+                $product->stock = $value->quantite_produit-$stock;
+                $product->username = $value->firstname;
+//                $product->action = $value->quantite_produit-$stock;
+
+                $data[$key]=$product;
+
+            }
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function($row){
+                    $action = view('produit.produit_action',compact('row'));
+
+//                    $actionBtn = '<div class="d-flex"><a href="javascript:void(0)" class="edit btn btn-warning btn-sm"><i class="fa fa-edit"></i></a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm ml-1"  onclick="deleteFun()"><i class="fa fa-trash"></i></a></div>';
+                    return (string)$action;
+                })
+//                ->addColumn('action', 'produit_action')
+                ->rawColumns(['action'])
+                ->make(true);
+//            $data=[];
+//            $data["data"]=$products;
+//            dd($data);
+//            return Response()->json($data);
+        }
+    }
     //function create or update product
     public function storeProduct(Request $request)
     {
@@ -122,12 +186,12 @@ class ProduitController extends Controller
             ;
         }
 
-
-        if ($save) {
-            return redirect()->back()->with('success', 'Enregistré avec succès!');
-
-        }
-        return redirect()->back()->with('danger', "Désolé une erreur s'est produite. Veillez recommencer!");
+        return Response()->json($save);
+//        if ($save) {
+//            return redirect()->back()->with('success', 'Enregistré avec succès!');
+//
+//        }
+//        return redirect()->back()->with('danger', "Désolé une erreur s'est produite. Veillez recommencer!");
     }
 
 //    update product
@@ -154,12 +218,12 @@ class ProduitController extends Controller
                 'iduser' => $iduser,
 
             ]);
-
-        if ($save) {
-            return redirect()->back()->with('success', 'Enregistré avec succès!');
-
-        }
-        return redirect()->back()->with('danger', "Désolé une erreur s'est produite. Veillez recommencer!");
+        return Response()->json($save);
+//        if ($save) {
+//            return redirect()->back()->with('success', 'Enregistré avec succès!');
+//
+//        }
+//        return redirect()->back()->with('danger', "Désolé une erreur s'est produite. Veillez recommencer!");
     }
 
     //delete product

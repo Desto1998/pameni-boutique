@@ -38,3 +38,11 @@
 #example tr.selected:focus {
     color: #593bdb!important;
 }
+label{
+    color: black;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button{
+    padding: 0.5em 0!important;
+}
+

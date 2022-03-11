@@ -3,6 +3,9 @@
     <link href="{{asset('template/vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">
     <link href="{{asset('template/vendor/sweetalert2/dist/sweetalert2.min.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('template/vendor/select2/css/select2.min.css')}}">
+{{--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"/>--}}
+{{--    <link href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet">--}}
+{{--    <link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet">--}}
 @endsection
 @section('content')
     <div class="container-fluid">
@@ -26,148 +29,27 @@
                 <div class="card px-3">
                     <div class="card-body">
                         <!-- Button trigger modal -->
-                            <h4 class="float-left h4">Liste des produits</h4>
-                            <button type="button" class="btn btn-primary float-right align-self-end mb-3" data-toggle="modal"
-                                    data-target=".bd-example-modal-lg"><i class="fa fa-plus">&nbsp; Ajouter</i></button>
+                        <h4 class="float-left h4">Liste des produits</h4>
+                        <button type="button" class="btn btn-primary float-right align-self-end mb-3"
+                                data-toggle="modal"
+                                data-target=".bd-example-modal-lg"><i class="fa fa-plus">&nbsp; Ajouter</i></button>
 
 
                         <div class="table-responsive mt-4">
-                            <table id="example" class="display text-center" style="min-width: 845px">
+                            <table id="example" class="display text-center w-100" >
                                 <thead class="bg-primary">
                                 <tr>
                                     <th>#</th>
-                                    <th>Reference</th>
-                                    <th>Titre</th>
+                                    <th>Ref.</th>
+                                    <th>Désignation</th>
                                     <th>Catégorie</th>
-                                    <th>Qte</th>
-                                    <th>prix U</th>
+                                    <th>Qté</th>
+                                    <th>P.U</th>
                                     <th>Stock</th>
-                                    <th>Crée Par</th>
+                                    <th style="width: 120px">Crée Par</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
-                                <tbody>
-                                @foreach($data as $key=> $value)
-                                    @php
-                                        $stock = 0;
-                                        foreach ($saleDevis as $sd){
-                                            if ($sd->idproduit==$value->produit_id) {
-                                               $stock += $sd->quantite ;
-                                            }
-                                        }
-
-                                        foreach ($sateFacture as $sf){
-                                            if ($sf->idproduit==$value->produit_id) {
-                                               $stock += $sf->quantite ;
-                                            }
-                                        }
-                                    @endphp
-
-                                    <tr>
-                                        <td>{{ $key+1 }}</td>
-                                        <td>{{ $value->reference }}</td>
-                                        <td>{{ $value->titre_produit }}</td>
-                                        <td>{{ $value->titre_cat }}</td>
-                                        <td>{{ $value->quantite_produit }}</td>
-                                        <td>{{ $value->prix_produit }}</td>
-                                        <td>{{  $value->quantite_produit -$stock }}</td>
-                                        <td>{{ $value->firstname }}</td>
-                                        <td class="d-flex">
-                                            <a href="#" class="btn btn-warning btn-sm" title="Modifier le produit"
-                                               data-toggle="modal" data-target="#produitsModal{{ $value->produit_id }}"><i
-                                                    class="fa fa-edit"></i></a>
-                                            @if (Auth::user()->is_admin==1)
-                                                <button class="btn btn-danger btn-sm ml-1 "
-                                                        title="Supprimer ce produit"
-                                                        onclick="deleteFun({{ $value->produit_id }})"><i
-                                                        class="fa fa-trash"></i></button>
-                                                {{--                                            Auth::user()->id--}}
-                                            @endif
-                                        </td>
-                                    </tr>
-                                    <div class="modal fade" id="produitsModal{{ $value->produit_id }}">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title">Modifier un produit</h5>
-
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form action="{{ route('produit.update') }}" method="post">
-                                                        @csrf
-                                                        <input type="hidden" name="produit_id"
-                                                               value="{{ $value->produit_id }}">
-                                                        <input type="hidden" name="reference"
-                                                               value="{{ $value->reference }}">
-
-                                                        <div class="form-group">
-                                                            <label for="titre_produit{{ $value->produit_id }}">Titre un
-                                                                produit<span
-                                                                    class="text-danger">*</span></label>
-                                                            <input type="text" name="titre_produit"
-                                                                   id="titre_produit{{ $value->produit_id }}" required
-                                                                   value="{{ $value->titre_produit }}"
-                                                                   placeholder="Titre"
-                                                                   class="form-control">
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label for="quantite_produit{{ $value->produit_id }}">Quantité<span
-                                                                    class="text-danger">*</span></label>
-                                                            <input type="number" name="quantite_produit"
-                                                                   id="quantite_produit{{ $value->produit_id }}"
-                                                                   value="{{ $value->quantite_produit }}" required
-                                                                   class="form-control">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="prix_produit{{ $value->produit_id }}">Prix
-                                                                unitaire<span
-                                                                    class="text-danger">*</span></label>
-                                                            <input type="number" name="prix_produit"
-                                                                   id="prix_produit{{ $value->produit_id }}" required
-                                                                   value="{{ $value->prix_produit }}" step="any"
-                                                                   class="form-control">
-                                                        </div>
-
-
-                                                        <div class="form-group">
-                                                            <label for="categorie{{ $value->produit_id }}">Charges <span
-                                                                    class="text-danger">*</span></label>
-                                                            <select class="form-control" required name="idcategorie"
-                                                                    id="categorie{{ $value->produit_id }}">
-                                                                <option disabled="disabled" selected>Sélectionner une
-                                                                    charge
-                                                                </option>
-                                                                @foreach($categories as $item)
-                                                                    <option
-                                                                        {{ $item->categorie_id==$value->idcategorie?'selected':'' }} value="{{ $item->categorie_id }}">{{ $item->titre_cat }}
-                                                                        => {{ $item->code_cat }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="description_produit">Description du
-                                                                produit </label>
-                                                            <textarea name="description_produit"
-                                                                      id="description_produit" placeholder="Description"
-                                                                      class="form-control">{{ $value->description_produit }}</textarea>
-                                                        </div>
-
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary"
-                                                                    data-dismiss="modal">Annuler
-                                                            </button>
-                                                            <button type="submit" class="btn btn-primary">Enregistrer
-                                                            </button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                                </tbody>
 
                             </table>
                         </div>
@@ -178,7 +60,7 @@
         </div>
 
     </div>
-    <!-- Modal -->
+    <!-- Modal add produts -->
 
     <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -189,64 +71,86 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('produit.store') }}" method="post">
+                    <form action="#" method="post" id="product-form">
                         @csrf
-
                         <div class="form-content" id="form-content">
                             <div class="form-group">
-                                <label for="titre_produit">Titre du produit<span class="text-danger">*</span></label>
-                                <input type="text" name="titre_produit[]" placeholder="Titre"
+                                <label for="titre_produit">Désignation du produit<span
+                                        class="text-danger">*</span></label>
+                                <input type="text" name="titre_produit" placeholder="Désignation" id="titre_produit"
                                        class="form-control"
                                        required>
                             </div>
                             <div class="row col-md-12">
                                 <div class="form-group col-md-6">
-                                    <label for="categorie">Catégorie <span class="text-danger">*</span></label>
-                                    <select class="form-control" required name="idcategorie[]" id="single-select">
+                                    <label class="" for="categorie">Catégorie <span class="text-danger">*</span></label>
+                                    <select class="form-control" required name="idcategorie" id="single-select">
                                         <option disabled="disabled" selected>Sélectionner une catégorie</option>
                                         @foreach($categories as $item)
+
                                             <option value="{{ $item->categorie_id }}">{{ $item->titre_cat }}
-                                                => {{ $item->code_cat }} </option>
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="quantite_produit">Quantité<span
                                             class="text-danger">*</span></label>
-                                    <input type="number" name="quantite_produit[]"
-                                           value="" required
+                                    <input type="number" name="quantite_produit"
+                                           value="" required min="1" id="quantite_produit"
                                            class="form-control">
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="prix_produit">Prix
                                         unitaire<span
                                             class="text-danger">*</span></label>
-                                    <input type="number" name="prix_produit[]"
+                                    <input type="number" id="prix_produit" name="prix_produit"
                                            required step="any"
-                                           value=""
+                                           value="" min="0"
                                            class="form-control">
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="description_produit">Description du produit </label>
-                                <textarea name="description_produit[]" placeholder="Description"
+                                <textarea name="description_produit" id="description_produit" placeholder="Description"
                                           class="form-control"></textarea>
                             </div>
 
                         </div>
                         <div class="row col-md-12 d-flex justify-content-end mb-3">
-                            <button type="button" class="btn btn-sm btn-light float-right" id="addFields"
+                            <button type="submit" class="btn btn-sm btn-success float-right" id="addFields"
                                     title="Cliquez pour ajouter une nouvelle section!">
                                 <i class="fa fa-plus"></i>
                             </button>
                             <button type="button" class="btn btn-sm btn-light float-right ml-2" id="removeFields"
-                                    title="Supprimer toute les sections!">
+                                    title="Supprimer tous!">
                                 <i class="fa fa-trash-o"></i>
                             </button>
                         </div>
+                    </form>
+                    <form method="post" action="{{ route('produit.store') }}" id="product-form-value">
+
+                        <div class="created-element" style="overflow: auto; max-height: 300px;">
+                            <table id="validated-element" style="width: 100%; border-collapse: collapse"
+                                   class="table col-md-12 table-striped table-responsive">
+                                <thead class="bg-primary">
+                                <tr class="text-center">
+                                    <th style="border:1px solid #eaeaea; width: 250px">Titre</th>
+                                    <th style="border:1px solid #eaeaea; width: 100px">Quantité</th>
+                                    <th style="border:1px solid #eaeaea; width: 100px">Prix</th>
+                                    <th style="border:1px solid #eaeaea; width: 200px">Categorie</th>
+                                    <th style="border:1px solid #eaeaea; width: 250px">Description</th>
+                                    <th style="border:1px solid #eaeaea; width: 20px"></th>
+                                </tr>
+                                </thead>
+                                <tbody id="content-item">
+
+                                </tbody>
+                            </table>
+                        </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                            <button type="reset" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
                             <button type="submit" class="btn btn-primary">Enregistrer</button>
                         </div>
                     </form>
@@ -256,26 +160,17 @@
         </div>
     </div>
 
-    {{--    <div class="modal fade" id="produitsModal">--}}
-    {{--        <div class="modal-dialog" role="document">--}}
-    {{--            <div class="modal-content">--}}
-    {{--                <div class="modal-header">--}}
-    {{--                    <h5 class="modal-title">Ajouter un produit</h5>--}}
-
-    {{--                </div>--}}
-    {{--                <div class="modal-body">--}}
-    {{--                    --}}
-    {{--                </div>--}}
-
-    {{--            </div>--}}
-    {{--        </div>--}}
-    {{--    </div>--}}
-
+@include('produit.produit_modal')
 @endsection
 @section('script')
     <script>
-        // delete funtion
+        // delete function
+
         function deleteFun(id) {
+            // alert(id)
+
+            var table = $('#example').DataTable();
+
             swal.fire({
                 title: "Supprimer ce produit?",
                 icon: 'question',
@@ -287,7 +182,6 @@
                 reverseButtons: !0
             }).then(function (e) {
                 if (e.value === true) {
-                    // if (confirm("Supprimer cette tâches?") == true) {
                     $.ajaxSetup({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -301,9 +195,12 @@
                         success: function (res) {
                             if (res) {
                                 swal.fire("Effectué!", "Supprimé avec succès!", "success")
-                                window.location.reload(200);
+                                // loadProducts()
 
-                            } else {
+                                table.row( $('#deletebtn'+id).parents('tr') )
+                                    .remove()
+                                    .draw();
+                            }else {
                                 sweetAlert("Désolé!", "Erreur lors de la suppression!", "error")
                             }
 
@@ -320,37 +217,215 @@
             })
             // }
         }
+        // variable qui compte le nombre de produit entree sur le formulair | ne pas toucher
         var totalInputs = 0;
-        $('#addFields').click(function (e) {
-            totalInputs ++;
-            var id= 'addedBlock'+totalInputs;
-           var block = ' <div class="mt-3" id="'+id+'"><hr><div class="form-group"> <label>Titre du produit<span class="text-danger"> *</span></label><input type="text" name="titre_produit[]" placeholder="Titre" class="form-control" required> </div>'
+        $('#product-form').on("submit", function (event) {
+            event.preventDefault();
+            if ($('#product-form-value').serialize() == null || $('#product-form-value').serialize() == undefined) {
+                return false
+            }
 
-            block += '<div class="row col-md-12">' +
-                '<div class="form-group col-md-6">' +
-                '<label>Catégorie ' + '<span class="text-danger">*</span>' + '</label>' +
-                ' <select class="form-control" required name="idcategorie[]" id="single-select"> ' +
-                '<option disabled="disabled" selected>Sélectionner une catégorie</option>@foreach($categories as $item)<option value="{{ $item->categorie_id }}">{{ $item->titre_cat }} {{ $item->code_cat }} </option>@endforeach</select> </div>';
-            block += '<div class="form-group col-md-3"><label>Quantité<span class="text-danger"> *</span></label> <input type="number" name="quantite_produit[]" required class="form-control"> </div>'
-            block += '<div class="form-group col-md-3"> <label>Prix unitaire<span class="text-danger"> *</span></label>'
-            block += '<input type="number" name="prix_produit[]" required step="any" class="form-control"></div></div>'
+            var titre = $('#titre_produit').val();
+            var prix = $('#prix_produit').val();
+            var qte = $('#quantite_produit').val()
+            var desc = $('#description_produit').val()
 
-            block += '<div class="form-group"> <label for="description_produit">Description du produit </label> <textarea name="description_produit[]" placeholder="Description" class="form-control"></textarea> </div></div>'
+            var cattext = $('#single-select option:selected').text();
 
-            $('#form-content').append(block);
+
+            var categorie = $('#single-select').val()
+            if (titre == '' || prix == '' || qte == '' || categorie == '' || categorie == null) {
+                toastr.warning("Veillez remplir tous les champs obligatoires!");
+                return "";
+            } else {
+                totalInputs++;
+                var id = 'addedBlock' + totalInputs;
+                var block = '';
+                var table = '<tr style="color: black" class="text-center" id="' + id + '">';
+                block += '<input type="hidden" class="' + id + '" value="' + prix + '" name="prix_produit[]">'
+                block += '<input type="hidden" class="' + id + '" value="' + qte + '" name="quantite_produit[]">'
+                block += '<input type="hidden" class="' + id + '" value="' + titre + '" name="titre_produit[]">'
+                block += '<input type="hidden" class="' + id + '" value="' + desc + '" name="description_produit[]">'
+                block += '<input type="hidden" class="' + id + '" value="' + categorie + '" name="idcategorie[]">'
+
+                table += '<td style="border:1px solid #eaeaea; width: 250px">' + titre + '</td>'
+                table += '<td style="border:1px solid #eaeaea; width: 100px">' + qte + '</td>'
+                table += '<td style="border:1px solid #eaeaea; width: 100px">' + prix + '</td>'
+                table += '<td style="border:1px solid #eaeaea; width: 250px">' + cattext + '</td>'
+                table += '<td style="border:1px solid #eaeaea; width: 250px">' + desc + '</td>'
+                table += '<td style="border:1px solid #eaeaea; width: 50px"><button type="button" class="btn btn-sm btn-danger" onclick="removeElelement(' + totalInputs + ')"><i class="fa fa-trash-o"></i></button></td>'
+                table += '</tr>';
+
+                $('#product-form')[0].reset();
+                $('#single-select').val(null).trigger('change');
+                $('#product-form-value').append(block);
+                $('#validated-element>tbody').append(table);
+            }
+
 
         })
-        $('#removeFields').click(function (e){
-            $('#addedBlock'+totalInputs).remove();
-            totalInputs --;
+        // Enlever toutes entrees  crees
+        $('#removeFields').click(function (e) {
+
+            if (confirm("Supprimer toutes entrées?") === true) {
+                $('#validated-element tbody').find("tr").remove();
+                $('#product-form-value')[0].reset();
+                totalInputs = 0;
+            }
+
         })
+
+        // retirer un produit du tableau de produit sur la modal d'enregistrement des produits
+        function removeElelement(nombre) {
+            if (confirm("Supprimer cette ligne?") === true) {
+                $('#validated-element tbody').find("#addedBlock" + nombre).remove();
+                $('.addedBlock' + nombre).remove();
+                totalInputs--;
+            }
+        }
+
+        // Sauvegarder l'ensembre des produits crees dans la bd
+        $("#product-form-value").on("submit", function (event) {
+            event.preventDefault();
+
+            if (totalInputs == 0) {
+                toastr.warning("Veillez ajouter au moins un produit!");
+                return false;
+            }
+            $('#product-form-value .btn-primary').attr("disabled", true).html("En cours...")
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            var data = $('#product-form-value').serialize()
+
+            $.ajax({
+                type: "POST",
+                url: "{{ route('produit.store') }}",
+                data: data,
+                dataType: 'json',
+                success: function (res) {
+                    if (res) {
+                        // swal.fire("Effectué!", "Enregistré avec succès!", "success")
+                        // on recharge le tableau de produit
+                        toastr.success("Enregistré avec succès!");
+                        $('#example').dataTable().fnClearTable();
+                        $('#example').dataTable().fnDestroy();
+                        loadProducts();
+                        // on reinitialise le formulaire qui contient les produits
+                        $('#product-form-value .btn-primary').attr("disabled", false).html("Enregistrer")
+                        $('#validated-element tbody tr').remove()
+                        $('#product-form-value')[0].reset()
+
+                        $('#product-form-value input').remove()
+                        totalInputs =0;
+                        $('.bd-example-modal-lg').modal('hide');
+                    } else {
+                        sweetAlert("Désolé!", "Erreur lors de l'enregistrement!", "error")
+                        $('#product-form-value .btn-primary').attr("disabled", false).html("Enregistrer")
+                    }
+
+                },
+                error: function (resp) {
+                    sweetAlert("Désolé!", "Une erreur s'est produite.", "error");
+                    $('#product-form-value .btn-primary').attr("disabled", false).html("Enregistrer")
+                }
+            });
+        })
+        // fonction qui charge les produits : les elements du tableau
+        function loadProducts() {
+            // $("#example").DataTable.destroy();
+            $("#example").DataTable({
+                Processing: true,
+                searching: true,
+                LengthChange: true, // desactive le module liste deroulante(d'affichage du nombre de resultats par page)
+                iDisplayLength: 10, // Configure le nombre de resultats a afficher par page a 10
+                bRetrieve: true,
+                stateSave: true,
+                ajaxSetup:{
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                },
+                ajax:{
+                    url: "{{ route('produit.load') }}",
+                },
+
+                columns: [
+                    {data: 'DT_RowIndex',name:'DT_RowIndex'},
+                    {data: 'reference',name:'reference'},
+                    {data: 'titre_produit',name:'titre_produit'},
+                    {data: 'categorie',name:'categorie'},
+                    {data: 'quantite',name:'quantite'},
+                    {data: 'prix',name:'prix'},
+                    // {data: 'description',name:'description'},
+                    {data: 'stock',name:'stock'},
+                    {data: 'username',name:'username'},
+                    {data: 'action', name: 'action', orderable: false, searchable: false},
+
+                ],
+                order: []
+            })
+
+        }
+
+        $(document).ready(function () {
+            loadProducts()
+            $('#example').DataTable().draw();
+        });
+
+        // edit product
+        function  editFun(id){
+                $('#edit-product-form'+id +' .btn-primary').attr("disabled", true).html("En cours...")
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                var data = $('#edit-product-form'+id).serialize()
+
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('produit.update') }}",
+                    data: data,
+                    dataType: 'json',
+                    success: function (res) {
+                        if (res) {
+                            // swal.fire("Effectué!", "Enregistré avec succès!", "success")
+                            // on recharge le tableau de produit
+                            toastr.success("Enregistré avec succès!");
+                            $('#example').dataTable().fnClearTable();
+                            $('#example').dataTable().fnDestroy();
+                            loadProducts();
+                            $('#produitsModal'+id).modal('hide');
+                            $('#edit-product-form'+id +' .btn-primary').attr("disabled", false).html("Enregistrer")
+                        } else {
+                            sweetAlert("Désolé!", "Erreur lors de l'enregistrement!", "error")
+                            $('#edit-product-form'+id +' .btn-primary').attr("disabled", false).html("Enregistrer")
+                        }
+
+                    },
+                    error: function (resp) {
+                        sweetAlert("Désolé!", "Une erreur s'est produite.", "error");
+                        $('#product-form-value .btn-primary').attr("disabled", false).html("Enregistrer")
+                    }
+                });
+
+        }
+
+
     </script>
-    <!-- Datatable -->
-    <script src="{{asset('template/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
-    <script src="{{asset('template/js/plugins-init/datatables.init.js')}}"></script>
+
     <script src="{{asset('template/vendor/sweetalert2/dist/sweetalert2.min.js')}}"></script>
     <!-- Selet search -->
     <script src="{{asset('template/vendor/select2/js/select2.full.min.js')}}"></script>
     <script src="{{asset('template/js/plugins-init/select2-init.js')}}"></script>
 
+    <!-- Datatable -->
+{{--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>--}}
+{{--    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>--}}
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
 @endsection

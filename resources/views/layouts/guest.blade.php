@@ -21,7 +21,7 @@
     <link href="{{asset('template/css/style.css')}}" rel="stylesheet">
 </head>
 <body class="h-100 mt-5" style="background-image: url('{{ asset('images/bg/bg1.jpg') }}');
-    background-size: 1500px; background-repeat: no-repeat">
+    background-size: 1470px; background-repeat: no-repeat">
 <!--*******************
        Preloader start
    ********************-->

@@ -79,6 +79,7 @@ Route::prefix('dashboard')->group(function () {
 
             //Routes for produit
             Route::get('product/index',[ProduitController::class,'listproduct'])->name('produit.all');
+            Route::get('product/list',[ProduitController::class,'loadProducts'])->name('produit.load');
             Route::post('product/store',[ProduitController::class,'storeProduct'])->name('produit.store');
             Route::post('product/update',[ProduitController::class,'updateProduct'])->name('produit.update');
             Route::post('product/delete',[ProduitController::class,'deleteProduct'])->name('produit.delete');
