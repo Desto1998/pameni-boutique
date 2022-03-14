@@ -62,6 +62,7 @@ class ProduitController extends Controller
                 }
                 $product->key = $key;
                 $product->produit_id = $value->produit_id;
+                $product->idcategorie = $value->idcategorie;
                 $product->reference = $value->reference;
                 $product->titre_produit = $value->titre_produit;
                 $product->quantite = $value->quantite_produit;
@@ -77,8 +78,9 @@ class ProduitController extends Controller
             }
             return Datatables::of($data)
                 ->addIndexColumn()
-                ->addColumn('action', function($row){
-                    $action = view('produit.produit_action',compact('row'));
+                ->addColumn('action', function($value){
+                    $categories = Categories::all();
+                    $action = view('produit.produit_action',compact('value','categories'));
 
 //                    $actionBtn = '<div class="d-flex"><a href="javascript:void(0)" class="edit btn btn-warning btn-sm"><i class="fa fa-edit"></i></a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm ml-1"  onclick="deleteFun()"><i class="fa fa-trash"></i></a></div>';
                     return (string)$action;

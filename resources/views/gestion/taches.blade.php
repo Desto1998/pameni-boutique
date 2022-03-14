@@ -2,7 +2,7 @@
 @section('css_before')
     <link href="{{asset('template/vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">
     <link href="{{asset('template/vendor/sweetalert2/dist/sweetalert2.min.css')}}" rel="stylesheet">
-    <link href="{{asset('template/vendor/sweetalert2/dist/sweetalert2.min.css')}}" rel="stylesheet">
+    <link rel="stylesheet" href="{{asset('template/vendor/select2/css/select2.min.css')}}">
 
 @endsection
 @section('content')
@@ -33,7 +33,7 @@
 
                         <div class="table-responsive">
                             <table id="example" class="display text-center" style="min-width: 845px">
-                                <thead class="bg-primary">
+                                <thead class="bg-primary text-center">
                                 <tr>
                                     <th>#</th>
                                     <th>Date</th>
@@ -49,113 +49,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($taches as $key=> $value)
-                                    <tr>
-                                        <td>{{ $key+1 }}</td>
-                                        <td>{{ $value->date_debut }}</td>
-                                        <td>{{ $value->raison }}</td>
-                                        <td>{{ $value->titre }}</td>
-                                        <td>{{ $value->nombre }}</td>
-                                        <td>{{ $value->prix }} FCFA</td>
-                                        <td>{{ $value->prix*$value->nombre }} FCFA</td>
-                                        {{--                                        <td>--}}
-                                        {{--                                            @if ($value->date_debut<=date('Y-m-d'))--}}
-                                        {{--                                                <span class="text-danger">Effectué</span>--}}
-                                        {{--                                            @else--}}
-                                        {{--                                                <span class="text-success">En attente</span>--}}
-                                        {{--                                            @endif--}}
-                                        {{--                                        </td>--}}
-                                        {{--                                        <td>{{ $value->date_ajout }}</td>--}}
-                                        <td>{{ $value->firstname }}</td>
-                                        <td class="d-flex">
-                                            <a href="javascript:void(0);" class="btn btn-warning btn-sm" title="Modifier la tâches"
-                                               data-toggle="modal" data-target="#tachesModal{{ $value->tache_id }}"><i
-                                                    class="fa fa-edit"></i></a>
-                                            @if (Auth::user()->is_admin==1)
-                                                <button class="btn btn-danger btn-sm ml-1 "
-                                                        title="Supprimer cette tâches"
-                                                        onclick="deleteFun({{ $value->tache_id }})"><i
-                                                        class="fa fa-trash"></i></button>
-                                                {{--                                            Auth::user()->id--}}
-                                            @endif
-                                        </td>
-                                    </tr>
-                                    <div class="modal fade" id="tachesModal{{ $value->tache_id }}">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title">Modifier une tâche</h5>
-                                                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form action="{{ route('gestion.taches.add') }}" method="post">
-                                                        @csrf
-                                                        <input type="hidden" name="tache_id"
-                                                               value="{{ $value->tache_id }}">
 
-                                                        <div class="form-group">
-                                                            <label for="raison{{ $value->tache_id }}">Raison<span
-                                                                    class="text-danger">*</span></label>
-                                                            <input type="text" name="raison"
-                                                                   id="raison{{ $value->tache_id }}"
-                                                                   value="{{ $value->raison }}" placeholder="Raison"
-                                                                   class="form-control">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="nombre{{ $value->tache_id }}">Quantité <span
-                                                                    class="text-danger">*</span></label>
-                                                            <input type="number" name="nombre"
-                                                                   value="{{ $value->nombre }}" min="1"
-                                                                   id="nombre{{ $value->tache_id }}"
-                                                                   class="form-control" required>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="prix{{ $value->tache_id }}">Prix <span
-                                                                    class="text-danger">*</span></label>
-                                                            <input type="number" name="prix" min="0"
-                                                                   value="{{ $value->prix }}" step="any"
-                                                                   id="prix{{ $value->tache_id }}" class="form-control"
-                                                                   required>
-                                                        </div>
-
-
-                                                        <div class="form-group">
-                                                            <label for="charge{{ $value->tache_id }}">Charges <span
-                                                                    class="text-danger">*</span></label>
-                                                            <select class="form-control" required name="idcharge"
-                                                                    id="charge{{ $value->tache_id }}">
-                                                                <option disabled="disabled" selected>Sélectionner une
-                                                                    charge
-                                                                </option>
-                                                                @foreach($charges as $item)
-                                                                    <option
-                                                                        {{ $item->charge_id==$value->idcharge?'selected':'' }} value="{{ $item->charge_id }}">{{ $item->titre }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="date_debut{{ $value->tache_id }}">Date <span
-                                                                    class="text-danger">*</span></label>
-                                                            <input type="date" name="date_debut"
-                                                                   id="date_debut{{ $value->tache_id }}" required
-                                                                   value="{{ $value->date_debut }}"
-                                                                   class="form-control">
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary"
-                                                                    data-dismiss="modal">Annuler
-                                                            </button>
-                                                            <button type="submit" class="btn btn-primary">Enregistrer
-                                                            </button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
                                 </tbody>
 
                             </table>
@@ -167,62 +61,13 @@
         </div>
 
     </div>
-    <!-- Modal -->
-    <div class="modal fade" id="tachesModal">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Ajouter une tâche</h5>
-                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="{{ route('gestion.taches.add') }}" method="post">
-                        @csrf
-                        <div class="form-group">
-                            <label for="raison">Raison<span class="text-danger">*</span></label>
-                            <input type="text" name="raison" id="raison" placeholder="Raison" class="form-control"
-                                   required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="nombre">Quantité <span class="text-danger">*</span></label>
-                            <input type="number" name="nombre" min="1" id="nombre" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="prix">Prix <span class="text-danger">*</span></label>
-                            <input type="number" name="prix" min="0" step="any" id="prix" class="form-control" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="charge">Charges <span class="text-danger">*</span></label>
-                            <select class="form-control" required name="idcharge" id="single-select">
-                                <option disabled="disabled" selected>Sélectionner une charge</option>
-                                @foreach($charges as $item)
-                                    <option value="{{ $item->charge_id }}">{{ $item->titre }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="date_debut">Date <span class="text-danger">*</span></label>
-                            <input type="date" name="date_debut" required id="date_debut" class="form-control">
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                            <button type="submit" class="btn btn-primary">Enregistrer</button>
-                        </div>
-                    </form>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
+    @include('gestion.tache_modal')
 @endsection
 @section('script')
     <script>
         // delete funtion
         function deleteFun(id) {
+            var table = $('#example').DataTable();
             swal.fire({
                 title: "Supprimer cette tâches?",
                 icon: 'question',
@@ -248,8 +93,9 @@
                         success: function (res) {
                             if (res) {
                                 swal.fire("Effectué!", "Supprimé avec succès!", "success")
-                                window.location.reload(200);
-
+                                table.row( $('#deletebtn'+id).parents('tr') )
+                                    .remove()
+                                    .draw();
                             } else {
                                 sweetAlert("Désolé!", "Erreur lors de la suppression!", "error")
                             }
@@ -267,7 +113,134 @@
             })
             // }
         }
+        function loadTaches(){
+            $('#example').dataTable().fnClearTable();
+            $('#example').dataTable().fnDestroy();
+            $("#example").DataTable({
+                Processing: true,
+                searching: true,
+                LengthChange: true, // desactive le module liste deroulante(d'affichage du nombre de resultats par page)
+                iDisplayLength: 10, // Configure le nombre de resultats a afficher par page a 10
+                bRetrieve: true,
+                stateSave: true,
+                ajaxSetup:{
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                },
+                ajax:{
+                    url: "{{ route('gestion.load.tache') }}",
 
+                },
+
+                columns: [
+                    {data: 'DT_RowIndex',name:'DT_RowIndex'},
+                    {data: 'date_debut',name:'date_debut'},
+                    {data: 'raison',name:'raison'},
+                    {data: 'titre',name:'titre'},
+                    {data: 'nombre',name:'nombre'},
+                    {data: 'prix',name:'prix'},
+                    {data: 'total',name:'total'},
+                    {data: 'firstname',name:'firstname'},
+                    {data: 'action', name: 'action', orderable: false, searchable: false},
+
+                ],
+                order: []
+            })
+        }
+        $(document).ready(function () {
+            loadTaches();
+
+        });
+
+        // add new taches
+        $("#tache-form").on("submit", function (event) {
+            event.preventDefault();
+
+            $('#tache-form .btn-primary').attr("disabled", true).html("En cours...")
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            var data = $('#tache-form').serialize()
+
+            $.ajax({
+                type: "POST",
+                url: "{{ route('gestion.taches.add') }}",
+                data: data,
+                dataType: 'json',
+                success: function (res) {
+                    console.log(res);
+
+                    if (res) {
+                        // swal.fire("Effectué!", "Enregistré avec succès!", "success")
+                        // on recharge le tableau de produit
+                        toastr.success("Enregistré avec succès!");
+
+                        loadTaches()
+                        // on reinitialise le formulaire qui contient les produits
+                        $('#tache-form .btn-primary').attr("disabled", false).html("Enregistrer")
+                        $('#tache-form')[0].reset()
+
+                        $('#tachesModal').modal('hide');
+                    } if (res===[]|| res===undefined || res==null) {
+                        sweetAlert("Désolé!", "Erreur lors de l'enregistrement!", "error")
+                        $('#tache-form .btn-primary').attr("disabled", false).html("Enregistrer")
+                    }
+
+                },
+                error: function (resp) {
+                    sweetAlert("Désolé!", "Une erreur s'est produite.", "error");
+                    $('#tache-form .btn-primary').attr("disabled", false).html("Enregistrer")
+                }
+            });
+        });
+
+        //  cette methode fait la mise a jour d'une tache
+        function editTache(id){
+            $("#edit-tache-form"+id).on("submit", function (event) {
+                event.preventDefault();
+                $('#edit-tache-form'+id +' .btn-primary').attr("disabled", true).html("En cours...")
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                var data = $('#edit-tache-form'+id).serialize()
+
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('gestion.taches.add') }}",
+                    data: data,
+                    dataType: 'json',
+                    success: function (res) {
+
+                        if (res) {
+                            // swal.fire("Effectué!", "Enregistré avec succès!", "success")
+                            // on recharge le tableau de produit
+                            toastr.success("Enregistré avec succès!");
+
+
+                            // on reinitialise le formulaire qui contient les produits
+                            $('#edit-tache-form'+id+' .btn-primary').attr("disabled", false).html("Enregistrer")
+                            $('#tachesModal'+id).modal('hide');
+                            loadTaches()
+
+                        } if (res===[]|| res===undefined || res==null) {
+                            sweetAlert("Désolé!", "Erreur lors de l'enregistrement!", "error")
+                            $('#edit-tache-form'+id+' .btn-primary').attr("disabled", false).html("Enregistrer")
+                        }
+
+
+                    },
+                    error: function (resp) {
+                        sweetAlert("Désolé!", "Une erreur s'est produite.", "error");
+                        $('#edit-tache-form'+id+' .btn-primary').attr("disabled", false).html("Enregistrer")
+                    }
+                });
+            });
+        }
     </script>
     <!-- Datatable -->
     <script src="{{asset('template/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>

@@ -192,12 +192,12 @@
                 },
                 error: function (resp) {
                     sweetAlert("Désolé!", "Une erreur s'est produite.", "error");
-                    $('#product-form-value .btn-primary').attr("disabled", false).html("Enregistrer")
+                    $('#categorie-form .btn-primary').attr("disabled", false).html("Enregistrer")
                 }
             });
         });
 
-        // getcategorie id cette methode retourne l'id de la categorie
+        // getcategorie id cette methode fait la mise a jour d'une categorie
         function getCategorieId(id){
             $("#edit-categorie-form"+id).on("submit", function (event) {
                 event.preventDefault();
@@ -224,11 +224,12 @@
                             // on recharge le tableau de produit
                             toastr.success("Enregistré avec succès!");
 
-                            loadCategorie()
+
                             // on reinitialise le formulaire qui contient les produits
                             $('#edit-categorie-form'+id+' .btn-primary').attr("disabled", false).html("Enregistrer")
 
                             $('#categoriesModal'+id).modal('hide');
+                            loadCategorie()
                         } if (res===[]|| res===undefined || res==null) {
                             sweetAlert("Désolé!", "Erreur lors de l'enregistrement!", "error")
                             $('#edit-categorie-form'+id+' .btn-primary').attr("disabled", false).html("Enregistrer")
@@ -238,7 +239,7 @@
                     },
                     error: function (resp) {
                         sweetAlert("Désolé!", "Une erreur s'est produite.", "error");
-                        $('#edit-categorie-form .btn-primary').attr("disabled", false).html("Enregistrer")
+                        $('#edit-categorie-form'+id+' .btn-primary').attr("disabled", false).html("Enregistrer")
                     }
                 });
             });

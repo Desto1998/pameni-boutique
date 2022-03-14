@@ -398,9 +398,10 @@
                             // swal.fire("Effectué!", "Enregistré avec succès!", "success")
                             // on recharge le tableau de produit
                             toastr.success("Enregistré avec succès!");
-                            loadProducts();
+
                             $('#produitsModal'+id).modal('hide');
                             $('#edit-product-form'+id +' .btn-primary').attr("disabled", false).html("Enregistrer")
+                            loadProducts();
                         } else {
                             sweetAlert("Désolé!", "Erreur lors de l'enregistrement!", "error")
                             $('#edit-product-form'+id +' .btn-primary').attr("disabled", false).html("Enregistrer")

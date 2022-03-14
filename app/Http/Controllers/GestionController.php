@@ -28,8 +28,8 @@ class GestionController extends Controller
             $data =Charges::join('users','users.id','charges.iduser')->orderBy('charges.created_at','desc' )->get();
             return Datatables::of($data)
                 ->addIndexColumn()
-                ->addColumn('action', function($row){
-                    $action = view('gestion.charge_action',compact('row'));
+                ->addColumn('action', function($value){
+                    $action = view('gestion.charge_action',compact('value'));
 
 //                    $actionBtn = '<div class="d-flex"><a href="javascript:void(0)" class="edit btn btn-warning btn-sm"><i class="fa fa-edit"></i></a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm ml-1"  onclick="deleteFun()"><i class="fa fa-trash"></i></a></div>';
                     return (string)$action;
@@ -38,6 +38,7 @@ class GestionController extends Controller
                 ->make(true);
 
         }
+        return false;
     }
     // Store or edit function
     protected function storeCharge(Request $request)
@@ -85,18 +86,25 @@ public function loadTaches(){
             ->join('users','users.id','charges.iduser')
             ->orderBy('taches.date_ajout','desc' )
             ->get();
+
         return Datatables::of($data)
             ->addIndexColumn()
-            ->addColumn('action', function($row){
-                $action = view('gestion.tache_action',compact('row'));
+            ->addColumn('action', function($value){
+                $charges = Charges::all();
+                $action = view('gestion.tache_action',compact('value','charges'));
 
 //                    $actionBtn = '<div class="d-flex"><a href="javascript:void(0)" class="edit btn btn-warning btn-sm"><i class="fa fa-edit"></i></a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm ml-1"  onclick="deleteFun()"><i class="fa fa-trash"></i></a></div>';
                 return (string)$action;
             })
-            ->rawColumns(['action'])
+            ->addColumn('total', function($value){
+                $total = $value->nombre*$value->prix;
+                return $total;
+            })
+            ->rawColumns(['action','total'])
             ->make(true);
 
     }
+    return false;
 }
     // Store or edit
     protected function storeTask(Request $request)

@@ -65,8 +65,8 @@ class CategorieController extends Controller
             $data = Categories::join('users', 'users.id', 'categories.iduser')->get();
             return Datatables::of($data)
                 ->addIndexColumn()
-                ->addColumn('action', function($row){
-                    $action = view('categorie.action',compact('row'));
+                ->addColumn('action', function($value){
+                    $action = view('categorie.action',compact('value'));
 
 //                    $actionBtn = '<div class="d-flex"><a href="javascript:void(0)" class="edit btn btn-warning btn-sm"><i class="fa fa-edit"></i></a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm ml-1"  onclick="deleteFun()"><i class="fa fa-trash"></i></a></div>';
                     return (string)$action;

@@ -42,71 +42,8 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($charges as $key=> $value)
-                                    <tr>
-                                        <td>{{ $key+1 }}</td>
-                                        <td>{{ $value->titre }}</td>
-                                        <td>{{ $value->description }}</td>
-                                        <td>{{ $value->firstname }}</td>
-                                        <td class="d-flex">
-                                            <a href="javascript:void(0);" class="btn btn-warning btn-sm" title="Modifier la charge"
-                                               data-toggle="modal" data-target="#chargesModal{{ $value->charge_id }}"><i
-                                                    class="fa fa-edit"></i></a>
-                                            @if (Auth::user()->is_admin==1)
-                                                <button class="btn btn-danger btn-sm ml-1 "
-                                                        title="Supprimer cette charge"
-                                                        onclick="deleteFun({{ $value->charge_id }})"><i
-                                                        class="fa fa-trash"></i></button>
-                                                {{--                                            Auth::user()->id--}}
-                                            @endif
-                                        </td>
-                                    </tr>
-                                    <div class="modal fade" id="chargesModal{{ $value->charge_id }}">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title">Modifier une charge</h5>
-                                                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form action="{{ route('gestion.charge.add') }}" method="post">
-                                                        @csrf
-                                                        <input type="hidden" name="charge_id"
-                                                               value="{{ $value->charge_id }}">
-                                                        <div class="form-group">
-                                                            <label for="titre">Titre de la charge <span
-                                                                    class="text-danger">*</span></label>
-                                                            <input type="text" name="titre"
-                                                                   id="titre{{ $value->charge_id }}" placeholder="Titre"
-                                                                   value="{{ $value->titre }}" required
-                                                                   class="form-control">
-                                                        </div>
 
-                                                        <div class="form-group">
-                                                            <label for="description{{ $value->charge_id }}">Description
-                                                                de la charge </label>
-                                                            <textarea name="description"
-                                                                      id="description{{ $value->charge_id }}"
-                                                                      placeholder="Description"
-                                                                      class="form-control">{{ $value->description }}</textarea>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary"
-                                                                    data-dismiss="modal">Annuler
-                                                            </button>
-                                                            <button type="submit" class="btn btn-primary">Enregistrer
-                                                            </button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
                                 </tbody>
-
                             </table>
                         </div>
 
@@ -116,43 +53,12 @@
         </div>
 
     </div>
-    <!-- Modal -->
-    <div class="modal fade" id="chargesModal">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Ajouter charge</h5>
-                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="{{ route('gestion.charge.add') }}" method="post">
-                        @csrf
-                        <div class="form-group">
-                            <label for="titre">Titre de la charge <span class="text-danger">*</span></label>
-                            <input type="text" name="titre" id="titre" placeholder="Titre" class="form-control">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="description">Description de la charge </label>
-                            <textarea name="description" id="description" placeholder="Description"
-                                      class="form-control"></textarea>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                            <button type="submit" class="btn btn-primary">Enregistrer</button>
-                        </div>
-                    </form>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
+@include('gestion.charge_modal')
 @endsection
 @section('script')
     <script>
         function deleteFun(id) {
+            var table = $('#example').DataTable();
             swal.fire({
                 title: "Supprimer cette charge?",
                 icon: 'question',
@@ -178,7 +84,9 @@
                         success: function (res) {
                             if (res) {
                                 swal.fire("Effectué!", "Supprimé avec succès!", "success")
-                                window.location.reload(200);
+                                table.row( $('#deletebtn'+id).parents('tr') )
+                                    .remove()
+                                    .draw();
 
                             } else {
                                 sweetAlert("Désolé!", "Erreur lors de la suppression!", "error")
@@ -196,6 +104,131 @@
                 return false;
             })
             // }
+        }
+        function loadCharges(){
+            $('#example').dataTable().fnClearTable();
+            $('#example').dataTable().fnDestroy();
+            $("#example").DataTable({
+                Processing: true,
+                searching: true,
+                LengthChange: true, // desactive le module liste deroulante(d'affichage du nombre de resultats par page)
+                iDisplayLength: 10, // Configure le nombre de resultats a afficher par page a 10
+                bRetrieve: true,
+                stateSave: true,
+                ajaxSetup:{
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                },
+                ajax:{
+                    url: "{{ route('gestion.load.charge') }}",
+
+                },
+
+                columns: [
+                    {data: 'DT_RowIndex',name:'DT_RowIndex'},
+                    {data: 'titre',name:'titre'},
+                    {data: 'description',name:'description'},
+                    {data: 'firstname',name:'firstname'},
+                    {data: 'action', name: 'action', orderable: false, searchable: false},
+
+                ],
+                order: []
+            })
+        }
+        // load table on page load
+        $(document).ready(function () {
+            loadCharges()
+
+        });
+
+        $("#charge-form").on("submit", function (event) {
+            event.preventDefault();
+
+            $('#charge-form .btn-primary').attr("disabled", true).html("En cours...")
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            var data = $('#charge-form').serialize()
+
+            $.ajax({
+                type: "POST",
+                url: "{{ route('gestion.charge.add') }}",
+                data: data,
+                dataType: 'json',
+                success: function (res) {
+                    console.log(res);
+                    if (res) {
+                        // swal.fire("Effectué!", "Enregistré avec succès!", "success")
+                        // on recharge le tableau de produit
+                        toastr.success("Enregistré avec succès!");
+
+                        loadCharges()
+                        // on reinitialise le formulaire qui contient les produits
+                        $('#charge-form .btn-primary').attr("disabled", false).html("Enregistrer")
+                        $('#charge-form')[0].reset()
+
+                        $('#chargesModal').modal('hide');
+                    }
+                    if (res===[]|| res===undefined || res==null) {
+                        sweetAlert("Désolé!", "Erreur lors de l'enregistrement!", "error")
+                        $('#charge-form .btn-primary').attr("disabled", false).html("Enregistrer")
+                    }
+
+                },
+                error: function (resp) {
+                    sweetAlert("Désolé!", "Une erreur s'est produite.", "error");
+                    $('#charge-form .btn-primary').attr("disabled", false).html("Enregistrer")
+                }
+            });
+        });
+
+        // id cette methode fait la mise a jour d'une charge
+        function editeCharge(id){
+            $("#edit-charge-form"+id).on("submit", function (event) {
+                event.preventDefault();
+                $('#edit-charge-form'+id +' .btn-primary').attr("disabled", true).html("En cours...")
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                var data = $('#edit-charge-form'+id).serialize()
+
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('gestion.charge.add') }}",
+                    data: data,
+                    dataType: 'json',
+                    success: function (res) {
+
+                        if (res) {
+                            // swal.fire("Effectué!", "Enregistré avec succès!", "success")
+                            // on recharge le tableau de produit
+                            toastr.success("Enregistré avec succès!");
+
+
+                            // on reinitialise le formulaire qui contient les charges
+                            $('#edit-charge-form'+id+' .btn-primary').attr("disabled", false).html("Enregistrer")
+
+                            $('#chargesModal'+id).modal('hide');
+                            loadCharges()
+                        }
+                        if (res===[]|| res===undefined || res==null) {
+                            sweetAlert("Désolé!", "Erreur lors de l'enregistrement!", "error")
+                            $('#edit-charge-form'+id+' .btn-primary').attr("disabled", false).html("Enregistrer")
+                        }
+
+
+                    },
+                    error: function (resp) {
+                        sweetAlert("Désolé!", "Une erreur s'est produite.", "error");
+                        $('#edit-charge-form'+id+'++ .btn-primary').attr("disabled", false).html("Enregistrer")
+                    }
+                });
+            });
         }
 
     </script>
