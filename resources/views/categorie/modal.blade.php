@@ -8,7 +8,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('categorie.store') }}" method="post">
+                <form action="#" method="post" id="categorie-form">
                     @csrf
                     <div class="form-group">
                         <label for="titre_cat">Titre de la catégorie <span class="text-danger">*</span></label>
@@ -16,7 +16,7 @@
                     </div>
                     <div class="form-group">
                         <label for="code_cat">Code de la catégorie <span class="text-danger">* (Min:4)</span></label>
-                        <input type="text" name="code_cat" id="code_cat" placeholder="Code" class="form-control text-uppercase">
+                        <input type="text" name="code_cat" id="code_cat" minlength="4" maxlength="6" placeholder="Code" class="form-control text-uppercase">
                     </div>
 
                     <div class="form-group">
@@ -79,7 +79,7 @@
                             <button type="button" class="btn btn-secondary"
                                     data-dismiss="modal">Annuler
                             </button>
-                            <button type="button" id="edit-btn{{ $value->categorie_id }}" class="btn btn-primary">Enregistrer
+                            <button type="submit" onclick="getCategorieId({{ $value->categorie_id }})" id="edit-btn{{ $value->categorie_id }}" class="btn btn-primary">Enregistrer
                             </button>
                         </div>
                     </form>

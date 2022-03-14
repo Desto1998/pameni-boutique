@@ -30,7 +30,7 @@
                     <div class="card-body">
                         <!-- Button trigger modal -->
                         <h4 class="w-50">Editer un client</h4>
-                        <form action="{{ route('client.store') }}" method="post">
+                        <form action="{{ route('client.update') }}" method="post">
                             @csrf
                             <input type="hidden" value="{{ $client->client_id }}" name="client_id">
                             <input type="hidden" value="{{ $client->date_ajout }}" name="date_ajout">

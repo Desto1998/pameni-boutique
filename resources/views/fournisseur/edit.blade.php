@@ -30,7 +30,7 @@
                     <div class="card-body">
                         <!-- Button trigger modal -->
                         <h4 class="w-50">Editer un fournisseur</h4>
-                        <form action="{{ route('fournisseur.store') }}" method="post">
+                        <form action="{{ route('fournisseur.update') }}" method="post">
                             @csrf
                             <input type="hidden" value="{{ $fournisseur->fournisseur_id }}" name="client_id">
                             <input type="hidden" value="{{ $fournisseur->date_ajout }}" name="date_ajout">

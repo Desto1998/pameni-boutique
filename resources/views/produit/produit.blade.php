@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('css_before')
-{{--    <link href="{{asset('template/vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">--}}
+    <link href="{{asset('template/vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">
     <link href="{{asset('template/vendor/sweetalert2/dist/sweetalert2.min.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('template/vendor/select2/css/select2.min.css')}}">
 {{--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"/>--}}
@@ -8,7 +8,7 @@
 {{--    <link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet">--}}
  <!-- datatable css -->
     <link href="{{ asset('datatable/css/jquery.dataTables.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('datatable/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+{{--    <link href="{{ asset('datatable/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet">--}}
 @endsection
 @section('content')
     <div class="container-fluid">
@@ -266,7 +266,7 @@
             }
 
 
-        })
+        });
         // Enlever toutes entrees  crees
         $('#removeFields').click(function (e) {
 
@@ -334,7 +334,7 @@
                     $('#product-form-value .btn-primary').attr("disabled", false).html("Enregistrer")
                 }
             });
-        })
+        });
         // fonction qui charge les produits : les elements du tableau
         function loadProducts() {
             $('#example').dataTable().fnClearTable();
@@ -398,8 +398,6 @@
                             // swal.fire("Effectué!", "Enregistré avec succès!", "success")
                             // on recharge le tableau de produit
                             toastr.success("Enregistré avec succès!");
-                            $('#example').dataTable().fnClearTable();
-                            $('#example').dataTable().fnDestroy();
                             loadProducts();
                             $('#produitsModal'+id).modal('hide');
                             $('#edit-product-form'+id +' .btn-primary').attr("disabled", false).html("Enregistrer")
@@ -419,6 +417,8 @@
 
 
     </script>
+    <script src="{{asset('template/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
+    <script src="{{asset('template/js/plugins-init/datatables.init.js')}}"></script>
 
     <script src="{{asset('template/vendor/sweetalert2/dist/sweetalert2.min.js')}}"></script>
     <!-- Selet search -->
@@ -433,8 +433,8 @@
 {{--    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>--}}
 {{--    <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>--}}
 
-    <script src="{{ asset('datatable/js/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('datatable/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('datatable/js/dataTables.bootstrap4.min.js') }}"></script>
+{{--    <script src="{{ asset('datatable/js/jquery.dataTables.min.js') }}"></script>--}}
+{{--    <script src="{{ asset('datatable/js/bootstrap.min.js') }}"></script>--}}
+{{--    <script src="{{ asset('datatable/js/dataTables.bootstrap4.min.js') }}"></script>--}}
 
 @endsection

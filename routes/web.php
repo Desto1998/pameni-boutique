@@ -59,11 +59,13 @@ Route::prefix('dashboard')->group(function () {
 
             // Route for charges
             Route::get('gestion/charges', [GestionController::class, 'charge'])->name('gestion.index');
+            Route::get('gestion/charges/load', [GestionController::class, 'loadCharges'])->name('gestion.load.charge');
             Route::post('gestion/charges/add', [GestionController::class, 'storeCharge'])->name('gestion.charge.add');
             Route::post('gestion/charges/delete', [GestionController::class, 'deleteCharge'])->name('gestion.charge.delete');
 
             // Route for taches
             Route::get('gestion/tasks', [GestionController::class, 'taches'])->name('gestion.tache');
+            Route::get('gestion/tasks/load', [GestionController::class, 'loadTaches'])->name('gestion.load.tache');
             Route::post('gestion/tasks/add', [GestionController::class, 'storeTask'])->name('gestion.taches.add');
             Route::post('gestion/tasks/delete', [GestionController::class, 'deleteTache'])->name('gestion.taches.delete');
 
@@ -88,14 +90,18 @@ Route::prefix('dashboard')->group(function () {
 
             //Routes for client
             Route::get('client/index',[ClientController::class,'index'])->name('client.all');
+            Route::get('client/load',[ClientController::class,'loadClients'])->name('client.load');
             Route::post('client/store',[ClientController::class,'store'])->name('client.store');
+            Route::post('client/update',[ClientController::class,'update'])->name('client.update');
             Route::post('client/delete',[ClientController::class,'delete'])->name('client.delete');
             Route::get('client/edit/{id}',[ClientController::class,'showEditForm'])->name('client.edit');
             Route::get('client/details/{id}',[ClientController::class,'view'])->name('client.view');
 
             //Routes for fournisseur
             Route::get('fournisseur/index',[FournisserController::class,'index'])->name('fournisseur.all');
+            Route::get('fournisseur/load',[FournisserController::class,'loadFournisseur'])->name('fournisseur.load');
             Route::post('fournisseur/store',[FournisserController::class,'store'])->name('fournisseur.store');
+            Route::post('fournisseur/update',[FournisserController::class,'update'])->name('fournisseur.update');
             Route::get('fournisseur/edit/{id}',[FournisserController::class,'showEditForm'])->name('fournisseur.edit');
             Route::post('fournisseur/delete',[FournisserController::class,'delete'])->name('fournisseur.delete');
             Route::get('fournisseur/details/{id}',[FournisserController::class,'view'])->name('fournisseur.view');

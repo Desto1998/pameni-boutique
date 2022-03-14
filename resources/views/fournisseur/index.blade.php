@@ -52,38 +52,38 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($data as $key=> $value)
-                                    <tr>
-                                        <td>{{ $key+1 }}</td>
-                                        <td>{{ $value->nom_fr }} {{ $value->prenom_fr }} {{ $value->raison_s_fr }}</td>
-                                        <td>{{ $value->phone_1_fr }} / {{ $value->phone_2_fr }}</td>
-                                        <td>{{ $value->email_fr }}</td>
-                                        <td>
-                                            @foreach($pays as $p)
-                                                @if ($p->pays_id==$value->idpays)
-                                                    {{ $p->nom_pays }}
-                                                @endif
-                                            @endforeach
-                                        </td>
-                                        <td>{{ $value->ville_fr }}</td>
-                                        <td>{{ $value->adresse_fr }}</td>
-                                        <td>{{ $value->postale }}</td>
-                                        <td class="d-flex">
-                                            <a href="{{ route('fournisseur.view',['id' =>$value->fournisseur_id]) }}" class="btn btn-success btn-sm" title="Visualiser le fournissuer"><i
-                                                    class="fa fa-eye"></i></a>
-                                            <a href="{{ route('fournisseur.edit',['id' =>$value->fournisseur_id]) }}" class="btn btn-warning btn-sm ml-1" title="Modifier le fournissuer"><i
-                                                    class="fa fa-edit"></i></a>
-                                            @if (Auth::user()->is_admin==1)
-                                                <button class="btn btn-danger btn-sm ml-1 "
-                                                        title="Supprimer ce fournissuer"
-                                                        onclick="deleteFun({{ $value->fournisseur_id }})"><i
-                                                        class="fa fa-trash"></i></button>
-                                                {{--                                            Auth::user()->id--}}
-                                            @endif
-                                        </td>
-                                    </tr>
+{{--                                @foreach($data as $key=> $value)--}}
+{{--                                    <tr>--}}
+{{--                                        <td>{{ $key+1 }}</td>--}}
+{{--                                        <td>{{ $value->nom_fr }} {{ $value->prenom_fr }} {{ $value->raison_s_fr }}</td>--}}
+{{--                                        <td>{{ $value->phone_1_fr }} / {{ $value->phone_2_fr }}</td>--}}
+{{--                                        <td>{{ $value->email_fr }}</td>--}}
+{{--                                        <td>--}}
+{{--                                            @foreach($pays as $p)--}}
+{{--                                                @if ($p->pays_id==$value->idpays)--}}
+{{--                                                    {{ $p->nom_pays }}--}}
+{{--                                                @endif--}}
+{{--                                            @endforeach--}}
+{{--                                        </td>--}}
+{{--                                        <td>{{ $value->ville_fr }}</td>--}}
+{{--                                        <td>{{ $value->adresse_fr }}</td>--}}
+{{--                                        <td>{{ $value->postale }}</td>--}}
+{{--                                        <td class="d-flex">--}}
+{{--                                            <a href="{{ route('fournisseur.view',['id' =>$value->fournisseur_id]) }}" class="btn btn-success btn-sm" title="Visualiser le fournissuer"><i--}}
+{{--                                                    class="fa fa-eye"></i></a>--}}
+{{--                                            <a href="{{ route('fournisseur.edit',['id' =>$value->fournisseur_id]) }}" class="btn btn-warning btn-sm ml-1" title="Modifier le fournissuer"><i--}}
+{{--                                                    class="fa fa-edit"></i></a>--}}
+{{--                                            @if (Auth::user()->is_admin==1)--}}
+{{--                                                <button class="btn btn-danger btn-sm ml-1 "--}}
+{{--                                                        title="Supprimer ce fournissuer"--}}
+{{--                                                        onclick="deleteFun({{ $value->fournisseur_id }})"><i--}}
+{{--                                                        class="fa fa-trash"></i></button>--}}
+{{--                                                --}}{{--                                            Auth::user()->id--}}
+{{--                                            @endif--}}
+{{--                                        </td>--}}
+{{--                                    </tr>--}}
 
-                                @endforeach
+{{--                                @endforeach--}}
                                 </tbody>
 
                             </table>
@@ -95,112 +95,14 @@
         </div>
 
     </div>
-    <!-- Modal -->
-    <div class="modal fade" id="fournisseursModal">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Ajouter un fournisseur</h5>
-                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="{{ route('fournisseur.store') }}" method="post">
-                        @csrf
-                        <div class="form-group">
-                            <label for="type_fr">Sélectionner le type du fournisseur</label>
-                            <select class="form-control" onchange="filterFormInput()" required name="type_fr" id="type_fr">
-                                <option value="0">Personne physique</option>
-                                <option value="1">Entreprise</option>
-                            </select>
-                        </div>
-
-                        <div class="row">
-                            <div class="form-group col-md-6 clienthide">
-                                <label for="nom_fr">Nom<span class="text-danger">*</span></label>
-                                <input type="text"  name="nom_fr" id="nom_fr" required placeholder="Nom" class="form-control">
-                            </div>
-
-                            <div class="form-group col-md-6 clienthide">
-                                <label for="prenom_fr">prenom</label>
-                                <input type="text" name="prenom_fr" id="prenom_fr" placeholder="Prénom" class="form-control">
-                            </div>
-                        </div>
-
-                        <div class="form-group enterprisehide" >
-                            <label for="raison_s_fr">Raison sociale<span class="text-danger">*</span></label>
-                            <input type="text" disabled name="raison_s_fr" id="raison_s_fr" placeholder="Raison sociale" class="form-control">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="email_fr">Email<span class="text-danger">*</span></label>
-                            <input type="email" name="email_fr" id="email_fr" required placeholder="Email" class="form-control">
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-6">
-                                <label for="phone_1">Téléphone 1<span class="text-danger">*</span></label>
-                                <input type="tel" name="phone_1" id="phone_1" required placeholder="Téléphone" class="form-control">
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label for="phone_2">Téléphone 2</label>
-                                <input type="tel" name="phone_2" id="phone_2" placeholder="Téléphone" class="form-control">
-                            </div>
-                        </div>
-
-
-                        <div class="form-group">
-                            <label for="single-select">Pays</label>
-                            <select class="form-control" required name="idpays" id="single-select">
-                                <option disabled="disabled" selected>Sélectionner un pays</option>
-                                @foreach($pays as $item)
-                                    <option value="{{ $item->pays_id }}">{{ $item->nom_pays }} </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-6">
-                                <label for="ville_fr">Ville<span class="text-danger">*</span></label>
-                                <input type="text" name="ville_fr" required id="ville_fr" placeholder="Ville" class="form-control">
-                            </div>
-
-                            <div class="form-group  col-md-6">
-                                <label for="postale">Boite postale</label>
-                                <input type="text" name="postale" id="postale" placeholder="" class="form-control">
-                            </div>
-
-                        </div>
-                        <div class="form-group">
-                            <label for="adresse_fr">Adresse</label>
-                            <input type="text" name="adresse_fr" id="adresse_fr" placeholder="Adresse" class="form-control">
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-6 enterprisehide">
-                                <label for="contribuabe">Numéro de contibuabe</label>
-                                <input type="text" disabled name="contribuabe" id="contribuabe" placeholder="Contribuabe" class="form-control">
-                            </div>
-
-                            <div class="form-group enterprisehide col-md-6">
-                                <label for="rcm">RC</label>
-                                <input type="text" name="rcm" disabled id="rcm" placeholder="RC" class="form-control">
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                            <button type="submit" class="btn btn-primary">Enregistrer</button>
-                        </div>
-                    </form>
-                </div>
-
-            </div>
-        </div>
-    </div>
+    @include('fournisseur.modal')
 
 @endsection
 @section('script')
     <script>
         // delete funtion
         function deleteFun(id) {
+            var table = $('#example').DataTable();
             swal.fire({
                 title: "Supprimer ce fournisseur?",
                 icon: 'question',
@@ -226,8 +128,9 @@
                         success: function (res) {
                             if (res) {
                                 swal.fire("Effectué!", "Supprimé avec succès!", "success")
-                                window.location.reload(200);
-
+                                table.row( $('#deletebtn'+id).parents('tr') )
+                                    .remove()
+                                    .draw();
                             } else {
                                 sweetAlert("Désolé!", "Erreur lors de la suppression!", "error")
                             }
@@ -269,6 +172,89 @@
             }
 
         }
+
+        // load all clients on datatable
+        function loadFournisseur(){
+            $('#example').dataTable().fnClearTable();
+            $('#example').dataTable().fnDestroy();
+            $("#example").DataTable({
+                Processing: true,
+                searching: true,
+                LengthChange: true, // desactive le module liste deroulante(d'affichage du nombre de resultats par page)
+                iDisplayLength: 10, // Configure le nombre de resultats a afficher par page a 10
+                bRetrieve: true,
+                stateSave: true,
+                ajaxSetup:{
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                },
+                ajax:{
+                    url: "{{ route('fournisseur.load') }}",
+
+                },
+                columns: [
+                    {data: 'DT_RowIndex',name:'DT_RowIndex'},
+                    {data: 'nom',name:'nom'},
+                    {data: 'phone',name:'phone'},
+                    {data: 'email_fr',name:'email_fr'},
+                    {data: 'nom_pays',name:'nom_pays'},
+                    {data: 'ville_fr',name:'ville_fr'},
+                    {data: 'adresse_fr',name:'adresse_fr'},
+                    {data: 'postale',name:'postale'},
+                    {data: 'action', name: 'action', orderable: false, searchable: false},
+
+                ],
+                order: []
+            })
+        }
+        $(document).ready(function () {
+            loadFournisseur()
+
+        });
+
+        // add new client
+        $("#fournisseur-form").on("submit", function (event) {
+            event.preventDefault();
+
+            $('#fournisseur-form .btn-primary').attr("disabled", true).html("En cours...")
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            var data = $('#fournisseur-form').serialize()
+
+            $.ajax({
+                type: "POST",
+                url: "{{ route('fournisseur.store') }}",
+                data: data,
+                dataType: 'json',
+                success: function (res) {
+                    console.log(res);
+                    if (res) {
+                        // swal.fire("Effectué!", "Enregistré avec succès!", "success")
+                        // on recharge le tableau de produit
+                        toastr.success("Enregistré avec succès!");
+
+
+                        // on reinitialise le formulaire
+                        $('#fournisseur-form .btn-primary').attr("disabled", false).html("Enregistrer")
+                        $('#fournisseur-form')[0].reset()
+                        $('#fournisseursModal').modal('hide');
+                        loadFournisseur();
+                    } else {
+                        sweetAlert("Désolé!", "Erreur lors de l'enregistrement!", "error")
+                        $('#fournisseur-form .btn-primary').attr("disabled", false).html("Enregistrer")
+                    }
+
+                },
+                error: function (resp) {
+                    sweetAlert("Désolé!", "Une erreur s'est produite.", "error");
+                    $('#fournisseur-form .btn-primary').attr("disabled", false).html("Enregistrer")
+                }
+            });
+        });
     </script>
     <!-- Datatable -->
     <script src="{{asset('template/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>

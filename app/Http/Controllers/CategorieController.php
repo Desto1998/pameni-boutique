@@ -26,25 +26,29 @@ class CategorieController extends Controller
         ]);
         $iduser = Auth::user()->id;
         $dataId = $request->categorie_id;
-        $checkCode = Categories::where('code_cat', $request->code_cat)->get();
+        $checkCode = Categories::where('categorie_id','!=',$dataId)->where('code_cat', $request->code_cat)->get();
         if (count($checkCode) > 0) {
-            return redirect()->back()->with('warning', 'Une catégorie avec ce code existe déja!');
+//            return redirect()->back()->with('warning', 'Une catégorie avec ce code existe déja!');
+            $statut = 0;
+            // retourne 0 si une categorie existe deja avec ce code
+            return  Response()->json($statut);
         }
 
         $save = Categories::updateOrCreate(
             ['categorie_id' => $dataId],
             [
                 'titre_cat' => $request->titre_cat,
-                'code_cat' => $request->code_cat,
+                'code_cat' => strtoupper($request->code_cat),
                 'description_cat' => $request->description_cat,
                 'iduser' => $iduser,
 
             ]);
-        if ($save) {
-            return redirect()->back()->with('success', 'Enregistré avec succès!');
-
-        }
-        return redirect()->back()->with('danger', "Désolé une erreur s'est produite. Veillez recommencer!");
+        return Response()->json($save);
+//        if ($save) {
+//            return redirect()->back()->with('success', 'Enregistré avec succès!');
+//
+//        }
+//        return redirect()->back()->with('danger', "Désolé une erreur s'est produite. Veillez recommencer!");
     }
 
     //delete categorie

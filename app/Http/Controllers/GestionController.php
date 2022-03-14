@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Models\Charges;
+use App\Models\Clients;
+use App\Models\Fournisseurs;
 use App\Models\Taches;
 use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use PhpParser\Node\Stmt\Return_;
+use Yajra\DataTables\DataTables;
 
 class GestionController extends Controller
 {
@@ -17,6 +20,24 @@ class GestionController extends Controller
     {
         $charges = Charges::join('users','users.id','charges.iduser')->orderBy('charges.created_at','desc' )->get();
         return view('gestion.charges', compact('charges'));
+    }
+
+    public function loadCharges(){
+        if (request()->ajax()) {
+
+            $data =Charges::join('users','users.id','charges.iduser')->orderBy('charges.created_at','desc' )->get();
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function($row){
+                    $action = view('gestion.charge_action',compact('row'));
+
+//                    $actionBtn = '<div class="d-flex"><a href="javascript:void(0)" class="edit btn btn-warning btn-sm"><i class="fa fa-edit"></i></a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm ml-1"  onclick="deleteFun()"><i class="fa fa-trash"></i></a></div>';
+                    return (string)$action;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+
+        }
     }
     // Store or edit function
     protected function storeCharge(Request $request)
@@ -35,11 +56,12 @@ class GestionController extends Controller
 
             ])
         ;
-        if ($save) {
-            return redirect()->back()->with('success','Enregistré avec succès!');
-
-        }
-        return redirect()->back()->with('danger', "Désolé une erreur s'est produite. Veillez recommencer!");
+        return Response()->json($save);
+//        if ($save) {
+//            return redirect()->back()->with('success','Enregistré avec succès!');
+//
+//        }
+//        return redirect()->back()->with('danger', "Désolé une erreur s'est produite. Veillez recommencer!");
     }
     protected function deleteCharge(Request $request){
         $delete = Charges::where('charge_id',$request->id)->delete();
@@ -49,14 +71,33 @@ class GestionController extends Controller
     // fontion pour les taches
     public function taches()
     {
-        $taches = taches::join('charges','charges.charge_id','taches.idcharge')
+        $taches = Taches::join('charges','charges.charge_id','taches.idcharge')
             ->join('users','users.id','charges.iduser')
             ->orderBy('taches.date_ajout','desc' )
             ->get();
         $charges = Charges::all();
         return view('gestion.taches', compact('charges','taches'));
     }
+public function loadTaches(){
+    if (request()->ajax()) {
 
+        $data = Taches::join('charges','charges.charge_id','taches.idcharge')
+            ->join('users','users.id','charges.iduser')
+            ->orderBy('taches.date_ajout','desc' )
+            ->get();
+        return Datatables::of($data)
+            ->addIndexColumn()
+            ->addColumn('action', function($row){
+                $action = view('gestion.tache_action',compact('row'));
+
+//                    $actionBtn = '<div class="d-flex"><a href="javascript:void(0)" class="edit btn btn-warning btn-sm"><i class="fa fa-edit"></i></a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm ml-1"  onclick="deleteFun()"><i class="fa fa-trash"></i></a></div>';
+                return (string)$action;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+
+    }
+}
     // Store or edit
     protected function storeTask(Request $request)
     {
@@ -84,11 +125,12 @@ class GestionController extends Controller
 
             ])
         ;
-        if ($save) {
-            return redirect()->back()->with('success','Enregistré avec succès!');
-
-        }
-        return redirect()->back()->with('danger', "Désolé une erreur s'est produite. Veillez recommencer!");
+        return Response()->json($save);
+//        if ($save) {
+//            return redirect()->back()->with('success','Enregistré avec succès!');
+//
+//        }
+//        return redirect()->back()->with('danger', "Désolé une erreur s'est produite. Veillez recommencer!");
     }
     protected function deleteTache(Request $request){
         $delete = Taches::where('tache_id',$request->id)->delete();

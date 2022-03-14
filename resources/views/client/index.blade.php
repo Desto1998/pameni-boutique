@@ -36,11 +36,11 @@
                                 data-target="#clientsModal"><i class="fa fa-plus">&nbsp; Ajouter</i></button>
 
                         <div class="table-responsive">
-                            <table id="example" class="display text-center" style="min-width: 845px">
+                            <table id="example" class="display text-center w-100">
                                 <thead class="bg-primary">
                                 <tr>
                                     <th>#</th>
-                                    <th>Nom</th>
+                                    <th style="width: 150px;">Nom</th>
                                     <th>Téléphone</th>
                                     <th>Email</th>
                                     <th>Pays</th>
@@ -51,38 +51,6 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($data as $key=> $value)
-                                    <tr>
-                                        <td>{{ $key+1 }}</td>
-                                        <td>{{ $value->nom_client }} {{ $value->prenom_client }} {{ $value->raison_s_client }}</td>
-                                        <td>{{ $value->phone_1_client }} / {{ $value->phone_2_client }}</td>
-                                        <td>{{ $value->email_client }}</td>
-                                        <td>
-                                            @foreach($pays as $p)
-                                                @if ($p->pays_id==$value->idpays)
-                                                    {{ $p->nom_pays }}
-                                                @endif
-                                            @endforeach
-                                        </td>
-                                        <td>{{ $value->ville_client }}</td>
-                                        <td>{{ $value->adresse_client }}</td>
-                                        <td>{{ $value->postale }}</td>
-                                        <td class="d-flex">
-                                            <a href="{{ route('client.view',['id' =>$value->client_id]) }}" class="btn btn-success btn-sm" title="Visualiser le client"><i
-                                                    class="fa fa-eye"></i></a>
-                                            <a href="{{ route('client.edit',['id' =>$value->client_id]) }}" class="btn btn-warning btn-sm ml-1" title="Modifier le client"><i
-                                                    class="fa fa-edit"></i></a>
-                                            @if (Auth::user()->is_admin==1)
-                                                <button class="btn btn-danger btn-sm ml-1 "
-                                                        title="Supprimer ce client"
-                                                        onclick="deleteFun({{ $value->client_id }})"><i
-                                                        class="fa fa-trash"></i></button>
-                                                {{--                                            Auth::user()->id--}}
-                                            @endif
-                                        </td>
-                                    </tr>
-
-                                @endforeach
                                 </tbody>
 
                             </table>
@@ -94,112 +62,14 @@
         </div>
 
     </div>
-    <!-- Modal -->
-    <div class="modal fade" id="clientsModal">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Ajouter un client</h5>
-                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="{{ route('client.store') }}" method="post">
-                        @csrf
-                        <div class="form-group">
-                            <label for="type_client">Sélectionner le type du client</label>
-                            <select class="form-control" onchange="filterFormInput()" required name="type_client" id="type_client">
-                                <option value="0">Personne physique</option>
-                                <option value="1">Entreprise</option>
-                            </select>
-                        </div>
-
-                        <div class="row">
-                            <div class="form-group col-md-6 clienthide">
-                                <label for="nom_client">Nom<span class="text-danger">*</span></label>
-                                <input type="text"  name="nom_client" id="nom_client" required placeholder="Nom" class="form-control">
-                            </div>
-
-                            <div class="form-group col-md-6 clienthide">
-                                <label for="prenom_client">prenom</label>
-                                <input type="text" name="prenom_client" id="prenom_client" placeholder="Prénom" class="form-control">
-                            </div>
-                        </div>
-
-                        <div class="form-group enterprisehide" >
-                            <label for="raison_s_client">Raison sociale<span class="text-danger">*</span></label>
-                            <input type="text" disabled name="raison_s_client" id="raison_s_client" placeholder="Raison sociale" class="form-control">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="email_client">Email<span class="text-danger">*</span></label>
-                            <input type="email" name="email_client" id="email_client" required placeholder="Email" class="form-control">
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-6">
-                                <label for="phone_1">Téléphone 1<span class="text-danger">*</span></label>
-                                <input type="tel" name="phone_1" id="phone_1" required placeholder="Téléphone" class="form-control">
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label for="phone_2">Téléphone 2</label>
-                                <input type="tel" name="phone_2" id="phone_2" placeholder="Téléphone" class="form-control">
-                            </div>
-                        </div>
-
-
-                        <div class="form-group">
-                            <label for="categorie">Pays</label>
-                            <select class="form-control" required name="idpays" id="single-select">
-                                <option disabled="disabled" selected>Sélectionner un pays</option>
-                                @foreach($pays as $item)
-                                    <option value="{{ $item->pays_id }}">{{ $item->nom_pays }} </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-6">
-                                <label for="ville_client">Ville<span class="text-danger">*</span></label>
-                                <input type="text" name="ville_client" required id="ville_client" placeholder="Ville" class="form-control">
-                            </div>
-
-                            <div class="form-group  col-md-6">
-                                <label for="postale">Boite postale</label>
-                                <input type="text" name="postale" id="postale" placeholder="" class="form-control">
-                            </div>
-
-                        </div>
-                        <div class="form-group">
-                            <label for="adresse_client">Adresse</label>
-                            <input type="text" name="adresse_client" id="adresse_client" placeholder="Adresse" class="form-control">
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-6 enterprisehide">
-                                <label for="contribuabe">Numéro de contibuabe</label>
-                                <input type="text" disabled name="contribuabe" id="contribuabe" placeholder="Contribuabe" class="form-control">
-                            </div>
-
-                            <div class="form-group enterprisehide col-md-6">
-                                <label for="rcm">RC</label>
-                                <input type="text" name="rcm" disabled id="rcm" placeholder="RC" class="form-control">
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                            <button type="submit" class="btn btn-primary">Enregistrer</button>
-                        </div>
-                    </form>
-                </div>
-
-            </div>
-        </div>
-    </div>
+   @include('client.modal')
 
 @endsection
 @section('script')
     <script>
         // delete funtion
         function deleteFun(id) {
+            var table = $('#example').DataTable();
             swal.fire({
                 title: "Supprimer ce client?",
                 icon: 'question',
@@ -225,7 +95,9 @@
                         success: function (res) {
                             if (res) {
                                 swal.fire("Effectué!", "Supprimé avec succès!", "success")
-                                window.location.reload(200);
+                                table.row( $('#deletebtn'+id).parents('tr') )
+                                    .remove()
+                                    .draw();
 
                             } else {
                                 sweetAlert("Désolé!", "Erreur lors de la suppression!", "error")
@@ -268,6 +140,90 @@
             }
 
         }
+
+        // load all clients on datatable
+        function loadClient(){
+            $('#example').dataTable().fnClearTable();
+            $('#example').dataTable().fnDestroy();
+            $("#example").DataTable({
+                Processing: true,
+                searching: true,
+                LengthChange: true, // desactive le module liste deroulante(d'affichage du nombre de resultats par page)
+                iDisplayLength: 10, // Configure le nombre de resultats a afficher par page a 10
+                bRetrieve: true,
+                stateSave: true,
+                ajaxSetup:{
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                },
+                ajax:{
+                    url: "{{ route('client.load') }}",
+
+                },
+                columns: [
+                    {data: 'DT_RowIndex',name:'DT_RowIndex'},
+                    {data: 'nom',name:'nom'},
+                    {data: 'phone',name:'phone'},
+                    {data: 'email_client',name:'email_client'},
+                    {data: 'nom_pays',name:'nom_pays'},
+                    {data: 'ville_client',name:'ville_client'},
+                    {data: 'adresse_client',name:'adresse_client'},
+                    {data: 'postale',name:'postale'},
+                    {data: 'action', name: 'action', orderable: false, searchable: false},
+
+                ],
+                order: []
+            })
+        }
+        $(document).ready(function () {
+            loadClient()
+
+        });
+
+        // add new client
+        $("#client-form").on("submit", function (event) {
+            event.preventDefault();
+
+            $('#client-form .btn-primary').attr("disabled", true).html("En cours...")
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            var data = $('#client-form').serialize()
+
+            $.ajax({
+                type: "POST",
+                url: "{{ route('client.store') }}",
+                data: data,
+                dataType: 'json',
+                success: function (res) {
+                    console.log(res);
+                    if (res) {
+                        // swal.fire("Effectué!", "Enregistré avec succès!", "success")
+                        // on recharge le tableau de produit
+                        toastr.success("Enregistré avec succès!");
+
+
+                        // on reinitialise le formulaire
+                        $('#client-form .btn-primary').attr("disabled", false).html("Enregistrer")
+                        $('#client-form')[0].reset()
+                        $('#clientsModal').modal('hide');
+                        loadClient();
+                    } else {
+                        sweetAlert("Désolé!", "Erreur lors de l'enregistrement!", "error")
+                        $('#client-form .btn-primary').attr("disabled", false).html("Enregistrer")
+                    }
+
+                },
+                error: function (resp) {
+                    sweetAlert("Désolé!", "Une erreur s'est produite.", "error");
+                    $('#client-form .btn-primary').attr("disabled", false).html("Enregistrer")
+                }
+            });
+        });
+
     </script>
     <!-- Datatable -->
     <script src="{{asset('template/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
