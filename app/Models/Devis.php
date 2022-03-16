@@ -21,6 +21,7 @@ class Devis extends Model
         'condition_financiere',
         'iduser',
         'date_paie',
+        'echeance',
 
     ];
 }

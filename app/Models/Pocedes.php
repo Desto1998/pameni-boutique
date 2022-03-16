@@ -13,6 +13,7 @@ class Pocedes extends Model
         'quantite',
         'prix',
         'remise',
+        'tva',
         'num_serie',
         'iddevis',
         'idproduit',

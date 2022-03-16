@@ -12,6 +12,8 @@ class Complements extends Model
     protected $fillable = [
         'quantite',
         'prix',
+        'remise',
+        'tva',
         'iduser',
         'iddevis',
         'idproduit',

@@ -13,6 +13,7 @@ class Comportes extends Model
         'quantite',
         'prix',
         'remise',
+        'tva',
         'idcommande',
         'idproduit',
         'iduser',

@@ -3,18 +3,14 @@
     <link href="{{asset('template/vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">
     <link href="{{asset('template/vendor/sweetalert2/dist/sweetalert2.min.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('template/vendor/select2/css/select2.min.css')}}">
-    <style>
-        .enterprisehide{
-            display: none;
-        }
-    </style>
+
 @endsection
 @section('content')
     <div class="container-fluid">
         <div class="row page-titles mx-0">
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
-                    <h4>LISTE DES DEVIS</h4>
+                    <h4>GESTION DES DEVIS</h4>
                     {{--                    <p class="mb-0">Your business dashboard template</p>--}}
                 </div>
             </div>
@@ -32,8 +28,8 @@
                     <div class="card-body">
                         <!-- Button trigger modal -->
                         <span class="float-left h4">Liste des Devis</span>
-                        <a type="button" class="btn btn-primary float-right mb-3" data-toggle="modal"
-                                data-target="#clientsModal"><i class="fa fa-plus">&nbsp; Ajouter</i></a>
+                        <a href="{{ route('devis.add') }}" class="btn btn-primary float-right mb-3"
+                                ><i class="fa fa-plus">&nbsp; Ajouter</i></a>
 
                         <div class="table-responsive">
                             <table id="example" class="display text-center" style="min-width: 845px">
@@ -42,10 +38,11 @@
                                     <th>#</th>
                                     <th>Refernce</th>
                                     <th>Client</th>
-                                    <th>Titre</th>
+                                    <th>Objet</th>
                                     <th>Date</th>
                                     <th>Statut</th>
-                                    <th>Montant TTC</th>
+                                    <th>Mon. HT</th>
+                                    <th>Mon. TTC</th>
                                     <th>Par</th>
                                     <th>Action</th>
                                 </tr>
@@ -57,7 +54,7 @@
                                     @endphp
                                     <tr>
                                         <td>{{ $key+1 }}</td>
-                                        <td>{{ $value->reference }}</td>
+                                        <td>{{ $value->reference_devis }}</td>
                                         <td>{{ $value->nom_client }} {{ $value->prenom_client }} {{ $value->raison_s_client }}</td>
                                         <td>{{ $value->objet }}</td>
                                         <td>{{ $value->date_devis }}</td>
@@ -68,6 +65,16 @@
                                                 <span class="text-success">Validé</span>
                                             @endif
 
+                                        </td>
+                                        <td>
+                                            @foreach($pocedes as $item)
+                                                @if ($item->iddevis==$value->devis_id)
+                                                    @php
+                                                        $montant += $item->quantite * $item->prix;
+                                                    @endphp
+                                                @endif
+                                            @endforeach
+                                            {{ $montant }}
                                         </td>
                                         <td>
                                             @foreach($pocedes as $item)
@@ -117,9 +124,10 @@
 @section('script')
     <script>
         // delete funtion
+        var table = $('#example').DataTable();
         function deleteFun(id) {
             swal.fire({
-                title: "Supprimer ce client?",
+                title: "Supprimer ce devis?",
                 icon: 'question',
                 text: "Ce devis sera supprimé de façon définitive.",
                 type: "warning",
@@ -137,13 +145,15 @@
                     });
                     $.ajax({
                         type: "POST",
-                        url: "{{ route('client.delete') }}",
+                        url: "{{ route('devis.delete') }}",
                         data: {id: id},
                         dataType: 'json',
                         success: function (res) {
                             if (res) {
                                 swal.fire("Effectué!", "Supprimé avec succès!", "success")
-                                window.location.reload(200);
+                                table.row( $('#deletebtn'+id).parents('tr') )
+                                    .remove()
+                                    .draw();
 
                             } else {
                                 sweetAlert("Désolé!", "Erreur lors de la suppression!", "error")
@@ -162,30 +172,7 @@
             })
             // }
         }
-        function filterFormInput(){
-            var type = $('#type_client').val();
-            if (type==1){
-                $('.enterprisehide').show(200)
-                $('.clienthide').hide(200)
-                $('#nom_client').prop('required',false)
-                $('#raison_s_client').prop('required',true)
-                $('#raison_s_client').attr('disabled',false)
-                $('#nom_client').attr('disabled',true)
-                $('#rcm').prop('required',true)
-                $('#rcm').attr('disabled',false)
-                $('#contribuabe').attr('disabled',false)
-            }else {
-                $('#raison_s_client').prop('required',false)
-                $('#raison_s_client').attr('disabled',true)
-                $('.enterprisehide').hide(200)
-                $('.clienthide').show(200)
-                $('#nom_client').prop('required',true)
-                $('#nom_client').attr('disabled',false)
-                $('#rcm').attr('disabled',true)
-                $('#contribuabe').attr('disabled',true)
-            }
 
-        }
     </script>
     <!-- Datatable -->
     <script src="{{asset('template/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
