@@ -13,8 +13,8 @@ class CategorieController extends Controller
     //function for product categories
     public function listCategories()
     {
-        $data = Categories::join('users', 'users.id', 'categories.iduser')->get();
-        return view('categorie.index', compact('data'));
+//        $data = Categories::join('users', 'users.id', 'categories.iduser')->get();
+        return view('categorie.index');
     }
 
     //create new categorie or update if id is provided

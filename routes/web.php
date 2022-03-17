@@ -108,12 +108,18 @@ Route::prefix('dashboard')->group(function () {
 
             //Route for devis
             Route::get('devis/index',[DevisController::class,'index'])->name('devis.all');
+            Route::get('devis/load',[DevisController::class,'loadDevis'])->name('devis.load');
             Route::get('devis/add',[DevisController::class,'showAddForm'])->name('devis.add');
             Route::post('devis/store',[DevisController::class,'store'])->name('devis.store');
             Route::get('devis/edit/{id}',[DevisController::class,'showEditForm'])->name('devis.edit');
             Route::post('devis/edit/store',[DevisController::class,'edit'])->name('devis.edit.store');
             Route::post('devis/delete',[DevisController::class,'delete'])->name('devis.delete');
             Route::get('devis/details/{id}',[DevisController::class,'view'])->name('devis.view');
+
+            Route::post('devis/valider',[DevisController::class,'validerDevis'])->name('devis.valider');
+            Route::post('devis/bloquer',[DevisController::class,'bloquerDevis'])->name('devis.bloquer');
+            Route::post('devis/makefacture',[DevisController::class,'makeFacture'])->name('devis.makefacture');
+            Route::get('devis/print/{id}',[DevisController::class,'printDevis'])->name('devis.print');
 
             //Route for factures
             Route::get('factures/index',[FactureController::class,'index'])->name('factures.all');

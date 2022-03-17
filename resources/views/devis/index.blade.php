@@ -3,7 +3,11 @@
     <link href="{{asset('template/vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">
     <link href="{{asset('template/vendor/sweetalert2/dist/sweetalert2.min.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('template/vendor/select2/css/select2.min.css')}}">
-
+    <style>
+        table thead tr th{
+            color: white!important;
+        }
+    </style>
 @endsection
 @section('content')
     <div class="container-fluid">
@@ -48,67 +52,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($data as $key=> $value)
-                                    @php
-                                        $montant = 0;
-                                    @endphp
-                                    <tr>
-                                        <td>{{ $key+1 }}</td>
-                                        <td>{{ $value->reference_devis }}</td>
-                                        <td>{{ $value->nom_client }} {{ $value->prenom_client }} {{ $value->raison_s_client }}</td>
-                                        <td>{{ $value->objet }}</td>
-                                        <td>{{ $value->date_devis }}</td>
-                                        <td>
-                                            @if ($value->statut==0)
-                                                <span class="text-danger">Non validé</span>
-                                            @else
-                                                <span class="text-success">Validé</span>
-                                            @endif
 
-                                        </td>
-                                        <td>
-                                            @foreach($pocedes as $item)
-                                                @if ($item->iddevis==$value->devis_id)
-                                                    @php
-                                                        $montant += $item->quantite * $item->prix;
-                                                    @endphp
-                                                @endif
-                                            @endforeach
-                                            {{ $montant }}
-                                        </td>
-                                        <td>
-                                            @foreach($pocedes as $item)
-                                                @if ($item->iddevis==$value->devis_id)
-                                                    @php
-                                                        $montant += $item->quantite * $item->prix;
-                                                    @endphp
-                                                @endif
-                                            @endforeach
-                                            {{ $montant }}
-                                        </td>
-                                        <td>
-                                            @foreach($users as $u)
-                                                @if ($u->id==$value->iduser)
-                                                    {{ $u->firstname }}
-                                                @endif
-                                            @endforeach
-                                        </td>
-                                        <td class="d-flex">
-                                            <a href="{{ route('devis.view',['id' =>$value->devis_id]) }}" class="btn btn-success btn-sm" title="Visualiser le client"><i
-                                                    class="fa fa-eye"></i></a>
-                                            <a href="{{ route('devis.edit',['id' =>$value->devis_id]) }}" class="btn btn-warning btn-sm ml-1" title="Modifier le client"><i
-                                                    class="fa fa-edit"></i></a>
-                                            @if (Auth::user()->is_admin==1)
-                                                <button class="btn btn-danger btn-sm ml-1 "
-                                                        title="Supprimer ce devis"
-                                                        onclick="deleteFun({{ $value->devis_id }})"><i
-                                                        class="fa fa-trash"></i></button>
-                                                {{--                                            Auth::user()->id--}}
-                                            @endif
-                                        </td>
-                                    </tr>
-
-                                @endforeach
                                 </tbody>
 
                             </table>
@@ -124,8 +68,9 @@
 @section('script')
     <script>
         // delete funtion
-        var table = $('#example').DataTable();
+
         function deleteFun(id) {
+            var table = $('#example').DataTable();
             swal.fire({
                 title: "Supprimer ce devis?",
                 icon: 'question',
@@ -173,6 +118,144 @@
             // }
         }
 
+
+        // fonction qui charge les produits : les elements du tableau
+        function loadDevis() {
+            $('#example').dataTable().fnClearTable();
+            $('#example').dataTable().fnDestroy();
+            // $("#example").DataTable.destroy();
+            $("#example").DataTable({
+                Processing: true,
+                searching: true,
+                LengthChange: true, // desactive le module liste deroulante(d'affichage du nombre de resultats par page)
+                iDisplayLength: 10, // Configure le nombre de resultats a afficher par page a 10
+                bRetrieve: true,
+                stateSave: true,
+                ajaxSetup:{
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                },
+                ajax:{
+                    url: "{{ route('devis.load') }}",
+                },
+
+                columns: [
+                    {data: 'DT_RowIndex',name:'DT_RowIndex'},
+                    {data: 'reference_devis',name:'reference_devis'},
+                    {data: 'client',name:'client'},
+                    {data: 'objet',name:'objet'},
+                    {data: 'date_devis',name:'date_devis'},
+                    {data: 'statut',name:'statut'},
+                    {data: 'montantHT',name:'montantHT'},
+                    {data: 'montantTTC',name:'montantTTC'},
+                    {data: 'firstname',name:'firstname'},
+                    {data: 'action', name: 'action', orderable: false, searchable: false},
+
+                ],
+                order: []
+            })
+
+        }
+
+        $(document).ready(function () {
+            loadDevis()
+        });
+
+        // cette fonction defini un devis comme valide
+        function validerFun(id) {
+            swal.fire({
+                title: "Valider ce devis?",
+                icon: 'question',
+                text: "Il ne sera plus modifiable aprés validation.",
+                type: "warning",
+                showCancelButton: !0,
+                confirmButtonText: "Oui, valider!",
+                cancelButtonText: "Non, annuler !",
+                reverseButtons: !0
+            }).then(function (e) {
+                if (e.value === true) {
+                    // if (confirm("Supprimer cette tâches?") == true) {
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('devis.valider') }}",
+                        data: {id: id},
+                        dataType: 'json',
+                        success: function (res) {
+                            if (res) {
+                                swal.fire("Effectué!", "Validé avec succès!", "success")
+                                // toastr.success("Validé avec succès!");
+                                loadDevis();
+
+                            } else {
+                                sweetAlert("Désolé!", "Erreur lors de la validation!", "error")
+                            }
+
+                        },
+                        error: function (resp) {
+                            sweetAlert("Désolé!", "Une erreur s'est produite. Actulisez la page et reessayez", "error");
+                        }
+                    });
+                } else {
+                    e.dismiss;
+                }
+            }, function (dismiss) {
+                return false;
+            })
+            // }
+        }
+        // cette fonction defini un devis comme Non valider
+        function bloquerFun(id) {
+            swal.fire({
+                title: "Bloquer ce devis?",
+                icon: 'question',
+                text: "Il ne sera pas possible de générer sa facture. Les autres pourrons editer.",
+                type: "warning",
+                showCancelButton: !0,
+                confirmButtonText: "Oui, bloquer!",
+                cancelButtonText: "Non, annuler !",
+                reverseButtons: !0
+            }).then(function (e) {
+                if (e.value === true) {
+                    // if (confirm("Supprimer cette tâches?") == true) {
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('devis.bloquer') }}",
+                        data: {id: id},
+                        dataType: 'json',
+                        success: function (res) {
+                            if (res) {
+                                swal.fire("Effectué!", "Bloqué avec succès!", "success")
+                                // toastr.success("Bloqué avec succès!");
+                                loadDevis();
+
+                            } else {
+                                sweetAlert("Désolé!", "Erreur lors de l'opération!", "error")
+                            }
+
+                        },
+                        error: function (resp) {
+                            sweetAlert("Désolé!", "Une erreur s'est produite. Actulisez la page et reessayez", "error");
+                        }
+                    });
+                } else {
+                    e.dismiss;
+                }
+            }, function (dismiss) {
+                return false;
+            })
+            // }
+        }
     </script>
     <!-- Datatable -->
     <script src="{{asset('template/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>

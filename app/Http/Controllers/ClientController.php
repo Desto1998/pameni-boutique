@@ -16,9 +16,9 @@ class ClientController extends Controller
 {
     //List all clients
     public function index(){
-        $data = Clients::orderBy('date_ajout','desc')->get();
+//        $data = Clients::orderBy('date_ajout','desc')->get();
         $pays = Pays::all();
-        return view('client.index',compact('data','pays'));
+        return view('client.index',compact('pays'));
     }
     public function loadClients(){
         if (request()->ajax()) {

@@ -21,14 +21,14 @@ class ProduitController extends Controller
     //function for pruducts
     public function listproduct(Request $request)
     {
-        $saleDevis = Pocedes::all();
-        $sateFacture = Produit_Factures::all();
-        $data = Produits::join('categories', 'categories.categorie_id', 'produits.idcategorie')
-            ->join('users', 'users.id', 'produits.iduser')
-            ->orderBy('produits.created_at', 'desc')
-            ->get();
+//        $saleDevis = Pocedes::all();
+//        $sateFacture = Produit_Factures::all();
+//        $data = Produits::join('categories', 'categories.categorie_id', 'produits.idcategorie')
+//            ->join('users', 'users.id', 'produits.iduser')
+//            ->orderBy('produits.created_at', 'desc')
+//            ->get();
         $categories = Categories::all();
-        return view('produit.produit', compact('data', 'categories', 'saleDevis', 'sateFacture'));
+        return view('produit.produit', compact('categories'));
     }
     public function loadProducts() {
         if (request()->ajax()) {

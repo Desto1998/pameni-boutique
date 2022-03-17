@@ -14,9 +14,9 @@ class FournisserController extends Controller
     //
     //List all clients
     public function index(){
-        $data = Fournisseurs::all();
+//        $data = Fournisseurs::all();
         $pays = Pays::all();
-        return view('fournisseur.index',compact('data','pays'));
+        return view('fournisseur.index',compact('pays'));
     }
     public function loadFournisseur(){
         if (request()->ajax()) {

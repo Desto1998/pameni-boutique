@@ -18,8 +18,8 @@ class GestionController extends Controller
     //Fontion pour les charges
     public function charge()
     {
-        $charges = Charges::join('users','users.id','charges.iduser')->orderBy('charges.created_at','desc' )->get();
-        return view('gestion.charges', compact('charges'));
+//        $charges = Charges::join('users','users.id','charges.iduser')->orderBy('charges.created_at','desc' )->get();
+        return view('gestion.charges');
     }
 
     public function loadCharges(){
@@ -72,12 +72,8 @@ class GestionController extends Controller
     // fontion pour les taches
     public function taches()
     {
-        $taches = Taches::join('charges','charges.charge_id','taches.idcharge')
-            ->join('users','users.id','charges.iduser')
-            ->orderBy('taches.date_ajout','desc' )
-            ->get();
         $charges = Charges::all();
-        return view('gestion.taches', compact('charges','taches'));
+        return view('gestion.taches',compact('charges'));
     }
 public function loadTaches(){
     if (request()->ajax()) {

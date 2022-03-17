@@ -38,28 +38,74 @@ class DevisController extends Controller
 
     public function loadDevis() {
         $data = Devis::join('clients', 'clients.client_id', 'devis.idclient')
+            ->join('users', 'users.id', 'devis.iduser')
             ->orderBy('devis.created_at', 'desc')
             ->get();
-        $users = User::all();
-        $complements = Complements::all();
-        $pocedes = Pocedes::all();
-        $paiements = Paiements::all();
-        $product  = new Array_();
+
+//        $product  = new Array_();
         return Datatables::of($data)
             ->addIndexColumn()
+            //Ajoute de la colonne action
             ->addColumn('action', function ($value) {
                 $categories = Categories::all();
-                $users = User::all();
-                $complements = Complements::all();
-                $pocedes = Pocedes::all();
-                $paiements = Paiements::all();
-                $action = view('devis.action', compact('value', 'categories'));
+                $complements = Complements::join('produits','produits.produit_id','complements.idproduit')->where('iddevis',$value->devis_id)->get();
+                $pocedes = Pocedes::join('produits','produits.produit_id','pocedes.idproduit')->where('iddevis',$value->devis_id)->get();
+                $action = view('devis.action', compact('value', 'categories','pocedes','complements'));
 
 //                    $actionBtn = '<div class="d-flex"><a href="javascript:void(0)" class="edit btn btn-warning btn-sm"><i class="fa fa-edit"></i></a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm ml-1"  onclick="deleteFun()"><i class="fa fa-trash"></i></a></div>';
                 return (string)$action;
             })
-//                ->addColumn('action', 'produit_action')
-            ->rawColumns(['action'])
+            // Le nom client Ajout de la colonne
+            ->addColumn('client', function ($value) {
+                 $client = $value->nom_client.' '.$value->prenom_client.' '.$value->raison_s_client;
+                return $client;
+            })
+            // Ajout du statut du. colonne marque en rouge | Si le statut est 0? NValide : Valide
+            ->addColumn('statut', function ($value) {
+
+                if ($value->statut == 0) {
+                    $statut = '<span class="text-danger">Non validé</span>';
+                }else{
+                    $statut = '<span class="text-success">Validé</span>';
+                }
+                return $statut;
+            })
+            // calcule du montant hors taxe
+            ->addColumn('montantHT', function ($value) {
+                $pocedes = Pocedes::where('iddevis',$value->devis_id)->get();
+                $montantHT = 0;
+
+                foreach ($pocedes as $p)
+                {
+                    if ($p->iddevis===$value->devis_id) {
+                        $remise = ($p->prix * $p->quantite *$p->remise)/100;
+                        $montant = ($p->quantite * $p->prix) - $remise;
+                        $montantHT += $montant;
+                    }
+                }
+                return  number_format($montantHT, 2, '.', '');
+            })
+            // calcule du montant TTC tout taxe comprie
+            ->addColumn('montantTTC', function ($value) {
+                $pocedes = Pocedes::where('iddevis',$value->devis_id)->get();
+                $montantTVA =0;
+                $montantTTC = 0;
+                foreach ($pocedes as $p)
+                {
+                    if ($p->iddevis===$value->devis_id) {
+                        $remise = ($p->prix * $p->quantite *$p->remise)/100;
+                        $montant = ($p->quantite * $p->prix) - $remise;
+                        $tva = ($montant * $p->tva)/100;
+                        $montant = $tva + $montant;
+//                        $montant += (($montant * 19.25)/100)+$montant;
+                        $montantTVA += $montant;
+                    }
+                }
+                 $montantTTC= (($montantTVA * 19.25)/100)+$montantTVA;
+                return  number_format($montantTTC, 2, '.', '');
+
+            })
+            ->rawColumns(['action','montantHT','montantTTC','statut'])
             ->make(true)
             ;
     }
@@ -91,7 +137,7 @@ class DevisController extends Controller
         $date = new DateTime($request->date);
 //        $date->sub(new DateInterval('P1D'));
         $nbjour = $request->validite * 7;
-        $date->add(new DateInterval("P{$request->validite}D"));
+        $date->add(new DateInterval("P{$nbjour}D"));
         $date = date("Y-m-d", strtotime($date->format('Y-m-d')));
 
         $reference = 'PF'.date('Y');
@@ -186,5 +232,22 @@ class DevisController extends Controller
     public function getDetails($id)
     {
         return 'in process';
+    }
+
+    public function validerDevis(Request $request){
+        $statut = Devis::where('devis_id',$request->id)->update(['statut'=>1]);
+        return Response()->json($statut);
+    }
+    public function bloquerDevis(Request $request){
+        $statut = Devis::where('devis_id',$request->id)->update(['statut'=>0]);
+        return Response()->json($statut);
+    }
+
+    public function printDevis($id){
+
+    }
+
+    public function makeFacture(Request $request) {
+        return " In process";
     }
 }
