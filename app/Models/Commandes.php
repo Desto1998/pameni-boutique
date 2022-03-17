@@ -22,6 +22,7 @@ class Commandes extends Model
         'observation',
         'note',
         'lieu_liv',
+        'tva_statut',
         'iduser',
 
     ];

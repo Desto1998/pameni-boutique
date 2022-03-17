@@ -22,6 +22,7 @@ class Devis extends Model
         'iduser',
         'date_paie',
         'echeance',
+        'tva_statut',
 
     ];
 }

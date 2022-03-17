@@ -7,7 +7,7 @@
                data-target="#devis-view-modal{{ $value->devis_id }}" class="btn btn-success btn-sm ml-1"
                title="Visualiser les details"><i
                     class="fa fa-eye"></i></a>
-            <a href="{{ route('devis.view',['id' =>$value->devis_id]) }}" class="btn btn-light btn-sm ml-1"
+            <a href="{{ route('devis.print',['id' =>$value->devis_id]) }}" target="_blank" class="btn btn-light btn-sm ml-1"
                title="Imprimer la proformat"><i
                     class="fa fa-file-pdf-o"></i></a>
             @if (Auth::user()->is_admin==1 || Auth::user()->id===$value->id && $value->statut <=1)
@@ -58,15 +58,15 @@
             <div class="modal-body">
                 <div class="row col-md-12">
                     <div class="col-md-6">
-                        <h3 class="">PROFORMA</h3>
-                        <h4>N° {{ $value->reference_devis }}</h4>
-                        <h4>Date: {{ $value->date_devis }}</h4>
+                        <h5 class="">PROFORMA</h5>
+                        <h6>N° {{ $value->reference_devis }}</h6>
+                        <h6>Date: {{ $value->date_devis }}</h6>
                     </div>
                     <div class="col-md-6">
-                        <h3 class="">COORDONNEES DU CLIENT</h3>
-                        <h4>{{ $value->nom_client.' '.$value->prenom_client.' '.$value->raison_s_client }}</h4>
-                        <h4>Tel: {{ $value->phone_1_client }}/{{ $value->phone_2_client }}</h4>
-                        <h4>BP : {{ $value->postale }}</h4>
+                        <h5 class="">COORDONNEES DU CLIENT</h5>
+                        <h6>{{ $value->nom_client.' '.$value->prenom_client.' '.$value->raison_s_client }}</h6>
+                        <h6>Tel: {{ $value->phone_1_client }}/{{ $value->phone_2_client }}</h6>
+                        <h6>BP : {{ $value->postale }}</h6>
                     </div>
                 </div>
                 <label class="nav-label"><span class="font-weight-bold">Objet: </span>{{ $value->objet }}</label>
@@ -90,16 +90,25 @@
                         <tbody style="color: #000000!important;">
                         @php
                             $montantTTC = 0;
+                            $montantHT=0;
+                            $montantTVA=0;
                         @endphp
 
 
                             @foreach($pocedes as $p)
-                                <tr class="text-black  produit-input">
                                 @php
-                                 $montantTTC = 0;
-                                $montantHT=0;
-                                $montantTVA = 0;
+                                    $remise = ($p->prix * $p->quantite *$p->remise)/100;
+                                    $montant = ($p->quantite * $p->prix) - $remise;
+                                    $HT = $montant;
+
+                                    $montantHT += $montant;
+                                    $tva = ($montant * $p->tva)/100;
+                                    $montant = $tva + $montant;
+                                    $TTC = $montant;
+                                    $montantTVA += $montant;
                                 @endphp
+                                <tr class="text-black  produit-input">
+
                                 <td>{{ $p->reference }}</td>
                                 <td>{{ $p->titre_produit }}</td>
                                 <td>{{ $p->quantite }}</td>
@@ -107,20 +116,12 @@
                                 <td>{{ $p->remise }}%</td>
                                 <td>{{ $p->tva }}%</td>
                                 <td>
-                                    {{ number_format((($p->prix*$p->quantite)-($p->remise*$p->prix*$p->quantite)/100),2, '.', '') }}
+                                    {{ number_format($HT,2, '.', '') }}
                                 </td>
                                 <td>
-                                    {{  number_format((($p->prix*$p->quantite)-($p->remise*$p->prix*$p->quantite)/100) + (($p->prix*$p->quantite)-($p->remise*$p->prix*$p->quantite*$p->tva)/100), 2, '.', '')  }}
+                                    {{  number_format($TTC, 2, '.', '')  }}
                                 </td>
-                                @php
-                                    $remise = ($p->prix * $p->quantite *$p->remise)/100;
-                                    $montant = ($p->quantite * $p->prix) - $remise;
-                                    $montantHT += $montant;
-                                    $tva = ($montant * $p->tva)/100;
-                                    $montant = $tva + $montant;
-            //                        $montant += (($montant * 19.25)/100)+$montant;
-                                    $montantTVA += $montant;
-                                @endphp
+
                         </tr>
                             @endforeach
 
@@ -134,12 +135,25 @@
 
                         <tr>
                             <td>TVA 19.25%</td>
-                            <td>{{ number_format(($montantTVA * 19.25)/100,2,'.','') }}</td>
+                            <td>
+                                @if ($value->tva_statut == 1)
+                                    {{ number_format(($montantTVA * 19.25)/100,2,'.','') }}
+                                @else
+                                    0
+                                @endif
+
+                            </td>
 
                         </tr>
                         <tr>
                             <td>Montant TTC</td>
-                            <td>{{ number_format(( ($montantTVA * 19.25)/100)+$montantTVA,2,'.','') }}</td>
+                            <td>
+                                @if ($value->tva_statut == 1)
+                                    {{ number_format(( ($montantTVA * 19.25)/100)+$montantTVA,2,'.','') }}
+                                @else
+                                    {{ number_format($montantTVA ,2,'.','') }}
+                                @endif
+                            </td>
                         </tr>
 
                         </tbody>
@@ -159,24 +173,29 @@
                             <th>TVA</th>
                             <th>M. HT</th>
                             <th>M. TTC</th>
-{{--                            <th><i class="fa fa-trash"></i></th>--}}
                         </tr>
 
                         </thead>
                         <tbody style="color: #000000!important;">
                         @php
-
                             $montantTTC = 0;
+                           $montantHT=0;
+                           $montantTVA = 0;
                         @endphp
+                        @php
+                            $remise = ($p->prix * $p->quantite *$p->remise)/100;
+                            $montant = ($p->quantite * $p->prix) - $remise;
+                            $HT = $montant;
 
-
+                            $montantHT += $montant;
+                            $tva = ($montant * $p->tva)/100;
+                            $montant = $tva + $montant;
+                            $TTC = $montant;
+                            $montantTVA += $montant;
+                        @endphp
                             @foreach($complements as $p)
                                 <tr class="text-black  produit-input">
-                                @php
-                                    $montantTTC = 0;
-                                   $montantHT=0;
-                                   $montantTVA = 0;
-                                @endphp
+
                                 <td>{{ $p->reference }}</td>
                                 <td>{{ $p->titre_produit }}</td>
                                 <td>{{ $p->quantite }}</td>
@@ -184,39 +203,14 @@
                                 <td>{{ $p->remise }}%</td>
                                 <td>{{ $p->tva }}%</td>
                                 <td>
-                                    {{ number_format((($p->prix*$p->quantite)-($p->remise*$p->prix*$p->quantite)/100),2, '.', '') }}
+                                    {{ number_format($HT,2, '.', '') }}
                                 </td>
                                 <td>
-                                    {{  number_format((($p->prix*$p->quantite)-($p->remise*$p->prix*$p->quantite)/100) + (($p->prix*$p->quantite)-($p->remise*$p->prix*$p->quantite*$p->tva)/100), 2, '.', '')  }}
+                                    {{  number_format($TTC, 2, '.', '')  }}
                                 </td>
-                                @php
-                                    $remise = ($p->prix * $p->quantite *$p->remise)/100;
-                                    $montant = ($p->quantite * $p->prix) - $remise;
-                                    $montantHT += $montant;
-                                    $tva = ($montant * $p->tva)/100;
-                                    $montant = $tva + $montant;
-            //                        $montant += (($montant * 19.25)/100)+$montant;
-                                    $montantTVA += $montant;
-                                @endphp
+
                                 </tr>
                             @endforeach
-
-
-{{--                        <tr>--}}
-{{--                            <td colspan="6"></td>--}}
-{{--                            <td>Total HT</td>--}}
-{{--                            <td>{{ number_format($montantHT,2,'.','') }}</td>--}}
-{{--                        </tr>--}}
-{{--                        <tr>--}}
-{{--                            <td colspan="6"></td>--}}
-{{--                            <td>TVA 19.25%</td>--}}
-{{--                            <td>{{ number_format(($montantTVA * 19.25)/100,2,'.','') }}</td>--}}
-{{--                        </tr>--}}
-{{--                        <tr>--}}
-{{--                            <td colspan="6"></td>--}}
-{{--                            <td>Montant TTC</td>--}}
-{{--                            <td>{{ number_format(( ($montantTVA * 19.25)/100)+$montantTVA,2,'.','') }}</td>--}}
-{{--                        </tr>--}}
 
                         </tbody>
                     </table>

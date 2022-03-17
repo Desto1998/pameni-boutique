@@ -113,13 +113,17 @@ Route::prefix('dashboard')->group(function () {
             Route::post('devis/store',[DevisController::class,'store'])->name('devis.store');
             Route::get('devis/edit/{id}',[DevisController::class,'showEditForm'])->name('devis.edit');
             Route::post('devis/edit/store',[DevisController::class,'edit'])->name('devis.edit.store');
-            Route::post('devis/delete',[DevisController::class,'delete'])->name('devis.delete');
             Route::get('devis/details/{id}',[DevisController::class,'view'])->name('devis.view');
 
             Route::post('devis/valider',[DevisController::class,'validerDevis'])->name('devis.valider');
             Route::post('devis/bloquer',[DevisController::class,'bloquerDevis'])->name('devis.bloquer');
+
             Route::post('devis/makefacture',[DevisController::class,'makeFacture'])->name('devis.makefacture');
             Route::get('devis/print/{id}',[DevisController::class,'printDevis'])->name('devis.print');
+
+            Route::post('devis/remove/produit',[DevisController::class,'removeProduit'])->name('devis.remove.produit');
+            Route::post('devis/remove/complement',[DevisController::class,'removeComplement'])->name('devis.remove.comp');
+            Route::post('devis/delete',[DevisController::class,'delete'])->name('devis.delete');
 
             //Route for factures
             Route::get('factures/index',[FactureController::class,'index'])->name('factures.all');

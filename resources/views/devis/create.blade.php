@@ -37,10 +37,13 @@
                                         <label for="date">Date de la profomat: </label>
                                         <input type="date" name="date" id="date" class="form-control" required>
                                     </div>
-{{--                                    <div class="form-group col-md-6">--}}
-{{--                                        <label for="echeance">Date d'echeance: </label>--}}
-{{--                                        <input type="date" name="echeance" id="echeance" class="form-control" required>--}}
-{{--                                    </div>--}}
+                                    <div class="form-group col-md-6">
+                                        <label for="statut_tva">Inclure la TVA? </label>
+                                        <select class="form-control" name="tva_statut">
+                                            <option value="0">Non</option>
+                                            <option value="1">Oui</option>
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="col-md-7 float-right d-flex" id="client-block">
                                     <div class="form-group col-md-6">

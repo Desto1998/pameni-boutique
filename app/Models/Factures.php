@@ -20,6 +20,7 @@ class Factures extends Model
         'disponibilite',
         'garentie',
         'condition_financiere',
+        'tva_statut',
         'iduser'
     ];
 }
