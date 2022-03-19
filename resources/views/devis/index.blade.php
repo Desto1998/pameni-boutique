@@ -63,7 +63,7 @@
             </div>
         </div>
     </div>
-
+@include('devis.modal')
 @endsection
 @section('script')
     <script>
@@ -256,6 +256,101 @@
             })
             // }
         }
+
+        // traitement de l'image
+        $("#logo-zone").click(function(e) {
+            $("#logo-upload").click();
+        });
+        function fasterPreview( uploader ) {
+            if ( uploader.files && uploader.files[0] ){
+                $('#logo-zone').attr('src',
+                    window.URL.createObjectURL(uploader.files[0]) );
+            }
+        }
+        $("#logo-upload").change(function(){
+            fasterPreview( this );
+        });
+        $('#edit-btn').click(function (e){
+            $('.form-control').removeAttr('disabled');
+            $('.btn-primary').removeAttr('disabled');
+        });
+
+        function getId(id){
+            $('#modal-form #iddevis').val(id);
+
+        }
+
+        // add new categorie
+        $("#modal-form").on("submit", function (event) {
+            event.preventDefault();
+
+            swal.fire({
+                title: "Voulez-vous générer la facture?",
+                icon: 'question',
+                text: "Ce devis ne sera plus modifiable après cette opération. Cette opération est irreversible.",
+                type: "warning",
+                showCancelButton: !0,
+                confirmButtonText: "Oui, Continuer!",
+                cancelButtonText: "Non, annuler !",
+                reverseButtons: !0
+            }).then(function (e) {
+                if (e.value === true) {
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $('#categorie-form .btn-primary').attr("disabled", true).html("En cours...")
+                    var data = $('#modal-form').serialize()
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('devis.makefacture') }}",
+                        data: data,
+                        dataType: 'json',
+                        success: function (res) {
+                            console.log(res);
+                            if (res){
+                                // swal.fire("Effectué!", "Enregistré avec succès!", "success")
+
+
+                                $('#modal-form .btn-primary').attr("disabled", false).html("Enregistrer")
+                                $('#modal-form')[0].reset()
+                                $('#fature-modal').modal('hide');
+                                loadDevis()
+
+                                swal.fire({
+                                    icon: 'success',
+                                    title: 'Effectué avec succès',
+                                    text: "L'opération s'est bien terminé!",
+                                    footer: '<a href="/dashboard/factures/print/'+res.facture_id+'"><i class="fa fa-eye"></i> Cliquer pour voir la facture.</a>'
+                                })
+
+                            }
+                            if (res===[]|| res===undefined || res==null) {
+                                sweetAlert("Désolé!", "Erreur lors de l'enregistrement!", "error")
+                                $('#modal-form .btn-primary').attr("disabled", false).html("Enregistrer")
+                            }
+
+                        },
+                        error: function (resp) {
+                            sweetAlert("Désolé!", "Une erreur s'est produite.", "error");
+                            $('#modal-form .btn-primary').attr("disabled", false).html("Enregistrer")
+                        }
+                    });
+                } else {
+
+                    $('#modal-form .btn-primary').attr("disabled", false).html("Enregistrer")
+                    $('#fature-modal').modal('hide');
+                    e.dismiss;
+                }
+            }, function (dismiss) {
+                $('#modal-form .btn-primary').attr("disabled", false).html("Enregistrer")
+                $('#fature-modal').modal('hide');
+                return false;
+            })
+
+        });
+
     </script>
     <!-- Datatable -->
     <script src="{{asset('template/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>

@@ -161,6 +161,7 @@
 
             </td>
             <td class="for-date">
+
                 <strong>{{ (new DateTime($data[0]->date_devis))->format('d').' '.$mois.' '.(new DateTime($data[0]->date_devis))->format('Y') }}</strong>
             </td>
         </tr>
@@ -282,9 +283,9 @@
     <strong>
 {{--        {{ (new \App\Models\ChiffreLettre())->Conversion(number_format(( ($montantTVA * 19.25)/100)+$montantTVA,0,'.','')) }}--}}
         @if ($data[0]->tva_statut == 1)
-            {{ (new \App\Models\ChiffreLettre())->Conversion(number_format(( ($montantTVA * 19.25)/100)+$montantTVA,0,'.','')) }}
+            {{ ucfirst((new \App\Models\ChiffreLettre())->Conversion(number_format(( ($montantTVA * 19.25)/100)+$montantTVA,0,'.',''))) }}
         @else
-            {{ (new \App\Models\ChiffreLettre())->Conversion(number_format($montantTVA ,2,'.','')) }}
+            {{ ucfirst((new \App\Models\ChiffreLettre())->Conversion(number_format($montantTVA ,2,'.',''))) }}
         @endif francs CFA
     </strong>
 </div>

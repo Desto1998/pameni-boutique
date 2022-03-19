@@ -6,9 +6,12 @@ use App\Models\Categories;
 use App\Models\Clients;
 use App\Models\Complements;
 use App\Models\Devis;
+use App\Models\Factures;
 use App\Models\Month;
 use App\Models\Paiements;
+use App\Models\Pieces;
 use App\Models\Pocedes;
+use App\Models\Produit_Factures;
 use App\Models\Produits;
 use App\Models\User;
 use DateInterval;
@@ -364,7 +367,84 @@ class DevisController extends Controller
 
     public function makeFacture(Request $request)
     {
-        return " In process";
+        $request->validate([
+            'ref_bon' => ['required'],
+            'date_bon' => ['required'],
+            'iddevis' => ['required'],
+        ]);
+        $devis = Devis::where('devis_id',$request->iddevis)->get();
+        $iduser = Auth::user()->id;
+        /** @var 'on' genere la  $reference */
+        $lastNum = Factures::whereYear('created_at', date('Y'))
+            ->whereRaw('facture_id = (select max(`facture_id`) from factures)')
+            ->get()
+        ;
+        $pocedes = Pocedes::join('produits', 'produits.produit_id', 'pocedes.idproduit')->where('iddevis', $request->iddevis)->get();
+        $reference = 'F' . date('Y');
+        if (count($lastNum) > 0) {
+            $lastNum = $lastNum[0]->reference_fact;
+            $actual = 0;
+            for ($j = 0; $j < strlen($lastNum); $j++) {
+                if ($j > 5) {
+                    $actual .= $lastNum[$j];
+                }
+            }
+            $num = (int)$actual;
+            $num += 1;
+            $actual = str_pad($num, 3, "0", STR_PAD_LEFT);
+            $reference .= $actual;
+        } else {
+            $num = 1;
+            $actual = str_pad($num, 3, "0", STR_PAD_LEFT);
+            $reference .= $actual;
+        }
+//        dd($reference);
+        if ($devis[0]) {
+            $save = Factures::create([
+                'reference_fact' => $reference,
+                'disponibilite' => $devis[0]->disponibilite,
+                'garentie' => $devis[0]->garentie,
+                'objet' => $devis[0]->objet,
+                'condition_financiere' => $devis[0]->condition,
+                'date_fact' => $request->date,
+                'idclient' => $devis[0]->idclient,
+                'tva_statut' => $devis[0]->tva_statut,
+                'iduser' => $iduser,
+            ]);
+            if ($save) {
+                foreach ($pocedes as $key=>$p) {
+                    Produit_Factures::create([
+                        'idfacture' => $save->facture_id,
+                        'quantite' => $p->quantite,
+                        'prix' => $p->prix,
+                        'tva' => $p->tva,
+                        'remise' => $p->remise,
+                        'idproduit' => $p->idproduit,
+                        'iduser' => $iduser,
+                    ]);
+                }
+            }
+
+            // On enregistre les infos du bon de commande
+            if (isset($request->ref_bon)) {
+                $file = $request->file('logo');
+                $destinationPath = 'images/piece';
+                $originalFile ="";
+                if ($file) {
+                    $originalFile = $file->getClientOriginalName();
+                    $file->move($destinationPath, $originalFile);
+                }
+                Pieces::create([
+                    'chemin' => $originalFile,
+                    'ref' => $request->ref_bon,
+                    'date_piece' => $request->date_bon,
+                    'idfacture' => $save->facture_id,
+                    'iduser' => $iduser,
+                ]);
+            }
+        }
+        $statut = Devis::where('devis_id', $request->iddevis)->update(['statut' => 2]);
+        return Response()->json($save);
     }
 
     public function printDevis($id)

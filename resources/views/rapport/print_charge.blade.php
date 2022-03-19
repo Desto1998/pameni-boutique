@@ -10,6 +10,27 @@
     *{
       font-family: "Roboto", sans-serif;
     }
+    header table tr td {
+        padding-right: 30px;
+    }
+
+    header table .for-logo img {
+        width: 100px;
+    }
+
+    header table .for-name {
+        text-align: center;
+    }
+
+    header table .for-name p {
+        font-size: 12px;
+    }
+
+    header table .for-name h3 {
+        font-family: "Arial Black";
+        color: #0c85d0;
+    }
+
     .forhead {
         display: flex;
         justify-content: center;
@@ -93,38 +114,61 @@
     .bold{
         font-weight: 700;
     }
+
+    footer {
+        position: fixed;
+        bottom: -70px;
+        left: 0px;
+        right: 0px;
+        height: 120px;
+        text-align: center;
+        line-height: 1;
+        font-size: 12px;
+    }
+
+    footer table {
+        width: 100%;
+    }
+
+    footer table tr td {
+        width: 33%;
+    }
+
+    footer table tr div {
+        width: 200px;
+        background-color: #0c85d0;
+        padding: 10px;
+        border-radius: 10px;
+        color: #ffffff;
+    }
 </style>
 <body>
 <div class="forhead" style="background: #EEEEEE">
-    <table style="background: #EEEEEE; padding: 5px">
-        <tr>
-            <td>
-                <div class="for-infomation">
-                    <h2>RAPPORT DES CHARGES</h2>
-
-                </div>
-            </td>
-            <td>
-                <div class="for-factname">
-
-                </div>
-            </td>
-            <td>
-
-                <div class="for-logo">
-
+    <header class="forhead">
+        <table class="heading-table">
+            <tr>
+                <td class="for-logo">
                     @php
                         $ImagePath = $_SERVER["DOCUMENT_ROOT"] . '/images/logo/logo_gssc.png';
-
                     @endphp
 
                     {{--                    <img src="{{ asset('images/logo/logo_gssc.png') }}" class="logo" alt="Logo not found">--}}
                     <img src="{{ $ImagePath }}" class="logo" alt="Logo not found">
+                </td>
+                <td class="for-name">
+                    <h3>{{ 'GLOBAL SOFT & COMMUNICATION Sarl' }}</h3>
+                    <p>
+                        <strong>GSC:</strong> Rue foch face direction Orange, DOUALA CAMEROUN <br><br>
+                        <strong>DSP: {{ $data[0]->firstname }} {{ $data[0]->lastname }} {{ $data[0]->phone }} </strong>
+                    </p>
 
-                </div>
-            </td>
-        </tr>
-    </table>
+                </td>
+                <td class="for-date">
+                    <strong>{{ (new DateTime($data[0]->date_devis))->format('d').' '.$mois.' '.(new DateTime($data[0]->date_devis))->format('Y') }}</strong>
+                </td>
+            </tr>
+        </table>
+    </header>
 </div>
 <h3 style="text-align: center; margin: 20px;text-transform: capitalize">{{ $titre }}</h3>
 <label><i>Période:</i> <strong>{{ $debut }}</strong> au <strong>{{ $fin }}</strong></label><br>
@@ -168,5 +212,31 @@
     <h2>Total: {{ $total }} FCFA</h2>
 </div>
 
+<footer class="for-footer">
+    <table class="table-footer">
+        <tr>
+            <td>
+                <div>
+                    <strong>Douala</strong>-
+                    Akwa boulevard de la libertee face Direction Orange Akwa Douala<br>
+                    gscdla@gsc-technology.com
+                </div>
+            </td>
+            <td>
+                <div>
+                    <strong>Yaounde</strong>, Rond pointNlongkak immeuble Pharmacie Lumiere
+                    <br>
+                    gscyde@gsc-technology.com
+                </div>
+            </td>
+            <td>
+                <div>
+                    <strong>Garoua</strong>, centre Commercial face Direction PMUC<br>
+                    gscgaroua@gsc-technology.com
+                </div>
+            </td>
+        </tr>
+    </table>
+</footer>
 </body>
 </html>

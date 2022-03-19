@@ -3,8 +3,8 @@
         <strong>... </strong></a>
     <ul class="dropdown-menu justify-content-center text-center" role="menu">
         <li class="text-center">
-            <a href="javascript:void(0);" data-toggle="modal"
-               data-target="#devis-view-modal{{ $value->devis_id }}" class="btn btn-success btn-sm ml-1"
+            <a href="javascript:void(0);"  class="btn btn-success btn-sm ml-1" data-toggle="modal"
+               data-target="#devis-view-modal{{ $value->devis_id }}"
                title="Visualiser les details"><i
                     class="fa fa-eye"></i></a>
             <a href="{{ route('devis.print',['id' =>$value->devis_id]) }}" target="_blank" class="btn btn-light btn-sm ml-1"
@@ -25,7 +25,8 @@
                         class="fa fa-check"></i></a>
             @endif
             @if ($value->statut===1 )
-                <a href="{{ route('devis.edit',['id' =>$value->devis_id]) }}" class="btn btn-secondary btn-sm ml-1"
+                <a href="{{ route('devis.edit',['id' =>$value->devis_id]) }}" data-toggle="modal"
+                   data-target="#fature-modal" onclick="getId({{ $value->devis_id }})" class="btn btn-secondary btn-sm ml-1"
                    title="Générer la facture."><i
                         class="fa fa-file-archive-o"></i></a>
             @endif
