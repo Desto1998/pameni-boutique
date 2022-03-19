@@ -172,6 +172,7 @@ create table factures
     garentie             varchar(1000) null,
     condition_financiere varchar(1000) null,
     iduser               int         not null,
+    iddevis              int null,
     created_at           TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at           DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -183,6 +184,8 @@ create table produit_factures
     quantite     int   not null,
     prix         float not null,
     remise       float null,
+    tva          float null,
+    num_serie    varchar(255) null,
     idfacture    int   not null,
     idproduit    int   not null,
     iduser       int   not null,
@@ -280,10 +283,12 @@ drop table if exists pieces;
 create table pieces
 (
     piece_id   int primary key AUTO_INCREMENT,
-    chemin     int   not null,
-    code       float not null,
+    chemin     varchar(500) null,
+    ref        varchar(50),
     remise     float null,
     idcommande int null,
+    idfacture  int null,
+    date_piece date null,
     iddevis    int null,
     iduser     int   not null,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

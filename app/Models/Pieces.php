@@ -10,11 +10,13 @@ class Pieces extends Model
     use HasFactory;
     protected $primaryKey = 'piece_id';
     protected $fillable = [
-        'code',
+        'ref',
         'chemin',
         'remise',
         'idcommande',
         'iddevis',
+        'idfacture',
+        'date_piece',
         'iduser',
     ];
 }

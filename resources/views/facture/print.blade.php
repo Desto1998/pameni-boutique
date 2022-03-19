@@ -88,16 +88,19 @@
 
     .for-garentie {
         width: 100%;
-        margin-top: 20px;
+        margin: 40px 0;
     }
 
+    .for-garentie tr td  {
+        width: 50%;
+    }
     .for-garentie tr td div {
         font-size: 12px;
         line-height: 1.6;
         padding: 8px;
         border: #EEEEEE solid 1px;
-        height: 50px;
-        width: 155px;
+        /*height: 50px;*/
+
     }
 
     .for-garentie tr td div .titre {
@@ -147,7 +150,7 @@
                 <h3>{{ 'GLOBAL SOFT & COMMUNICATION Sarl' }}</h3>
                 <p>
                     <strong>GSC:</strong> Rue foch face direction Orange, DOUALA CAMEROUN <br><br>
-                    <strong>DSP: {{ $data[0]->firstname }} {{ $data[0]->lastname }} {{ $data[0]->phone }} </strong>
+{{--                    <strong>DSP: {{ $data[0]->firstname }} {{ $data[0]->lastname }} {{ $data[0]->phone }} </strong>--}}
                 </p>
 
             </td>
@@ -164,19 +167,19 @@
             <td class="devis-info">
                 <div class="devis-details">
                     <strong style="text-decoration: underline">FACTURE</strong><br>
-                    <strong>{{ $data[0]->reference_devis }}</strong><br>
+                    <strong>{{ $data[0]->reference_fact }}</strong><br>
                     <strong>Contibibuable n°</strong><br>
                     <strong>M06191391224E</strong><br>
                 </div>
 
                 <div class="devis-details" style="margin-top: 15px">
-                    <strong style="text-decoration: underline">FACTURE</strong><br>
+                    <strong style="text-decoration: underline">Coordonnée bancaire</strong><br>
                     <strong>CCA-Bank</strong><br>
                     <strong>N° de compte: 00258112901</strong><br>
                     <strong>Code banque: 10039</strong><br>
                     <strong>Code Guichet: 10039</strong><br>
                     <strong>clé: 30</strong><br>
-                    <strong>BCN</strong><br>
+                    <strong>BC N° {{$num_BC}} </strong><br>
                 </div>
 
             </td>
@@ -281,12 +284,13 @@
 </div>
 <div class="for-prix">
     <strong>
+         ARRETEE LA PRESENTE FACTURE A LA SOMME DE:<br>
         {{--        {{ (new \App\Models\ChiffreLettre())->Conversion(number_format(( ($montantTVA * 19.25)/100)+$montantTVA,0,'.','')) }}--}}
         @if ($data[0]->tva_statut == 1)
             {{ (new \App\Models\ChiffreLettre())->Conversion(number_format(( ($montantTVA * 19.25)/100)+$montantTVA,0,'.','')) }}
         @else
-            {{ number_format($montantTVA ,2,'.','') }}
-        @endif
+            {{ (new \App\Models\ChiffreLettre())->Conversion(number_format($montantTVA ,2,'.','')) }}
+        @endif francs CFA
     </strong>
 </div>
 
@@ -294,26 +298,24 @@
     <tr>
         <td>
             <div>
-                <label class="titre">Validité de l'offre</label><br>
-                <label>{{ $data[0]->validite }} semaines</label>
+                <label class="titre">CONDITION DE GARANTIE:</label><br>
+                <small>
+                    La garantie est valable dans le cas de défauts d'usine et ainsi que les pannes dues aux
+                    défauts de fabrication.<br>
+                    Les équipements électroniques livrés par nos soins doivent etre sous protection électrique recommandé par le constructeur.
+                </small>
             </div>
         </td>
+
         <td>
             <div>
-                <label class="titre">Disponibilité</label><br>
-                <label>{{ $data[0]->disponibilite }} </label>
-            </div>
-        </td>
-        <td>
-            <div>
-                <label class="titre">Garentie</label><br>
-                <label>{{ $data[0]->garentie }}</label>
-            </div>
-        </td>
-        <td>
-            <div>
-                <label class="titre">Conditions financières</label><br>
-                <label>{{ $data[0]->condition }} semaines</label>
+                <label class="titre">Note: </label><br>
+                <small>Toutes les fournitures restent la priopriété exclusive
+                de Global Soft and Communication Sarl jusqu'au règlement intégral de la facture par le client.
+                    Nos Tarifs sont confidentiels. ne sont utilisable et adressés qu'a nos clients,
+                    lq diffusion de cette facture et contenu sont strictemment interdits.
+
+                </small>
             </div>
         </td>
     </tr>

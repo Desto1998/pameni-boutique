@@ -12,14 +12,14 @@
         <div class="row page-titles mx-0">
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
-                    <h4>Editer la facture "{{ $data[0]->reference_fact }}"</h4>
+                    <h4>Créer une facture</h4>
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="javascript:void(0)">Dashboard</a></li>
                     <li class="breadcrumb-item"><a href="javascript:void(0)">Factures</a></li>
-                    <li class="breadcrumb-item active"><a href="javascript:void(0)">Editer</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0)">Ajouter</a></li>
                 </ol>
             </div>
         </div>
@@ -29,20 +29,19 @@
                     <div class="card-body">
                         <!-- Button trigger modal -->
                         {{--                        <h4 class="w-50">Ajouter un devis</h4>--}}
-                        <form action="{{ route('factures.edit.store') }}" method="post" id="devis-form" enctype="multipart/form-data">
+                        <form action="{{ route('factures.store') }}" method="post" id="devis-form" enctype="multipart/form-data">
                             @csrf
-                            <input type="hidden" value="{{ $data[0]->facture_id }}" name="facture_id">
                             <div class="row">
                                 <div class="col-md-5 float-left d-flex">
                                     <div class="form-group col-md-6">
                                         <label for="date">Date de la facture: </label>
-                                        <input type="date" value="{{ $data[0]->date_fact }}" name="date" id="date" class="form-control" required>
+                                        <input type="date" name="date" id="date" class="form-control" required>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="statut_tva">Inclure la TVA? </label>
                                         <select class="form-control" name="tva_statut">
-                                            <option {{ $data[0]->tva_statut==0?"selected":"" }} value="0">Non</option>
-                                            <option {{ $data[0]->tva_statut==1?"selected":"" }} value="1">Oui</option>
+                                            <option value="0">Non</option>
+                                            <option value="1">Oui</option>
                                         </select>
                                     </div>
                                 </div>
@@ -50,9 +49,10 @@
                                     <div class="form-group col-md-6">
                                         <label for="echeance">Client: </label>
                                         <select name="idclient" id="single-select" class="form-control">
+                                            <option selected="selected" disabled>Sélectionez un client</option>
                                             @foreach($clients as $cl)
-                                                <option {{ $data[0]->client_id==$cl->client_id?"selected":"" }}
-                                                        value="{{ $cl->client_id }}">{{ $cl->nom_client }} {{ $cl->prenom_client }}{{ $cl->raison_s_client }}</option>
+                                                <option
+                                                    value="{{ $cl->client_id }}">{{ $cl->nom_client }} {{ $cl->prenom_client }}{{ $cl->raison_s_client }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -70,14 +70,18 @@
                                                 {{--                                                <label class="h5 font-weight-bold mt-1"> {{ $cl->rcm }}</label><br>--}}
                                                 {{--                                                <label class="h5 font-weight-bold mt-1">NC: {{ $cl->contribuabe }}</label><br>--}}
                                             </div>
+
                                         @endforeach
                                     </div>
+
+
                                 </div>
+
+
                             </div>
                             <div class="form-group">
                                 <label for="objet">Objet: </label>
-                                <input type="text" name="objet" id="objet" value="{{ $data[0]->objet }}"
-                                       class="form-control" required>
+                                <input type="text" name="objet" id="objet" class="form-control" required>
                             </div>
                             <div class="for-produit table-responsive" style="max-height: 300px; overflow: auto">
                                 <label class="nav-label">Produits</label>
@@ -96,78 +100,40 @@
 
                                     </thead>
                                     <tbody style="color: #000000!important;">
-                                    @php
-                                        $montantTTC = 0;
-                                        $montantHT=0;
-                                        $montantTVA=0;
-                                    @endphp
+                                    <tr class="text-black  produit-input font-weight-bold" id="product-row0">
+                                        <td style="width: 250px;">
+                                            <select name="idproduit[]" class="dropdown-groups form-control" id="select-pro0" onchange="setPrix(0)" style="color: #000000">
+                                                <option selected="selected" disabled>Sélectionez un produit</option>
+                                                @foreach($categories as $cat)
+                                                    <optgroup class="" label="{{ $cat->titre_cat }}">
+                                                        @foreach($produits as $p)
+                                                            @if ($p->idcategorie===$cat->categorie_id)
+                                                                <option
+                                                                    value="{{ $p->produit_id }}">{{ $p->titre_produit }}</option>
+                                                            @endif
+                                                        @endforeach
+                                                    </optgroup>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                        <td><input type="number" min="0" value="0" name="quantite[]" onchange="calculeHT(0)" id="quantite0" class="form-control quantite"
+                                                   required></td>
+                                        <td><input type="number" min="0" value="0" name="prix[]" onchange="calculeHT(0)" id="prix0" class="form-control prix"
+                                                   required></td>
+                                        <td><input type="number" min="0" value="0" name="remise[]" onchange="calculeHT(0)" step="any" id="remise0"
+                                                   class="form-control remise" required></td>
+                                        <td><input type="number" min="0" value="0" name="tva[]" step="any" id="tva0" onchange="calculeHT(0)"
+                                                   class="form-control tva" required></td>
+                                        <td><input type="number" min="0" readonly  name="totalHT[]" value="0" step="any" id="totalHT0"
+                                                   class="form-control totalHT"></td>
+                                        <td><input type="number" min="0" value="0" readonly name="totalTTC[]" step="any" id="totalTTC0"
+                                                   class="form-control totalTTC"></td>
+                                        <td class="text-center">
+                                            <button type="button" onclick="removeLigne(0)"
+                                                    class="btn btn-sm btn-danger"><i class="fa fa-trash-o"></i></button>
+                                        </td>
+                                    </tr>
 
-                                    @foreach($pocedes as $item)
-                                        @php
-                                            $remise = ($item->prix * $item->quantite *$item->remise)/100;
-                                            $montant = ($item->quantite * $item->prix) - $remise;
-                                            $HT = $montant;
-
-                                            $montantHT += $montant;
-                                            $tva = ($montant * $item->tva)/100;
-                                            $montant = $tva + $montant;
-                                            $TTC = $montant;
-                                            $montantTVA += $montant;
-                                        @endphp
-                                        <tr class="text-black  produit-input font-weight-bold"
-                                            id="product-row{{ -$item->produit_f_id }}">
-
-                                            <td style="width: 250px;">
-                                                <input type="hidden" name="produit_f_id[]" value="{{ $item->produit_f_id }}">
-                                                <select name="idproduit[]" class="dropdown-groups form-control"
-                                                        id="select-pro{{ -$item->produit_f_id }}"
-                                                        onchange="setPrix({{ -$item->produit_f_id }})"
-                                                        style="color: #000000">
-                                                    <option selected="selected" disabled>Sélectionez un produit</option>
-                                                    @foreach($categories as $cat)
-                                                        <optgroup class="" label="{{ $cat->titre_cat }}">
-                                                            @foreach($produits as $p)
-                                                                @if ($p->idcategorie===$cat->categorie_id)
-                                                                    <option
-                                                                        {{ $item->produit_f_id==$p->produit_id?'selected':'' }}
-                                                                        value="{{ $p->produit_id }}">{{ $p->titre_produit }}</option>
-                                                                @endif
-                                                            @endforeach
-                                                        </optgroup>
-                                                    @endforeach
-                                                </select>
-                                            </td>
-                                            <td><input type="number" min="0" value="{{ $item->quantite }}"
-                                                       name="quantite[]" onchange="calculeHT({{ -$item->produit_f_id }})"
-                                                       id="quantite{{ -$item->produit_f_id }}"
-                                                       class="form-control quantite"
-                                                       required></td>
-                                            <td><input type="number" min="0" value="{{ $item->prix }}" name="prix[]"
-                                                       onchange="calculeHT({{ -$item->produit_f_id }})"
-                                                       id="prix{{ -$item->produit_f_id }}" class="form-control prix"
-                                                       required></td>
-                                            <td><input type="number" min="0" value="{{ $item->remise }}" name="remise[]"
-                                                       onchange="calculeHT({{ -$item->produit_f_id }})" step="any"
-                                                       id="remise{{ -$item->produit_f_id }}"
-                                                       class="form-control remise" required></td>
-                                            <td><input type="number" min="0" value="{{ $item->tva }}" name="tva[]"
-                                                       step="any" id="tva{{ -$item->produit_f_id }}"
-                                                       onchange="calculeHT({{ -$item->produit_f_id }})"
-                                                       class="form-control tva" required></td>
-                                            <td><input type="number" min="0" readonly name="totalHT[]" value="{{ $HT }}"
-                                                       step="any" id="totalHT{{ -$item->produit_f_id }}"
-                                                       class="form-control totalHT"></td>
-                                            <td><input type="number" min="0" value="{{ $TTC }}" readonly
-                                                       name="totalTTC[]" step="any" id="totalTTC{{ -$item->produit_f_id }}"
-                                                       class="form-control totalTTC"></td>
-
-                                            <td class="text-center">
-                                                <button type="button" onclick="removeProduit({{ $item->produit_f_id }})"
-                                                        class="btn btn-sm btn-danger"><i class="fa fa-trash-o"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -194,13 +160,11 @@
                                     <label class="nav-label text-center">Informations du bon de commande</label>
                                     <div class="form-group">
                                         <label for="ref_bon">Reference du bon de commande</label>
-                                        <input type="hidden" name="piece_id" value="{{ isset($piece[0])?$piece[0]->piece_id:'' }}">
-                                        <input type="hidden" name="chemin" value="{{ isset($piece[0])?$piece[0]->chemin:'' }}">
-                                        <input type="text" name="ref_bon" value="{{ isset($piece[0])?$piece[0]->ref:'' }}" id="ref_bon" class="form-control" required>
+                                        <input type="text" name="ref_bon" id="ref_bon" class="form-control" required>
                                     </div>
                                     <div class="form-group">
                                         <label>date du bon de commande</label>
-                                        <input type="date" value="{{ isset($piece[0])?$piece[0]->date_piece:'' }}" name="date_bon" id="ref_bon" class="form-control">
+                                        <input type="date"  name="date_bon" id="ref_bon" class="form-control">
                                     </div>
                                     <div class="form-group">
                                         <label for="logo-upload">Joindre un fichier</label>
@@ -209,7 +173,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="row mb-3 ml-5" title="Cliquer pour selectioner une image">
-                                        <img id="logo-zone" style="width: 300px; height: 300px; min-height: 200px; min-width: 200px" src="{{ isset($piece[0]->chemin)?asset('images/piece/'.$piece[0]->chemin):asset('images/logo-thumbnail.png') }}" alt="Ouopps! Auncune image disponible">
+                                        <img id="logo-zone" style="width: 300px; height: 300px; min-height: 200px; min-width: 200px" src="{{ asset('images/logo-thumbnail.png') }}" alt="Ouopps! Auncune image disponible">
                                     </div>
                                     {{--                                    <div class="kv-avatar-hint">--}}
                                     {{--                                        <small>Sélectionner un fichier< 1500 KB</small>--}}
@@ -246,19 +210,6 @@
         var totalProduit = 0;
         var totalComplement = 0;
         $(document).ready(function () {
-            // ici on affiche les informations du client en fonction du client selectionneee
-            var idclient = $('#single-select').val();
-            $('.infos_client').hide(200);
-            //on affiche l'info client correspondant
-            $('#infos_client' + idclient).show(250);
-            $('#single-select').on('change', function (e) {
-                var idclient = $('#single-select').val();
-                // on cache d'abord toutes les infos client
-                $('.infos_client').hide(200);
-                //on affiche l'info client correspondant
-                $('#infos_client' + idclient).show(250);
-            });
-
             // ici on affiche les informations du client en fonction du client selectionneee
 
             $('#single-select').on('change', function (e) {
@@ -395,62 +346,6 @@
             $('.form-control').removeAttr('disabled');
             $('.btn-primary').removeAttr('disabled');
         });
-
-        // cette methode retire un produit depuid la bd
-        function removeProduit(id) {
-
-            if ($('#table-produit tbody').find("tr").length > 1) {
-
-                swal.fire({
-                    title: "Supprimer ce produit?",
-                    icon: 'question',
-                    text: "Ce produit sera retiré.",
-                    type: "warning",
-                    showCancelButton: !0,
-                    confirmButtonText: "Oui, supprimer!",
-                    cancelButtonText: "Non, annuler !",
-                    reverseButtons: !0
-                }).then(function (e) {
-                    if (e.value === true) {
-                        // if (confirm("Supprimer cette tâches?") == true) {
-                        $.ajaxSetup({
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            }
-                        });
-                        $.ajax({
-                            type: "POST",
-                            url: "{{ route('factures.remove.produit') }}",
-                            data: {id: id},
-                            dataType: 'json',
-                            success: function (res) {
-                                if (res) {
-                                    // swal.fire("Effectué!", "Supprimé avec succès!", "success")
-                                    toastr.success("Supprimé avec succès!");
-                                    $('#product-row' + (-id)).remove()
-                                    total();
-                                } else {
-                                    sweetAlert("Désolé!", "Erreur lors de la suppression!", "error")
-                                }
-
-                            },
-                            error: function (resp) {
-                                sweetAlert("Désolé!", "Une erreur s'est produite.", "error");
-                            }
-                        });
-                    } else {
-                        e.dismiss;
-                    }
-                }, function (dismiss) {
-                    return false;
-                })
-            } else {
-                alert("Vous ne pouvez pas supprimer tous les elements.");
-            }
-
-
-        }
-
     </script>
 
     <!-- Selet search -->

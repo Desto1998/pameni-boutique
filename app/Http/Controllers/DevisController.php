@@ -153,7 +153,7 @@ class DevisController extends Controller
         $nbjour = $request->validite * 7;
         $date->add(new DateInterval("P{$nbjour}D"));
         $date = date("Y-m-d", strtotime($date->format('Y-m-d')));
-
+        /** @var 'on' genere la  $reference */
         $reference = 'PF' . date('Y');
         if (count($lastNum) > 0) {
             $lastNum = $lastNum[0]->reference_devis;

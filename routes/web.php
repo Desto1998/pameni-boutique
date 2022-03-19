@@ -127,21 +127,29 @@ Route::prefix('dashboard')->group(function () {
 
             //Route for factures
             Route::get('factures/index',[FactureController::class,'index'])->name('factures.all');
-            Route::get('factures/add',[DevisController::class,'showAddForm'])->name('factures.add');
+            Route::get('factures/load',[FactureController::class,'loadFactures'])->name('factures.load');
+            Route::get('factures/add',[FactureController::class,'showAddForm'])->name('factures.add');
             Route::post('factures/store',[FactureController::class,'store'])->name('factures.store');
             Route::get('factures/edit/{id}',[FactureController::class,'showEditForm'])->name('factures.edit');
             Route::post('factures/edit/store',[FactureController::class,'edit'])->name('factures.edit.store');
-            Route::post('factures/delete',[FactureController::class,'delete'])->name('factures.delete');
             Route::get('factures/details/{id}',[FactureController::class,'view'])->name('factures.view');
+            Route::post('factures/delete',[FactureController::class,'delete'])->name('factures.delete');
+            Route::post('factures/valider',[FactureController::class,'validerFactures'])->name('factures.valider');
+            Route::post('factures/bloquer',[FactureController::class,'bloquerFactures'])->name('factures.bloquer');
+
+            Route::get('factures/print/{id}',[FactureController::class,'printFactures'])->name('factures.print');
+            Route::post('factures/remove/produit',[FactureController::class,'removeProduit'])->name('factures.remove.produit');
 
             //Route for commandes
             Route::get('commandes/index',[CommandeController::class,'index'])->name('commandes.all');
-            Route::get('commandes/add',[DevisController::class,'showAddForm'])->name('commandes.add');
+            Route::get('commandes/add',[CommandeController::class,'showAddForm'])->name('commandes.add');
             Route::post('commandes/store',[CommandeController::class,'store'])->name('commandes.store');
             Route::get('commandes/edit/{id}',[CommandeController::class,'showEditForm'])->name('commandes.edit');
             Route::post('commandes/edit/store',[CommandeController::class,'edit'])->name('commandes.edit.store');
             Route::post('commandes/delete',[CommandeController::class,'delete'])->name('commandes.delete');
             Route::get('commandes/details/{id}',[CommandeController::class,'view'])->name('commandes.view');
+            Route::get('factures/print/{id}',[FactureController::class,'printFactures'])->name('factures.print');
+
         });
 
 

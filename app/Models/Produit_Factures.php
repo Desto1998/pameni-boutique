@@ -15,6 +15,8 @@ class Produit_Factures extends Model
         'quantite',
         'prix',
         'remise',
+        'tva',
+        'num_serie',
         'idfacture',
         'idproduit',
         'iduser',

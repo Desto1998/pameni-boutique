@@ -21,6 +21,7 @@ class Factures extends Model
         'garentie',
         'condition_financiere',
         'tva_statut',
-        'iduser'
+        'iduser',
+        'iddevis'
     ];
 }

@@ -284,8 +284,8 @@
         @if ($data[0]->tva_statut == 1)
             {{ (new \App\Models\ChiffreLettre())->Conversion(number_format(( ($montantTVA * 19.25)/100)+$montantTVA,0,'.','')) }}
         @else
-            {{ number_format($montantTVA ,2,'.','') }}
-        @endif
+            {{ (new \App\Models\ChiffreLettre())->Conversion(number_format($montantTVA ,2,'.','')) }}
+        @endif francs CFA
     </strong>
 </div>
 

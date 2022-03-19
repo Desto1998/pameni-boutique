@@ -14,14 +14,14 @@
         <div class="row page-titles mx-0">
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
-                    <h4>GESTION DES FACTURES</h4>
+                    <h4>GESTION DES DEVIS</h4>
                     {{--                    <p class="mb-0">Your business dashboard template</p>--}}
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="javascript:void(0)">Dashboard</a></li>
-                    <li class="breadcrumb-item"><a href="javascript:void(0)">Factures</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:void(0)">Commandes</a></li>
                     <li class="breadcrumb-item active"><a href="javascript:void(0)">Index</a></li>
                 </ol>
             </div>
@@ -31,8 +31,8 @@
                 <div class="card px-3">
                     <div class="card-body">
                         <!-- Button trigger modal -->
-                        <span class="float-left h4">Liste des factures</span>
-                        <a href="{{ route('factures.add') }}" class="btn btn-primary float-right mb-3"
+                        <span class="float-left h4">Liste des commandes</span>
+                        <a href="{{ route('commandes.add') }}" class="btn btn-primary float-right mb-3"
                         ><i class="fa fa-plus">&nbsp; Ajouter</i></a>
 
                         <div class="table-responsive">
@@ -72,9 +72,9 @@
         function deleteFun(id) {
             var table = $('#example').DataTable();
             swal.fire({
-                title: "Supprimer cette facture?",
+                title: "Supprimer ce devis?",
                 icon: 'question',
-                text: "Cette facture sera supprimé de façon définitive.",
+                text: "Ce devis sera supprimé de façon définitive.",
                 type: "warning",
                 showCancelButton: !0,
                 confirmButtonText: "Oui, supprimer!",
@@ -90,7 +90,7 @@
                     });
                     $.ajax({
                         type: "POST",
-                        url: "{{ route('factures.delete') }}",
+                        url: "{{ route('devis.delete') }}",
                         data: {id: id},
                         dataType: 'json',
                         success: function (res) {
@@ -120,7 +120,7 @@
 
 
         // fonction qui charge les produits : les elements du tableau
-        function loadFactures() {
+        function loadDevis() {
             $('#example').dataTable().fnClearTable();
             $('#example').dataTable().fnDestroy();
             // $("#example").DataTable.destroy();
@@ -137,15 +137,15 @@
                     }
                 },
                 ajax:{
-                    url: "{{ route('factures.load') }}",
+                    url: "{{ route('devis.load') }}",
                 },
 
                 columns: [
                     {data: 'DT_RowIndex',name:'DT_RowIndex'},
-                    {data: 'reference_fact',name:'reference_fact'},
+                    {data: 'reference_devis',name:'reference_devis'},
                     {data: 'client',name:'client'},
                     {data: 'objet',name:'objet'},
-                    {data: 'date_fact',name:'date_fact'},
+                    {data: 'date_devis',name:'date_devis'},
                     {data: 'statut',name:'statut'},
                     {data: 'montantHT',name:'montantHT'},
                     {data: 'montantTTC',name:'montantTTC'},
@@ -159,15 +159,15 @@
         }
 
         $(document).ready(function () {
-            loadFactures()
+            loadDevis()
         });
 
         // cette fonction defini un devis comme valide
         function validerFun(id) {
             swal.fire({
-                title: "Valider cette facture?",
+                title: "Valider ce devis?",
                 icon: 'question',
-                text: "Elle ne sera plus modifiable aprés validation.",
+                text: "Il ne sera plus modifiable aprés validation.",
                 type: "warning",
                 showCancelButton: !0,
                 confirmButtonText: "Oui, valider!",
@@ -183,14 +183,14 @@
                     });
                     $.ajax({
                         type: "POST",
-                        url: "{{ route('factures.valider') }}",
+                        url: "{{ route('devis.valider') }}",
                         data: {id: id},
                         dataType: 'json',
                         success: function (res) {
                             if (res) {
                                 swal.fire("Effectué!", "Validé avec succès!", "success")
                                 // toastr.success("Validé avec succès!");
-                                loadFactures();
+                                loadDevis();
 
                             } else {
                                 sweetAlert("Désolé!", "Erreur lors de la validation!", "error")
@@ -212,9 +212,9 @@
         // cette fonction defini un devis comme Non valider
         function bloquerFun(id) {
             swal.fire({
-                title: "Bloquer cette facture?",
+                title: "Bloquer ce devis?",
                 icon: 'question',
-                text: "Il ne sera pas possible d'imprimer.",
+                text: "Il ne sera pas possible de générer sa facture. Les autres pourrons editer.",
                 type: "warning",
                 showCancelButton: !0,
                 confirmButtonText: "Oui, bloquer!",
@@ -230,7 +230,7 @@
                     });
                     $.ajax({
                         type: "POST",
-                        url: "{{ route('factures.bloquer') }}",
+                        url: "{{ route('devis.bloquer') }}",
                         data: {id: id},
                         dataType: 'json',
                         success: function (res) {

@@ -224,7 +224,7 @@
                 <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false"><i
                             class="fa fa-cart-plus"></i><span class="nav-text">Commandes</span></a>
                     <ul aria-expanded="false">
-                        <li><a href="{{ route('commandes.all') }}">Créer une commande</a></li>
+                        <li><a href="{{ route('commandes.add') }}">Créer une commande</a></li>
                         <li><a href="{{ route('commandes.all') }}">Gestion des commandes</a></li>
                     </ul>
                 </li>
