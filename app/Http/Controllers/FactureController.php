@@ -135,7 +135,7 @@ class FactureController extends Controller
             'objet' => ['required', 'min:5'],
             'quantite' => ['required'],
             'prix' => ['required'],
-            'ref_bon' => ['required'],
+           // 'ref_bon' => ['required'],
         ]);
 //        dd($request);
 //        $lastNum = Devis::whereYear('created_at', date('Y'))->ma('devis_id')->get() ;
@@ -186,7 +186,7 @@ class FactureController extends Controller
                 'idfacture' => $save->facture_id,
                 'quantite' => $request->quantite[$i],
                 'prix' => $request->prix[$i],
-                'tva' => $request->tva[$i],
+                'tva' => 0, //$request->tva[$i],
                 'remise' => $request->remise[$i],
                 'idproduit' => $request->idproduit[$i],
                 'iduser' => $iduser,
@@ -255,7 +255,7 @@ class FactureController extends Controller
             'objet' => ['required', 'min:5'],
             'quantite' => ['required'],
             'prix' => ['required'],
-            'ref_bon' => ['required'],
+            // 'ref_bon' => ['required'],
             'facture_id' => ['required'],
         ]);
 
@@ -279,7 +279,7 @@ class FactureController extends Controller
                 'idfacture' => $request->facture_id,
                 'quantite' => $request->quantite[$i],
                 'prix' => $request->prix[$i],
-                'tva' => $request->tva[$i],
+                'tva' => 0, //$request->tva[$i],
                 'remise' => $request->remise[$i],
                 'idproduit' => $request->idproduit[$i],
                 'iduser' => $iduser,

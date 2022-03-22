@@ -196,7 +196,7 @@
                                         <label for="ref_bon">Reference du bon de commande</label>
                                         <input type="hidden" name="piece_id" value="{{ isset($piece[0])?$piece[0]->piece_id:'' }}">
                                         <input type="hidden" name="chemin" value="{{ isset($piece[0])?$piece[0]->chemin:'' }}">
-                                        <input type="text" name="ref_bon" value="{{ isset($piece[0])?$piece[0]->ref:'' }}" id="ref_bon" class="form-control" required>
+                                        <input type="text" name="ref_bon" value="{{ isset($piece[0])?$piece[0]->ref:'' }}" id="ref_bon" class="form-control">
                                     </div>
                                     <div class="form-group">
                                         <label>date du bon de commande</label>
@@ -295,11 +295,11 @@
                 row += '<td><input type="number" min="0" name="quantite[]" value="0" onchange="calculeHT('+totalProduit+')" id="quantite'+totalProduit+'" class="form-control quantite" required></td>' +
                     '<td><input type="number" min="0" name="prix[]" value="0" onchange="calculeHT('+totalProduit+')" id="prix'+totalProduit+'" class="form-control prix" required></td>' +
                     '<td><input type="number" min="0" name="remise[]" value="0" onchange="calculeHT('+totalProduit+')" id="remise'+totalProduit+'" step="any" class="form-control remise" required></td>' +
-                    '<td><input type="number" min="0"  name="tva[]" value="0" onchange="calculeHT('+totalProduit+')"  id="tva'+totalProduit+'" step="any" class="form-control tva" required></td>' +
                     '<td><input type="number" min="0" value="0"  readonly name="totalHT[]" id="totalHT'+totalProduit+'" step="any" class="form-control totalHT" ></td>' +
                     '<td><input type="number" min="0" value="0" readonly name="totalTTC[]" id="totalTTC'+totalProduit+'" step="any" class="form-control totalTTC" ></td>' +
                     '<td class="text-center"><button type="button" onclick="removeLigne(' + totalProduit + ')" class="btn btn-sm btn-danger"><i class="fa fa-trash-o"></i></button></td>' +
                     '</tr>';
+                // '<td><input type="number" min="0"  name="tva[]" value="0" onchange="calculeHT('+totalProduit+')"  id="tva'+totalProduit+'" step="any" class="form-control tva" required></td>' +
                 $('#table-produit tbody').append(row);
 
                 $('#' + selectid).select2();
@@ -344,10 +344,12 @@
                 if ($('#prix'+number).val()!=''){
                     qte = $('#prix'+number).val()
                 }
-
-                if ($('#tva'+number).val()!=''){
-                    tva = $('#tva'+number).val()
+                if ($('select[name="tva_statut"]').val()==1){
+                    tva = 19.25;
                 }
+                // if ($('#tva'+number).val()!=''){
+                //     tva = $('#tva'+number).val()
+                // }
 
                 var montant = (qte*prix) - (qte*prix*remise)/100 ;
 

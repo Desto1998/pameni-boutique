@@ -92,7 +92,7 @@
                                         <th>Qté</th>
                                         <th>P.U.HT.</th>
                                         <th>Remise</th>
-                                        <th>TVA</th>
+{{--                                        <th>TVA</th>--}}
                                         <th>M. HT</th>
                                         <th>M. TTC</th>
                                         <th><i class="fa fa-trash"></i></th>
@@ -122,8 +122,8 @@
                                                    required></td>
                                         <td><input type="number" min="0" value="0" name="remise[]" onchange="calculeHT(0)" step="any" id="remise0"
                                                    class="form-control remise" required></td>
-                                        <td><input type="number" min="0" value="0" name="tva[]" step="any" id="tva0" onchange="calculeHT(0)"
-                                                   class="form-control tva" required></td>
+{{--                                        <td><input type="number" min="0" value="0" name="tva[]" step="any" id="tva0" onchange="calculeHT(0)"--}}
+{{--                                                   class="form-control tva" required></td>--}}
                                         <td><input type="number" min="0" readonly  name="totalHT[]" value="0" step="any" id="totalHT0"
                                                    class="form-control totalHT"></td>
                                         <td><input type="number" min="0" value="0" readonly name="totalTTC[]" step="any" id="totalTTC0"
@@ -160,7 +160,7 @@
                                     <label class="nav-label text-center">Informations du bon de commande</label>
                                     <div class="form-group">
                                         <label for="ref_bon">Reference du bon de commande</label>
-                                        <input type="text" name="ref_bon" id="ref_bon" class="form-control" required>
+                                        <input type="text" name="ref_bon" id="ref_bon" class="form-control">
                                     </div>
                                     <div class="form-group">
                                         <label>date du bon de commande</label>
@@ -246,11 +246,11 @@
                 row += '<td><input type="number" min="0" name="quantite[]" value="0" onchange="calculeHT('+totalProduit+')" id="quantite'+totalProduit+'" class="form-control quantite" required></td>' +
                     '<td><input type="number" min="0" name="prix[]" value="0" onchange="calculeHT('+totalProduit+')" id="prix'+totalProduit+'" class="form-control prix" required></td>' +
                     '<td><input type="number" min="0" name="remise[]" value="0" onchange="calculeHT('+totalProduit+')" id="remise'+totalProduit+'" step="any" class="form-control remise" required></td>' +
-                    '<td><input type="number" min="0"  name="tva[]" value="0" onchange="calculeHT('+totalProduit+')"  id="tva'+totalProduit+'" step="any" class="form-control tva" required></td>' +
                     '<td><input type="number" min="0" value="0"  readonly name="totalHT[]" id="totalHT'+totalProduit+'" step="any" class="form-control totalHT" ></td>' +
                     '<td><input type="number" min="0" value="0" readonly name="totalTTC[]" id="totalTTC'+totalProduit+'" step="any" class="form-control totalTTC" ></td>' +
                     '<td class="text-center"><button type="button" onclick="removeLigne(' + totalProduit + ')" class="btn btn-sm btn-danger"><i class="fa fa-trash-o"></i></button></td>' +
                     '</tr>';
+                //  '<td><input type="number" min="0"  name="tva[]" value="0" onchange="calculeHT('+totalProduit+')"  id="tva'+totalProduit+'" step="any" class="form-control tva" required></td>' +
                 $('#table-produit tbody').append(row);
 
                 $('#' + selectid).select2();
@@ -296,10 +296,12 @@
                     qte = $('#prix'+number).val()
                 }
 
-                if ($('#tva'+number).val()!=''){
-                    tva = $('#tva'+number).val()
+                // if ($('#tva'+number).val()!=''){
+                //     tva = $('#tva'+number).val()
+                // }
+                if ($('select[name="tva_statut"]').val()==1){
+                    tva = 19.25;
                 }
-
                 var montant = (qte*prix) - (qte*prix*remise)/100 ;
 
                 var ttc = (montant * tva )/100 + montant;

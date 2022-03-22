@@ -205,7 +205,7 @@
             <th>Qté</th>
             <th>P.U.HT.</th>
             <th>Remise</th>
-            <th>TVA</th>
+{{--            <th>TVA</th>--}}
             <th>M. HT(FCFA)</th>
             <th>M. TTC</th>
             {{--                            <th><i class="fa fa-trash"></i></th>--}}
@@ -237,7 +237,7 @@
                 <td class="number">{{ $p->quantite }}</td>
                 <td class="number">{{ $p->prix }}</td>
                 <td class="number">{{ $p->remise }}%</td>
-                <td class="number">{{ $p->tva }}%</td>
+{{--                <td class="number">{{ $p->tva }}%</td>--}}
                 <td class="number">
                     {{ number_format($HT,2, '.', '') }}
                 </td>
@@ -330,7 +330,7 @@
             <th>Qté</th>
             <th>P.U.HT.</th>
             <th>Remise</th>
-            <th>TVA</th>
+{{--            <th>TVA</th>--}}
             <th>M. HT(FCFA)</th>
             <th>M. TTC</th>
         </tr>
@@ -361,7 +361,7 @@
                 <td class="number">{{ $p->quantite }}</td>
                 <td class="number">{{ $p->prix }}</td>
                 <td class="number">{{ $p->remise }}%</td>
-                <td class="number">{{ $p->tva }}%</td>
+{{--                <td class="number">{{ $p->tva }}%</td>--}}
                 <td class="number">
                     {{ number_format($HT,2, '.', '') }}
                 </td>

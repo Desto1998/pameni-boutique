@@ -92,7 +92,7 @@
                                         <th>Qté</th>
                                         <th>P.U.HT.</th>
                                         <th>Remise</th>
-                                        <th>TVA</th>
+{{--                                        <th>TVA</th>--}}
                                         <th>M. HT</th>
                                         <th>M. TTC</th>
                                         <th><i class="fa fa-trash"></i></th>
@@ -122,8 +122,8 @@
                                                    required></td>
                                         <td><input type="number" min="0" value="0" name="remise[]" onchange="calculeHT(0)" step="any" id="remise0"
                                                    class="form-control remise" required></td>
-                                        <td><input type="number" min="0" value="0" name="tva[]" step="any" id="tva0" onchange="calculeHT(0)"
-                                                   class="form-control tva" required></td>
+{{--                                        <td><input type="number" min="0" value="0" name="tva[]" step="any" id="tva0" onchange="calculeHT(0)"--}}
+{{--                                                   class="form-control tva" required></td>--}}
                                         <td><input type="number" min="0" readonly  name="totalHT[]" value="0" step="any" id="totalHT0"
                                                    class="form-control totalHT"></td>
                                         <td><input type="number" min="0" value="0" readonly name="totalTTC[]" step="any" id="totalTTC0"
@@ -191,7 +191,7 @@
                                         <th>Qté</th>
                                         <th>P.U.HT.</th>
                                         <th>Remise</th>
-                                        <th>TVA</th>
+{{--                                        <th>TVA</th>--}}
                                         <th>M. HT</th>
                                         <th>M. TTC</th>
                                         <th><i class="fa fa-trash"></i></th>
@@ -221,8 +221,8 @@
                                                    ></td>
                                         <td><input type="number" value="0" min="0" name="remise_com[]" onchange="calculeComHT(0)" step="any" id="remise_com0"
                                                    class="form-control remise_com"></td>
-                                        <td><input type="number" value="0" min="0" name="tva_com[]" step="any" id="tva_com0" onchange="calculeComHT(0)"
-                                                   class="form-control tva_com"></td>
+{{--                                        <td><input type="number" value="0" min="0" name="tva_com[]" step="any" id="tva_com0" onchange="calculeComHT(0)"--}}
+{{--                                                   class="form-control tva_com"></td>--}}
                                         <td><input type="number" min="0" readonly  name="total_comHT[]" value="0" step="any" id="total_comHT0"
                                                    class="form-control total_comHT"></td>
                                         <td><input type="number" min="0" value="0" readonly name="total_comTTC[]" step="any" id="total_comTTC0"
@@ -321,11 +321,12 @@
                 row += '<td><input type="number" min="0" name="quantite[]" value="0" onchange="calculeHT('+totalProduit+')" id="quantite'+totalProduit+'" class="form-control quantite" required></td>' +
                     '<td><input type="number" min="0" name="prix[]" value="0" onchange="calculeHT('+totalProduit+')" id="prix'+totalProduit+'" class="form-control prix" required></td>' +
                     '<td><input type="number" min="0" name="remise[]" value="0" onchange="calculeHT('+totalProduit+')" id="remise'+totalProduit+'" step="any" class="form-control remise" required></td>' +
-                    '<td><input type="number" min="0"  name="tva[]" value="0" onchange="calculeHT('+totalProduit+')"  id="tva'+totalProduit+'" step="any" class="form-control tva" required></td>' +
                     '<td><input type="number" min="0" value="0"  readonly name="totalHT[]" id="totalHT'+totalProduit+'" step="any" class="form-control totalHT" ></td>' +
                     '<td><input type="number" min="0" value="0" readonly name="totalTTC[]" id="totalTTC'+totalProduit+'" step="any" class="form-control totalTTC" ></td>' +
                     '<td class="text-center"><button type="button" onclick="removeLigne(' + totalProduit + ')" class="btn btn-sm btn-danger"><i class="fa fa-trash-o"></i></button></td>' +
                     '</tr>';
+                // '<td><input type="number" min="0"  name="tva[]" value="0" onchange="calculeHT('+totalProduit+')"  id="tva'+totalProduit+'" step="any" class="form-control tva" required></td>' +
+
                 $('#table-produit tbody').append(row);
 
                 $('#' + selectid).select2();
@@ -370,10 +371,12 @@
                 if ($('#prix'+number).val()!=''){
                     qte = $('#prix'+number).val()
                 }
-
-                if ($('#tva'+number).val()!=''){
-                    tva = $('#tva'+number).val()
+                if ($('select[name="tva_statut"]').val()==1){
+                    tva = 19.25;
                 }
+                // if ($('#tva'+number).val()!=''){
+                //     tva = $('#tva'+number).val()
+                // }
 
                 var montant = (qte*prix) - (qte*prix*remise)/100 ;
 
@@ -434,11 +437,11 @@
             row += '<td><input type="number" min="0" name="quantite_com[]" value="0"  onchange="calculeComHT('+totalComplement+')" id="quantite_com'+totalComplement+'" class="form-control quantite_com" required></td>' +
                 '<td><input type="number" min="0" name="prix_com[]" value="0" onchange="calculeComHT('+totalComplement+')" id="prix_com'+totalComplement+'" class="form-control prix_com" required></td>' +
                 '<td><input type="number" min="0" name="remise_com[]" value="0" onchange="calculeComHT('+totalComplement+')" id="remise_com'+totalComplement+'" step="any" class="form-control remise_com" required></td>' +
-                '<td><input type="number" min="0"  name="tva_com[]" value="0" onchange="calculeComHT('+totalComplement+')"  id="tva_com'+totalComplement+'" step="any" class="form-control tva_com" required></td>' +
                 '<td><input type="number" min="0" value="0"  readonly name="total_comHT[]" id="total_comHT'+totalComplement+'" step="any" class="form-control total_comHT" ></td>' +
                 '<td><input type="number" min="0" value="0" readonly name="total_comTTC[]" id="total_comTTC'+totalComplement+'" step="any" class="form-control total_comTTC" ></td>' +
                 '<td class="text-center"><button type="button" onclick="removeComLigne(' + totalComplement + ')" class="btn btn-sm btn-danger"><i class="fa fa-trash-o"></i></button></td>' +
                 '</tr>';
+            // '<td><input type="number" min="0"  name="tva_com[]" value="0" onchange="calculeComHT('+totalComplement+')"  id="tva_com'+totalComplement+'" step="any" class="form-control tva_com" required></td>' +
             $('#table-complement tbody').append(row);
 
             $('#' + selectid).select2();
@@ -478,9 +481,9 @@
                     qte = $('#prix_com'+number).val()
                 }
 
-                if ($('#tva_com'+number).val()!=''){
-                    tva = $('#tva_com'+number).val()
-                }
+                // if ($('#tva_com'+number).val()!=''){
+                //     tva = $('#tva_com'+number).val()
+                // }
 
                 var montant = (qte*prix) - (qte*prix*remise)/100 ;
 
