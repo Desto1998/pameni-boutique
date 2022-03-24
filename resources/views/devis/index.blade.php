@@ -137,7 +137,7 @@
                     }
                 },
                 ajax:{
-                    url: "{{ route('devis.load') }}",
+                    url: "{{ route('devis.load',['id'=>-1]) }}",
                 },
 
                 columns: [

@@ -138,7 +138,7 @@
                     }
                 },
                 ajax:{
-                    url: "{{ route('factures.load') }}",
+                    url: "{{ route('factures.load',['id'=>-1]) }}",
                 },
 
                 columns: [

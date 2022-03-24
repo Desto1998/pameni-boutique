@@ -37,12 +37,21 @@ class FactureController extends Controller
         );
     }
 
-    public function loadFactures()
+    public function loadFactures($id)
     {
-        $data = Factures::join('clients', 'clients.client_id', 'factures.idclient')
-            ->join('users', 'users.id', 'factures.iduser')
-            ->orderBy('factures.created_at', 'desc')
-            ->get();
+        if ($id<=0) {
+            $data = Factures::join('clients', 'clients.client_id', 'factures.idclient')
+                ->join('users', 'users.id', 'factures.iduser')
+                ->orderBy('factures.created_at', 'desc')
+                ->get();
+        }else {
+            $data = Factures::join('clients', 'clients.client_id', 'factures.idclient')
+                ->join('users', 'users.id', 'factures.iduser')
+                ->where('factures.idclient',$id)
+                ->orderBy('factures.created_at', 'desc')
+                ->get();
+        }
+
 
 //        $product  = new Array_();
         return Datatables::of($data)

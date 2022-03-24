@@ -44,12 +44,21 @@ class DevisController extends Controller
         );
     }
 
-    public function loadDevis()
+    public function loadDevis($id)
     {
-        $data = Devis::join('clients', 'clients.client_id', 'devis.idclient')
-            ->join('users', 'users.id', 'devis.iduser')
-            ->orderBy('devis.created_at', 'desc')
-            ->get();
+        if ($id<=0) {
+            $data = Devis::join('clients', 'clients.client_id', 'devis.idclient')
+                ->join('users', 'users.id', 'devis.iduser')
+                ->orderBy('devis.created_at', 'desc')
+                ->get();
+        }else{
+            $data = Devis::join('clients', 'clients.client_id', 'devis.idclient')
+                ->join('users', 'users.id', 'devis.iduser')
+                ->where('devis.idclient',$id)
+                ->orderBy('devis.created_at', 'desc')
+                ->get();
+        }
+
 
 //        $product  = new Array_();
         return Datatables::of($data)

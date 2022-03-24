@@ -110,7 +110,7 @@ Route::prefix('dashboard')->group(function () {
 
             //Route for devis
             Route::get('devis/index',[DevisController::class,'index'])->name('devis.all');
-            Route::get('devis/load',[DevisController::class,'loadDevis'])->name('devis.load');
+            Route::get('devis/load/{id}',[DevisController::class,'loadDevis'])->name('devis.load');
             Route::get('devis/add',[DevisController::class,'showAddForm'])->name('devis.add');
             Route::post('devis/store',[DevisController::class,'store'])->name('devis.store');
             Route::get('devis/edit/{id}',[DevisController::class,'showEditForm'])->name('devis.edit');
@@ -129,7 +129,7 @@ Route::prefix('dashboard')->group(function () {
 
             //Route for factures
             Route::get('factures/index',[FactureController::class,'index'])->name('factures.all');
-            Route::get('factures/load',[FactureController::class,'loadFactures'])->name('factures.load');
+            Route::get('factures/load/{id}',[FactureController::class,'loadFactures'])->name('factures.load');
             Route::get('factures/add',[FactureController::class,'showAddForm'])->name('factures.add');
             Route::post('factures/store',[FactureController::class,'store'])->name('factures.store');
             Route::get('factures/edit/{id}',[FactureController::class,'showEditForm'])->name('factures.edit');

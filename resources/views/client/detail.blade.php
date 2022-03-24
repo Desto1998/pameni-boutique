@@ -339,7 +339,88 @@
 
         });
 
+        function loadFactures() {
+            $('#facture-table').dataTable().fnClearTable();
+            $('#facture-table').dataTable().fnDestroy();
+            // $("#example").DataTable.destroy();
+            $("#facture-table").DataTable({
+                Processing: true,
+                searching: true,
+                LengthChange: true, // desactive le module liste deroulante(d'affichage du nombre de resultats par page)
+                iDisplayLength: 10, // Configure le nombre de resultats a afficher par page a 10
+                bRetrieve: true,
+                stateSave: true,
+                ajaxSetup:{
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                },
+                ajax:{
+                    url: "{{ route('factures.load',['id'=>$data[0]->client_id]) }}",
+                },
 
+                columns: [
+                    {data: 'DT_RowIndex',name:'DT_RowIndex'},
+                    {data: 'reference_fact',name:'reference_fact'},
+                    {data: 'client',name:'client'},
+                    {data: 'objet',name:'objet'},
+                    {data: 'date_fact',name:'date_fact'},
+                    {data: 'statut',name:'statut'},
+                    {data: 'montantHT',name:'montantHT'},
+                    {data: 'montantTTC',name:'montantTTC'},
+                    {data: 'paye',name:'paye'},
+                    {data: 'firstname',name:'firstname'},
+                    {data: 'action', name: 'action', orderable: false, searchable: false},
+
+                ],
+                order: []
+            })
+
+        }
+
+        // fonction qui charge les produits : les elements du tableau
+        function loadDevis() {
+            $('#devis-table').dataTable().fnClearTable();
+            $('#devis-table').dataTable().fnDestroy();
+            // $("#example").DataTable.destroy();
+            $("#devis-table").DataTable({
+                Processing: true,
+                searching: true,
+                LengthChange: true, // desactive le module liste deroulante(d'affichage du nombre de resultats par page)
+                iDisplayLength: 10, // Configure le nombre de resultats a afficher par page a 10
+                bRetrieve: true,
+                stateSave: true,
+                ajaxSetup:{
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                },
+                ajax:{
+                    url: "{{ route('devis.load',['id'=>$data[0]->client_id]) }}",
+                },
+
+                columns: [
+                    {data: 'DT_RowIndex',name:'DT_RowIndex'},
+                    {data: 'reference_devis',name:'reference_devis'},
+                    {data: 'client',name:'client'},
+                    {data: 'objet',name:'objet'},
+                    {data: 'date_devis',name:'date_devis'},
+                    {data: 'statut',name:'statut'},
+                    {data: 'montantHT',name:'montantHT'},
+                    {data: 'montantTTC',name:'montantTTC'},
+                    {data: 'firstname',name:'firstname'},
+                    {data: 'action', name: 'action', orderable: false, searchable: false},
+
+                ],
+                order: []
+            })
+
+        }
+
+        $(document).ready(function () {
+            loadDevis();
+            loadFactures()
+        });
     </script>
     <!-- Datatable -->
     <script src="{{asset('template/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
