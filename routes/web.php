@@ -5,11 +5,13 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CommandeController;
+use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\DevisController;
 use App\Http\Controllers\FactureController;
 use App\Http\Controllers\FournisserController;
 use App\Http\Controllers\GestionController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PaiementController;
 use App\Http\Controllers\ProduitController;
 use App\Http\Controllers\RapportController;
 use App\Http\Controllers\UserController;
@@ -113,7 +115,7 @@ Route::prefix('dashboard')->group(function () {
             Route::post('devis/store',[DevisController::class,'store'])->name('devis.store');
             Route::get('devis/edit/{id}',[DevisController::class,'showEditForm'])->name('devis.edit');
             Route::post('devis/edit/store',[DevisController::class,'edit'])->name('devis.edit.store');
-            Route::get('devis/details/{id}',[DevisController::class,'view'])->name('devis.view');
+            Route::get('devis/details/{id}',[DevisController::class,'viewDetail'])->name('devis.view');
 
             Route::post('devis/valider',[DevisController::class,'validerDevis'])->name('devis.valider');
             Route::post('devis/bloquer',[DevisController::class,'bloquerDevis'])->name('devis.bloquer');
@@ -132,13 +134,17 @@ Route::prefix('dashboard')->group(function () {
             Route::post('factures/store',[FactureController::class,'store'])->name('factures.store');
             Route::get('factures/edit/{id}',[FactureController::class,'showEditForm'])->name('factures.edit');
             Route::post('factures/edit/store',[FactureController::class,'edit'])->name('factures.edit.store');
-            Route::get('factures/details/{id}',[FactureController::class,'view'])->name('factures.view');
+            Route::get('factures/details/{id}',[FactureController::class,'viewDetail'])->name('factures.view');
             Route::post('factures/delete',[FactureController::class,'delete'])->name('factures.delete');
             Route::post('factures/valider',[FactureController::class,'validerFactures'])->name('factures.valider');
             Route::post('factures/bloquer',[FactureController::class,'bloquerFactures'])->name('factures.bloquer');
 
             Route::get('factures/print/{id}',[FactureController::class,'printFactures'])->name('factures.print');
-            Route::post('factures/remove/produit',[FactureController::class,'removeProduit'])->name('factures.remove.produit');
+
+
+            Route::post('factures/paiement/store',[FactureController::class,'addPaiement'])->name('factures.paiement.store');
+            Route::post('factures/paiement/delete',[FactureController::class,'deletePaiement'])->name('factures.paiement.delete');
+            Route::post('factures/paiement/update',[PaiementController::class,'updatePaiement'])->name('factures.paiement.update');
 
             //Route for commandes
             Route::get('commandes/index',[CommandeController::class,'index'])->name('commandes.all');
@@ -148,27 +154,32 @@ Route::prefix('dashboard')->group(function () {
             Route::post('commandes/edit/store',[CommandeController::class,'edit'])->name('commandes.edit.store');
             Route::post('commandes/delete',[CommandeController::class,'delete'])->name('commandes.delete');
             Route::get('commandes/details/{id}',[CommandeController::class,'view'])->name('commandes.view');
-            Route::get('factures/print/{id}',[FactureController::class,'printFactures'])->name('factures.print');
 
-        });
+            Route::post('factures/addcomment',[CommentsController::class,'addCommentFacture'])->name('factures.add.comment');
+            Route::post('devis/addcomment',[CommentsController::class,'addCommentDevis'])->name('devis.add.comment');
+            Route::post('commande/addcomment',[CommentsController::class,'addCommentCommande'])->name('commande.add.comment');
+            Route::post('comment/update',[CommentsController::class,'updateComment'])->name('comment.update');
+            Route::post('comment/delete',[CommentsController::class,'deleteComment'])->name('comment.delete');
 
+            //Route for admin prefix with admin depend on  middleware to allow only admin
+            Route::prefix('admin')->group(function () {
+                Route::middleware([CheckAdmin::class])->group(function () {
 
-
-        //Route for admin prefix with admin depend on  middleware to allow only admin
-        Route::prefix('admin')->group(function () {
-            Route::middleware([CheckAdmin::class])->group(function () {
-
-               // routes pour les compte utilisateurs
-            Route::get('user/all', [UserController::class, 'index'])->name('user.all');
-            Route::view('user/new', 'user.add')->name('user.add');
-            Route::post('user/new/store', [UserController::class, 'storeUser'])->name('user.add.store');
-            Route::get('user/edit/{id}', [UserController::class, 'editUser'])->name('user.edit');
-            Route::post('user/edit/store', [UserController::class, 'updateUser'])->name('user.edit.store');
-            Route::post('user/delete', [UserController::class, 'deleteUser'])->name('user.delete');
-            Route::get('user/activate/{id}', [UserController::class, 'activate'])->name('activate_compte');
-            Route::get('user/block/{id}', [UserController::class, 'block'])->name('block_compte');
+                    // routes pour les compte utilisateurs
+                    Route::get('user/all', [UserController::class, 'index'])->name('user.all');
+                    Route::view('user/new', 'user.add')->name('user.add');
+                    Route::post('user/new/store', [UserController::class, 'storeUser'])->name('user.add.store');
+                    Route::get('user/edit/{id}', [UserController::class, 'editUser'])->name('user.edit');
+                    Route::post('user/edit/store', [UserController::class, 'updateUser'])->name('user.edit.store');
+                    Route::post('user/delete', [UserController::class, 'deleteUser'])->name('user.delete');
+                    Route::get('user/activate/{id}', [UserController::class, 'activate'])->name('activate_compte');
+                    Route::get('user/block/{id}', [UserController::class, 'block'])->name('block_compte');
+                });
             });
+
+
         });
+
     });
 
 });

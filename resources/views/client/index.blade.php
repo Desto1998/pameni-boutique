@@ -43,10 +43,10 @@
                                     <th style="width: 150px;">Nom</th>
                                     <th>Téléphone</th>
                                     <th>Email</th>
-                                    <th>Pays</th>
+{{--                                    <th>Pays</th>--}}
                                     <th>Ville</th>
                                     <th>Adresse</th>
-                                    <th>Boite postale</th>
+{{--                                    <th>Boite postale</th>--}}
                                     <th>Action</th>
                                 </tr>
                                 </thead>
@@ -166,10 +166,10 @@
                     {data: 'nom',name:'nom'},
                     {data: 'phone',name:'phone'},
                     {data: 'email_client',name:'email_client'},
-                    {data: 'nom_pays',name:'nom_pays'},
+                    // {data: 'nom_pays',name:'nom_pays'},
                     {data: 'ville_client',name:'ville_client'},
                     {data: 'adresse_client',name:'adresse_client'},
-                    {data: 'postale',name:'postale'},
+                    // {data: 'postale',name:'postale'},
                     {data: 'action', name: 'action', orderable: false, searchable: false},
 
                 ],

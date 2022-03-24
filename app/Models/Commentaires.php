@@ -16,6 +16,7 @@ class Commentaires extends Model
         'statut_commentaire',
         'idcommande',
         'iddevis',
+        'idfacture',
         'iduser',
 
     ];

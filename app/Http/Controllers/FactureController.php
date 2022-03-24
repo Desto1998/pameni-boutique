@@ -4,17 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Categories;
 use App\Models\Clients;
-use App\Models\Complements;
-use App\Models\Devis;
+use App\Models\Commandes;
+use App\Models\Commentaires;
 use App\Models\Factures;
 use App\Models\Paiements;
+use App\Models\Pays;
 use App\Models\Pieces;
-use App\Models\Pocedes;
 use App\Models\Produit_Factures;
 use App\Models\Produits;
 use App\Models\User;
 use DateInterval;
 use DateTime;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use PDF;
@@ -51,7 +52,7 @@ class FactureController extends Controller
                 $categories = Categories::all();
                 $paiements = Paiements::where('idfacture', $value->facture_id)->get();
                 $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $value->facture_id)->get();
-                $action = view('facture.action', compact('value', 'categories', 'pocedes','paiements'));
+                $action = view('facture.action', compact('value', 'categories', 'pocedes', 'paiements'));
 //                    $actionBtn = '<div class="d-flex"><a href="javascript:void(0)" class="edit btn btn-warning btn-sm"><i class="fa fa-edit"></i></a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm ml-1"  onclick="deleteFun()"><i class="fa fa-trash"></i></a></div>';
                 return (string)$action;
             })
@@ -59,6 +60,11 @@ class FactureController extends Controller
             ->addColumn('client', function ($value) {
                 $client = $value->nom_client . ' ' . $value->prenom_client . ' ' . $value->raison_s_client;
                 return $client;
+            })
+            // ajout d'une colonne pour le montant de paieent deja effectueerr
+            ->addColumn('paye', function ($value) {
+                $paye = Paiements::where('idfacture', $value->facture_id)->sum('montant');
+                return $paye;
             })
             // Ajout du statut du. colonne marque en rouge | Si le statut est 0? NValide : Valide
             ->addColumn('statut', function ($value) {
@@ -76,11 +82,11 @@ class FactureController extends Controller
                 $montantHT = 0;
 
                 foreach ($pocedes as $p) {
-                    if ($p->iddevis === $value->devis_id) {
-                        $remise = ($p->prix * $p->quantite * $p->remise) / 100;
-                        $montant = ($p->quantite * $p->prix) - $remise;
-                        $montantHT += $montant;
-                    }
+
+                    $remise = ($p->prix * $p->quantite * $p->remise) / 100;
+                    $montant = ($p->quantite * $p->prix) - $remise;
+                    $montantHT += $montant;
+
                 }
                 return number_format($montantHT, 2, '.', '');
             })
@@ -90,25 +96,25 @@ class FactureController extends Controller
                 $montantTVA = 0;
                 $montantTTC = 0;
                 foreach ($pocedes as $p) {
-                    if ($p->iddevis === $value->devis_id) {
-                        $remise = ($p->prix * $p->quantite * $p->remise) / 100;
-                        $montant = ($p->quantite * $p->prix) - $remise;
-                        $tva = ($montant * $p->tva) / 100;
-                        $montant = $tva + $montant;
+
+                    $remise = ($p->prix * $p->quantite * $p->remise) / 100;
+                    $montant = ($p->quantite * $p->prix) - $remise;
+                    $tva = ($montant * $p->tva) / 100;
+                    $montant = $tva + $montant;
 //                        $montant += (($montant * 19.25)/100)+$montant;
-                        $montantTVA += $montant;
-                    }
+                    $montantTVA += $montant;
+
                 }
                 if ($value->tva_statut == 1) {
                     $montantTTC = (($montantTVA * 19.25) / 100) + $montantTVA;
-                }else{
+                } else {
                     $montantTTC = $montantTVA;
                 }
 
                 return number_format($montantTTC, 2, '.', '');
 
             })
-            ->rawColumns(['action', 'montantHT', 'montantTTC', 'statut'])
+            ->rawColumns(['action', 'montantHT', 'montantTTC', 'statut', 'paye'])
             ->make(true);
     }
 
@@ -117,15 +123,15 @@ class FactureController extends Controller
     {
         $produits = Produits::orderBy('created_at', 'desc')->get();
         $ID = [];
-        foreach ($produits as $key =>$value){
-            if (!in_array($value->idcategorie,$ID)) {
-                $ID[$key]=$value->idcategorie;
+        foreach ($produits as $key => $value) {
+            if (!in_array($value->idcategorie, $ID)) {
+                $ID[$key] = $value->idcategorie;
             }
         }
-        $categories = Categories::whereIn('categorie_id',$ID )->orderBy('categories.created_at', 'desc')->get();
-
+        $categories = Categories::whereIn('categorie_id', $ID)->orderBy('categories.created_at', 'desc')->get();
+        $pays = Pays::all();
         $clients = Clients::orderBy('created_at', 'desc')->get();
-        return view('facture.create', compact('categories', 'produits', 'clients'));
+        return view('facture.create', compact('categories', 'produits', 'clients', 'pays'));
     }
 
     public function store(Request $request)
@@ -135,7 +141,7 @@ class FactureController extends Controller
             'objet' => ['required', 'min:5'],
             'quantite' => ['required'],
             'prix' => ['required'],
-           // 'ref_bon' => ['required'],
+            // 'ref_bon' => ['required'],
         ]);
 //        dd($request);
 //        $lastNum = Devis::whereYear('created_at', date('Y'))->ma('devis_id')->get() ;
@@ -196,7 +202,7 @@ class FactureController extends Controller
         if (isset($request->ref_bon)) {
             $file = $request->file('logo');
             $destinationPath = 'images/piece';
-            $originalFile ="";
+            $originalFile = "";
             if ($file) {
                 $originalFile = $file->getClientOriginalName();
                 $file->move($destinationPath, $originalFile);
@@ -215,18 +221,48 @@ class FactureController extends Controller
         return redirect()->back()->with('danger', "Désolé une erreur s'est produite. Veillez recommencer!");
     }
 
-    public function removeProduit(Request $request){
+    public function removeProduit(Request $request)
+    {
         $request->validate([
-            'id'=>['required']
+            'id' => ['required']
         ]);
-        $remove = Produit_Factures::where('produit_f_id',$request->id)->delete();
+        $remove = Produit_Factures::where('produit_f_id', $request->id)->delete();
         return Response()->json($remove);
     }
 
     public function viewDetail($id)
     {
-        return 'In process';
+        $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $id)->get();
+        $montantTVA = 0;
+        $montantTTC = 0;
+        foreach ($pocedes as $p) {
+
+            $remise = ($p->prix * $p->quantite * $p->remise) / 100;
+            $montant = ($p->quantite * $p->prix) - $remise;
+            $tva = ($montant * $p->tva) / 100;
+            $montant = $tva + $montant;
+//                        $montant += (($montant * 19.25)/100)+$montant;
+            $montantTVA += $montant;
+
+        }
+        $data = Factures::join('clients', 'clients.client_id', 'factures.idclient')
+        ->join('users', 'users.id', 'factures.iduser')
+        ->where('facture_id', $id)
+        ->get()
+    ;
+        if ($data[0]->tva_statut == 1) {
+            $montantTTC = (($montantTVA * 19.25) / 100) + $montantTVA;
+        } else {
+            $montantTTC = $montantTVA;
+        }
+        $paiements = Paiements::where('idfacture',$id)->get();
+        $commentaires = Commentaires::join('users','users.id','commentaires.iduser')->where('idfacture',$id)->get();
+
+        $piece = Pieces::where('idfacture', $id)->get();
+        return view('facture.details.index', compact('data','pocedes','montant',
+        'montantTTC','montantTVA','commentaires','paiements','piece')) ;
     }
+
     public function showEditForm($id)
     {
         $data = Factures::join('clients', 'clients.client_id', 'factures.idclient')
@@ -237,17 +273,18 @@ class FactureController extends Controller
 //        $categories = Categories::all();
         $produits = Produits::orderBy('created_at', 'desc')->get();
         $ID = [];
-        foreach ($produits as $key =>$value){
-            if (!in_array($value->idcategorie,$ID)) {
-                $ID[$key]=$value->idcategorie;
+        foreach ($produits as $key => $value) {
+            if (!in_array($value->idcategorie, $ID)) {
+                $ID[$key] = $value->idcategorie;
             }
         }
-        $piece = Pieces::where('idfacture',$id)->get();
-        $categories = Categories::whereIn('categorie_id',$ID )->orderBy('categories.created_at', 'desc')->get();
+        $piece = Pieces::where('idfacture', $id)->get();
+        $categories = Categories::whereIn('categorie_id', $ID)->orderBy('categories.created_at', 'desc')->get();
         $clients = Clients::orderBy('created_at', 'desc')->get();
         $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $id)->get();
-        return view('facture.edit',compact('data','piece','categories','pocedes','clients','produits'));
+        return view('facture.edit', compact('data', 'piece', 'categories', 'pocedes', 'clients', 'produits'));
     }
+
     public function edit(Request $request)
     {
         $request->validate([
@@ -262,7 +299,7 @@ class FactureController extends Controller
         $iduser = Auth::user()->id;
 
 //        dd($reference); updateOrCreate
-        $save = Factures::where('facture_id',$request->facture_id)->update([
+        $save = Factures::where('facture_id', $request->facture_id)->update([
             'objet' => $request->objet,
             'condition_financiere' => $request->condition,
             'date_fact' => $request->date,
@@ -275,7 +312,7 @@ class FactureController extends Controller
             if (isset($request->produit_f_id[$i]) && !empty($request->produit_f_id[$i])) {
                 $pocedeId = $request->produit_f_id[$i];
             }
-            Produit_Factures::updateOrCreate(['produit_f_id'=>$pocedeId],[
+            Produit_Factures::updateOrCreate(['produit_f_id' => $pocedeId], [
                 'idfacture' => $request->facture_id,
                 'quantite' => $request->quantite[$i],
                 'prix' => $request->prix[$i],
@@ -289,14 +326,14 @@ class FactureController extends Controller
         if (isset($request->ref_bon)) {
             $file = $request->file('logo');
             $destinationPath = 'images/piece';
-            $originalFile ="";
+            $originalFile = "";
             if ($file) {
                 $originalFile = $file->getClientOriginalName();
                 $file->move($destinationPath, $originalFile);
-            }else{
-                $originalFile =$request->chemin;
+            } else {
+                $originalFile = $request->chemin;
             }
-            Pieces::updateOrCreate(['piece_id'=>$request->piece_id],[
+            Pieces::updateOrCreate(['piece_id' => $request->piece_id], [
                 'chemin' => $originalFile,
                 'ref' => $request->ref_bon,
                 'date_piece' => $request->date_bon,
@@ -310,14 +347,17 @@ class FactureController extends Controller
         }
         return redirect()->back()->with('danger', "Désolé une erreur s'est produite. Veillez recommencer!");
     }
-    public function delete(Request $request){
-        Produit_Factures::where('idfacture',$request->id)->delete();
-        Paiements::where('idfacture',$request->id)->delete();
-        $delete  = Factures::where('idfacture',$request->id)->delete();
+
+    public function delete(Request $request)
+    {
+        Produit_Factures::where('idfacture', $request->id)->delete();
+        Paiements::where('idfacture', $request->id)->delete();
+        $delete = Factures::where('idfacture', $request->id)->delete();
         return Response()->json($delete);
     }
 
-    public function getDetails($id){
+    public function getDetails($id)
+    {
         return 'in process';
     }
 
@@ -339,16 +379,43 @@ class FactureController extends Controller
         $data = Factures::join('clients', 'clients.client_id', 'factures.idclient')
             ->join('users', 'users.id', 'factures.iduser')
             ->where('facture_id', $id)
-            ->get()
-        ;
+            ->get();
         $date = new DateTime($data[0]->date_fact);
         $date = $date->format('m');
-        $piece = Pieces::where('idfacture',$id)->get();
-        $num_BC = isset($piece[0])?$piece[0]->ref:'';
+        $piece = Pieces::where('idfacture', $id)->get();
+        $num_BC = isset($piece[0]) ? $piece[0]->ref : '';
         $mois = (new \App\Models\Month)->getFrenshMonth((int)$date);
         $categories = Categories::all();
         $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $id)->get();
-        $pdf = PDF::loadView('facture.print', compact('data', 'num_BC','mois','categories', 'pocedes'))->setPaper('a4', 'portrait')->setWarnings(false);
-        return $pdf->stream($data[0]->reference_fact . '_' .date("d-m-Y H:i:s") . '.pdf');
+        $pdf = PDF::loadView('facture.print', compact('data', 'num_BC', 'mois', 'categories', 'pocedes'))->setPaper('a4', 'portrait')->setWarnings(false);
+        return $pdf->stream($data[0]->reference_fact . '_' . date("d-m-Y H:i:s") . '.pdf');
+    }
+
+    public function addPaiement(Request $request)
+    {
+        $request->validate([
+            'montant' => ['required'],
+            'mode' => ['required'],
+            'idfacture' => ['required'],
+        ]);
+        $dataID = $request->paiement_id;
+        $iduser = Auth::user()->id;
+        $save = Paiements::updateOrCreate(['paiement_id' => $dataID], [
+            'idfacture' => $request->idfacture,
+            'mode' => $request->mode,
+            'montant' => $request->montant,
+            'description' => $request->description,
+            'date_paiement' => date('Y-m-d'),
+            'statut' => 1,
+            'iduser' => $iduser,
+        ]);
+        return Response()->json($save);
+
+    }
+
+    public function deletePaiement(Request $request)
+    {
+        $delete = Paiements::where('paiement_id', $request->id)->delete();
+        return Response()->json($delete);
     }
 }

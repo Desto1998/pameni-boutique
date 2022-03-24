@@ -14,7 +14,7 @@
         <div class="row page-titles mx-0">
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
-                    <h4>GESTION DES FACTURES</h4>
+                    <h4>DETAILS FACTURE "{{ $data[0]->reference_fact }}"</h4>
                     {{--                    <p class="mb-0">Your business dashboard template</p>--}}
                 </div>
             </div>
@@ -22,7 +22,7 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="javascript:void(0)">Dashboard</a></li>
                     <li class="breadcrumb-item"><a href="javascript:void(0)">Factures</a></li>
-                    <li class="breadcrumb-item active"><a href="javascript:void(0)">Index</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0)">{{ $data[0]->reference_fact }}</a></li>
                 </ol>
             </div>
         </div>
@@ -30,41 +30,45 @@
             <div class="col-md-12">
                 <div class="card px-3">
                     <div class="card-body">
-                        <!-- Button trigger modal -->
-                        <span class="float-left h4">Liste des factures</span>
-                        <a href="{{ route('factures.add') }}" class="btn btn-primary float-right mb-3"
-                        ><i class="fa fa-plus">&nbsp; Ajouter</i></a>
-
-                        <div class="table-responsive">
-                            <table id="example" class="display text-center" style="min-width: 845px">
-                                <thead class="bg-primary">
-                                <tr>
-                                    <th>#</th>
-                                    <th>Refernce</th>
-                                    <th>Client</th>
-                                    <th>Objet</th>
-                                    <th>Date</th>
-                                    <th>Statut</th>
-                                    <th>Mon. HT</th>
-                                    <th>Mon. TTC</th>
-                                    <th>Payé</th>
-                                    <th>Par</th>
-                                    <th>Action</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-
-                                </tbody>
-
-                            </table>
+                        <div class="default-tab">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#detail">Details</a>
+                                </li>
+{{--                                <li class="nav-item">--}}
+{{--                                    <a class="nav-link" data-toggle="tab" href="#profile">Produits({{ count($pocedes) }})</a>--}}
+{{--                                </li>--}}
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#paiement">Paiements({{ count($paiements) }})</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#message">Commentaires({{ count($commentaires) }})</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="detail" role="tabpanel">
+                                    <div class="pt-4">
+                                        @include('facture.details.detail')
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="paiement">
+                                    <div class="pt-4">
+                                        @include('facture.details.paiement')
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="message">
+                                    <div class="pt-4">
+                                        @include('facture.details.comments')
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
-@include('facture.modal')
+    @include('facture.modal')
 @endsection
 @section('script')
     <script>
@@ -119,50 +123,6 @@
             // }
         }
 
-
-        // fonction qui charge les produits : les elements du tableau
-        function loadFactures() {
-            $('#example').dataTable().fnClearTable();
-            $('#example').dataTable().fnDestroy();
-            // $("#example").DataTable.destroy();
-            $("#example").DataTable({
-                Processing: true,
-                searching: true,
-                LengthChange: true, // desactive le module liste deroulante(d'affichage du nombre de resultats par page)
-                iDisplayLength: 10, // Configure le nombre de resultats a afficher par page a 10
-                bRetrieve: true,
-                stateSave: true,
-                ajaxSetup:{
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                },
-                ajax:{
-                    url: "{{ route('factures.load') }}",
-                },
-
-                columns: [
-                    {data: 'DT_RowIndex',name:'DT_RowIndex'},
-                    {data: 'reference_fact',name:'reference_fact'},
-                    {data: 'client',name:'client'},
-                    {data: 'objet',name:'objet'},
-                    {data: 'date_fact',name:'date_fact'},
-                    {data: 'statut',name:'statut'},
-                    {data: 'montantHT',name:'montantHT'},
-                    {data: 'montantTTC',name:'montantTTC'},
-                    {data: 'paye',name:'paye'},
-                    {data: 'firstname',name:'firstname'},
-                    {data: 'action', name: 'action', orderable: false, searchable: false},
-
-                ],
-                order: []
-            })
-
-        }
-
-        $(document).ready(function () {
-            loadFactures()
-        });
 
         // cette fonction defini un devis comme valide
         function validerFun(id) {
@@ -324,6 +284,146 @@
             })
 
         });
+
+        function closeComment() {
+            $('.commentForm').hide(200);
+        }
+
+        function edtiComment(id) {
+            $('.commentForm').hide(200);
+            $('#commentForm' + id).show(200);
+        }
+        function deleteComment(id) {
+            if (confirm("Supprimer ce commentaire?") === true) {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('comment.delete') }}",
+                    data: {id: id},
+                    dataType: 'json',
+                    success: function (res) {
+                        if (res) {
+                            toastr.success("Supprimé avec succès!");
+                            window.location.reload(200);
+
+                        } else {
+                            toastr.error("Une erreur s'est produite!");
+                        }
+
+                    }
+                });
+            }
+        }
+
+        $("#modal-form").on("submit", function (event) {
+            event.preventDefault();
+            swal.fire({
+                title: "Voulez-vous enregistre ce paiement?",
+                icon: 'question',
+                text: "Vous pouvez le modifier plus tard dans les details.",
+                type: "warning",
+                showCancelButton: !0,
+                confirmButtonText: "Oui, Continuer!",
+                cancelButtonText: "Non, annuler !",
+                reverseButtons: !0
+            }).then(function (e) {
+                if (e.value === true) {
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $('#modal-form .btn-primary').attr("disabled", true).html("En cours...")
+                    var data = $('#modal-form').serialize()
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('factures.paiement.store') }}",
+                        data: data,
+                        dataType: 'json',
+                        success: function (res) {
+                            console.log(res);
+                            if (res){
+                                toastr.success("Enregistré avec succès.", "Effectué!")
+
+                                $('#modal-form .btn-primary').attr("disabled", false).html("Enregistrer")
+                                $('#modal-form')[0].reset()
+                                $('#paiement-modal').modal('hide');
+                                window.location.reload();
+
+                            }
+                            if (res===[]|| res===undefined || res==null) {
+                                toastr.error("Erreur lors de l'enregistrement.", "Désolé!",)
+                                $('#modal-form .btn-primary').attr("disabled", false).html("Enregistrer")
+                            }
+
+                        },
+                        error: function (resp) {
+                            sweetAlert("Désolé!", "Une erreur s'est produite. Actualisez la page et reessayez.", "error");
+                            $('#modal-form .btn-primary').attr("disabled", false).html("Enregistrer")
+                        }
+                    });
+                } else {
+
+                    $('#modal-form .btn-primary').attr("disabled", false).html("Enregistrer")
+                    $('#paiement-modal').modal('hide');
+                    e.dismiss;
+                }
+            }, function (dismiss) {
+                $('#modal-form .btn-primary').attr("disabled", false).html("Enregistrer")
+                $('#paiement-modal').modal('hide');
+                return false;
+            })
+
+        });
+
+        function deletePaiement(id) {
+            swal.fire({
+                title: "Supprimer ce?",
+                icon: 'question',
+                text: "Ce paiement sera supprimé de façon définitive.",
+                type: "warning",
+                showCancelButton: !0,
+                confirmButtonText: "Oui, supprimer!",
+                cancelButtonText: "Non, annuler !",
+                reverseButtons: !0
+            }).then(function (e) {
+                if (e.value === true) {
+                    // if (confirm("Supprimer cette tâches?") == true) {
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('factures.paiement.delete') }}",
+                        data: {id: id},
+                        dataType: 'json',
+                        success: function (res) {
+                            if (res) {
+                                swal.fire("Effectué!", "Supprimé avec succès!", "success")
+                                window.location.reload();
+                            } else {
+                                sweetAlert("Désolé!", "Erreur lors de la suppression!", "error")
+                            }
+
+                        },
+                        error: function (resp) {
+                            sweetAlert("Désolé!", "Une erreur s'est produite.", "error");
+                        }
+                    });
+                } else {
+                    e.dismiss;
+                }
+            }, function (dismiss) {
+                return false;
+            })
+            // }
+        }
     </script>
     <!-- Datatable -->
     <script src="{{asset('template/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>

@@ -283,7 +283,6 @@
         // add new categorie
         $("#modal-form").on("submit", function (event) {
             event.preventDefault();
-
             swal.fire({
                 title: "Voulez-vous générer la facture?",
                 icon: 'question',
@@ -300,7 +299,7 @@
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         }
                     });
-                    $('#categorie-form .btn-primary').attr("disabled", true).html("En cours...")
+                    $('#modal-form .btn-primary').attr("disabled", true).html("En cours...")
                     var data = $('#modal-form').serialize()
                     $.ajax({
                         type: "POST",
@@ -322,7 +321,7 @@
                                     icon: 'success',
                                     title: 'Effectué avec succès',
                                     text: "L'opération s'est bien terminé!",
-                                    footer: '<a href="/dashboard/factures/print/'+res.facture_id+'"><i class="fa fa-eye"></i> Cliquer pour voir la facture.</a>'
+                                    footer: '<a href="/dashboard/factures/print/'+res.facture_id+'" target="_blank"><i class="fa fa-eye"></i> Cliquer pour voir la facture.</a>'
                                 })
 
                             }

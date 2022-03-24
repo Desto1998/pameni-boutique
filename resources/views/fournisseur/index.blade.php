@@ -44,10 +44,10 @@
                                     <th>Nom</th>
                                     <th>Téléphone</th>
                                     <th>Email</th>
-                                    <th>Pays</th>
+{{--                                    <th>Pays</th>--}}
                                     <th>Ville</th>
                                     <th>Adresse</th>
-                                    <th>Boite postale</th>
+{{--                                    <th>Boite postale</th>--}}
                                     <th>Action</th>
                                 </tr>
                                 </thead>
@@ -198,10 +198,10 @@
                     {data: 'nom',name:'nom'},
                     {data: 'phone',name:'phone'},
                     {data: 'email_fr',name:'email_fr'},
-                    {data: 'nom_pays',name:'nom_pays'},
+                    // {data: 'nom_pays',name:'nom_pays'},
                     {data: 'ville_fr',name:'ville_fr'},
                     {data: 'adresse_fr',name:'adresse_fr'},
-                    {data: 'postale',name:'postale'},
+                    // {data: 'postale',name:'postale'},
                     {data: 'action', name: 'action', orderable: false, searchable: false},
 
                 ],

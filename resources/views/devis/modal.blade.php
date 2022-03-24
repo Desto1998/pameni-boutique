@@ -13,12 +13,12 @@
                     <input type="hidden" name="iddevis" id="iddevis" value="" required>
                     <div class="form-group">
                         <label for="date">Date de la facture <span class="text-danger">*</span></label>
-                        <input type="date" name="date" id="date"  class="form-control">
+                        <input type="date" name="date" id="date"  class="form-control" required>
                     </div>
                     <label class="nav-label">Informations du bon de commande</label>
                     <div class="form-group">
                         <label for="ref_bon">Référence <span class="text-danger">*</span></label>
-                        <input type="text" name="ref_bon" maxlength="20" id="ref_bon" placeholder="Reference" class="form-control">
+                        <input type="text" name="ref_bon" maxlength="20" id="ref_bon" placeholder="Reference" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label for="date_bon">Date  <span class="text-danger">*</span></label>

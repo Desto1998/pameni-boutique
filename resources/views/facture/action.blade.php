@@ -8,7 +8,7 @@
                title="Visualiser les details"><i
                     class="fa fa-eye"></i></a>
             <a href="{{ route('factures.print',['id' =>$value->facture_id]) }}" target="_blank" class="btn btn-light btn-sm ml-1"
-               title="Imprimer la proformat"><i
+               title="Imprimer la facture"><i
                     class="fa fa-file-pdf-o"></i></a>
             @if (Auth::user()->is_admin==1 || Auth::user()->id===$value->id && $value->statut <=1)
                 <a href="{{ route('factures.edit',['id' =>$value->facture_id]) }}" class="btn btn-warning btn-sm ml-1"
@@ -18,6 +18,12 @@
         </li>
 
         <li class="text-center mt-2">
+
+            <a href="javascript:void(0);" data-toggle="modal"
+               data-target="#paiement-modal" onclick="getId({{ $value->facture_id }})" class="btn btn-secondary btn-sm ml-1"
+               title="Ajouter un paiement."><i
+                    class="fa fa-money"></i></a>
+
             @if ($value->statut===0 && Auth::user()->is_admin==1)
                 <a href="javascript:void(0);" onclick="validerFun({{ $value->facture_id}})"
                    class="btn btn-primary btn-sm ml-1"
@@ -34,7 +40,7 @@
 
             @if (Auth::user()->is_admin==1)
                 <button class="btn btn-danger btn-sm ml-1 "
-                        title="Supprimer ce devis" id="deletebtn{{ $value->facture_id }}"
+                        title="Supprimer cette facture" id="deletebtn{{ $value->facture_id }}"
                         onclick="deleteFun({{ $value->facture_id }})"><i
                         class="fa fa-trash"></i></button>
             @endif
@@ -48,6 +54,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Détail de la facture: {{ $value->reference_fact }}</h5>
+                <a href="{{ route('factures.view',['id' =>$value->facture_id]) }}" class="mx-5 ml-1"
+                   title="Plus de details">Voir plus</a>
                 <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                 </button>
             </div>
@@ -123,7 +131,7 @@
 
 
                         <tr>
-                            <th colspan="6" rowspan="3"></th>
+                            <th colspan="5" rowspan="3"></th>
                             <td>Total HT</td>
                             <td>{{ number_format($montantHT,2,'.','') }}</td>
 

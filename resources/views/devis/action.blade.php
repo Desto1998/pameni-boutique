@@ -53,6 +53,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Détail de la dévis: {{ $value->reference_devis }}</h5>
+                <a href="{{ route('devis.view',['id' =>$value->devis_id]) }}" class="mx-5  ml-1"
+                   title="Plus de details">Voir plus</a>
                 <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                 </button>
             </div>
@@ -128,7 +130,7 @@
 
 
                         <tr>
-                            <th colspan="6" rowspan="3"></th>
+                            <th colspan="5" rowspan="3"></th>
                             <td>Total HT</td>
                             <td>{{ number_format($montantHT,2,'.','') }}</td>
 

@@ -214,7 +214,8 @@ create table paiements
     paiement_id   int primary key AUTO_INCREMENT,
     mode          varchar(255)  not null,
     date_paiement date          not null,
-    description   varchar(1000) not null,
+    description   varchar(1000)  null,
+    montant       float         not null,
     statut        int       default 1,
     idcommande    int null,
     iddevis       int null,
@@ -290,7 +291,7 @@ create table pieces
     idfacture  int null,
     date_piece date null,
     iddevis    int null,
-    iduser     int   not null,
+    iduser     int not null,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;

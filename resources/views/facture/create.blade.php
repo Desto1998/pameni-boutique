@@ -5,6 +5,9 @@
         .hidden {
             display: none;
         }
+        .enterprisehide{
+            display: none;
+        }
     </style>
 @endsection
 @section('content')
@@ -47,7 +50,7 @@
                                 </div>
                                 <div class="col-md-7 float-right d-flex" id="client-block">
                                     <div class="form-group col-md-6">
-                                        <label for="echeance">Client: </label>
+                                        <label for="echeance">Client:</label>
                                         <select name="idclient" id="single-select" class="form-control">
                                             <option selected="selected" disabled>Sélectionez un client</option>
                                             @foreach($clients as $cl)
@@ -57,8 +60,13 @@
                                         </select>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label class="text-center pl-3">Coordonnées du client</label>
+                                    <div class="form-group" id="client-block">
+                                        <label class="text-center pl-3">Coordonnées du client &nbsp;&nbsp;
+                                            <button type="button" class="btn btn-primary btn-sm float-right" data-toggle="modal"
+                                                    title="Ajouter un client"
+                                                         data-target="#clientsModal"><i class="fa fa-plus">&nbsp;</i>
+                                            </button>
+                                        </label>
                                         @foreach($clients as $cl)
                                             <div class="hidden infos_client pl-3" id="infos_client{{ $cl->client_id }}">
                                                 <label
@@ -203,6 +211,7 @@
         <input type="hidden" name="produit_categorie" value="{{ $p->idcategorie }}" id="data_p_categorie{{ $p->idcategorie }}">
 
     @endforeach
+    @include('client.modal')
 @endsection
 @section('script')
     <script>
@@ -347,6 +356,82 @@
         $('#edit-btn').click(function (e){
             $('.form-control').removeAttr('disabled');
             $('.btn-primary').removeAttr('disabled');
+        });
+
+        // function d'ajout du client
+
+        function filterFormInput(){
+            var type = $('#type_client').val();
+            if (type==1){
+                $('.enterprisehide').show(200)
+                $('.clienthide').hide(200)
+                $('#nom_client').prop('required',false)
+                $('#raison_s_client').prop('required',true)
+                $('#raison_s_client').attr('disabled',false)
+                $('#nom_client').attr('disabled',true)
+                $('#rcm').prop('required',true)
+                $('#rcm').attr('disabled',false)
+                $('#contribuabe').attr('disabled',false)
+            }else {
+                $('#raison_s_client').prop('required',false)
+                $('#raison_s_client').attr('disabled',true)
+                $('.enterprisehide').hide(200)
+                $('.clienthide').show(200)
+                $('#nom_client').prop('required',true)
+                $('#nom_client').attr('disabled',false)
+                $('#rcm').attr('disabled',true)
+                $('#contribuabe').attr('disabled',true)
+            }
+
+        }
+
+        $("#client-form").on("submit", function (event) {
+            event.preventDefault();
+
+            $('#client-form .btn-primary').attr("disabled", true).html("En cours...")
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            var data = $('#client-form').serialize()
+
+            $.ajax({
+                type: "POST",
+                url: "{{ route('client.store') }}",
+                data: data,
+                dataType: 'json',
+                success: function (res) {
+                    console.log(res);
+                    if (res) {
+
+                        toastr.success("Enregistré avec succès!");
+                       var option =' <option selected value="'+res.client_id+'">'+ res.nom_client +' ' + res.prenom_client +' '+ res.raison_s_client +'</option>'
+                        $('#single-select').append(option).select2();
+                       // $('#single-select').select2();
+                       var data = '<div class="hidden infos_client pl-3" id="infos_client'+res.client_id+'">';
+                        data += '<label class="h5 font-weight-bold mt-1">'+ res.nom_client +' ' + res.prenom_client +' '+ res.raison_s_client +'</label><br>'
+                        data += '<label class="h5 font-weight-bold mt-1">Tel: '+ res.phone_1_client +  ' / ' + res.phone_2_client +'</label><br>'
+                        data += '  <label class="h5 font-weight-bold mt-1">Bp:'+ res.postale +'</label><br>'
+                        data += '</div>';
+                        $('#client-block').append(data);
+                        $('#infos_client'+res.client_id).show(100);
+                        // on reinitialise le formulaire
+                        $('#client-form .btn-primary').attr("disabled", false).html("Enregistrer")
+                        $('#client-form')[0].reset()
+                        $('#clientsModal').modal('hide');
+
+                    } else {
+                        sweetAlert("Désolé!", "Erreur lors de l'enregistrement!", "error")
+                        $('#client-form .btn-primary').attr("disabled", false).html("Enregistrer")
+                    }
+
+                },
+                error: function (resp) {
+                    sweetAlert("Désolé!", "Une erreur s'est produite.", "error");
+                    $('#client-form .btn-primary').attr("disabled", false).html("Enregistrer")
+                }
+            });
         });
     </script>
 

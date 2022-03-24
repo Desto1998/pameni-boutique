@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Categories;
 use App\Models\Clients;
+use App\Models\Commentaires;
 use App\Models\Complements;
 use App\Models\Devis;
 use App\Models\Factures;
 use App\Models\Month;
 use App\Models\Paiements;
+use App\Models\Pays;
 use App\Models\Pieces;
 use App\Models\Pocedes;
 use App\Models\Produit_Factures;
@@ -72,8 +74,10 @@ class DevisController extends Controller
 
                 if ($value->statut == 0) {
                     $statut = '<span class="text-danger">Non validé</span>';
+                } elseif ($value->statut == 1){
+                    $statut = '<span class="text-primary">Validé</span>';
                 } else {
-                    $statut = '<span class="text-success">Validé</span>';
+                    $statut = '<span class="text-success">Facture créée</span>';
                 }
                 return $statut;
             })
@@ -128,10 +132,11 @@ class DevisController extends Controller
                 $ID[$key]=$value->idcategorie;
             }
         }
+        $pays = Pays::all();
         $categories = Categories::whereIn('categorie_id',$ID )->orderBy('categories.created_at', 'desc')->get();
 
         $clients = Clients::orderBy('created_at', 'desc')->get();
-        return view('devis.create', compact('categories', 'produits', 'clients'));
+        return view('devis.create', compact('categories', 'produits', 'clients','pays'));
     }
 
     public function store(Request $request)
@@ -224,7 +229,36 @@ class DevisController extends Controller
 
     public function viewDetail($id)
     {
-        return 'In process';
+        $pocedes = Pocedes::join('produits', 'produits.produit_id', 'pocedes.idproduit')->where('iddevis', $id)->get();
+        $complements = Complements::join('produits', 'produits.produit_id', 'complements.idproduit')->where('iddevis', $id)->get();
+        $montantTVA = 0;
+        $montantTTC = 0;
+
+        foreach ($pocedes as $p) {
+
+            $remise = ($p->prix * $p->quantite * $p->remise) / 100;
+            $montant = ($p->quantite * $p->prix) - $remise;
+            $tva = ($montant * $p->tva) / 100;
+            $montant = $tva + $montant;
+//                        $montant += (($montant * 19.25)/100)+$montant;
+            $montantTVA += $montant;
+
+        }
+        $data = Devis::join('clients', 'clients.client_id', 'devis.idclient')
+            ->join('users', 'users.id', 'devis.iduser')
+            ->where('devis_id', $id)
+            ->get()
+        ;
+        if ($data[0]->tva_statut == 1) {
+            $montantTTC = (($montantTVA * 19.25) / 100) + $montantTVA;
+        } else {
+            $montantTTC = $montantTVA;
+        }
+        $commentaires = Commentaires::join('users','users.id','commentaires.iduser')->where('iddevis',$id)->get();
+
+//        $piece = Pieces::where('i', $id)->get();
+        return view('devis.details.index', compact('data','pocedes','montant',
+            'montantTTC','montantTVA','commentaires','complements')) ;
     }
 
     public function showEditForm($id)
@@ -410,6 +444,7 @@ class DevisController extends Controller
                 'idclient' => $devis[0]->idclient,
                 'tva_statut' => $devis[0]->tva_statut,
                 'iduser' => $iduser,
+                'iddevis' => $devis[0]->devis_id,
             ]);
             if ($save) {
                 foreach ($pocedes as $key=>$p) {

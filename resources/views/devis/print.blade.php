@@ -249,7 +249,7 @@
         @endforeach
 
         <tr>
-            <th colspan="6" rowspan="3"></th>
+            <th colspan="5" rowspan="3"></th>
             <td class="total">Total HT</td>
             <td class="number total">{{ number_format($montantHT,2,'.','') }}</td>
 
