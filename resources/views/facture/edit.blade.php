@@ -172,20 +172,24 @@
                                 </table>
                             </div>
                             <div class="col-md-12 d-flex">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <button type="button" class="btn btn-sm btn-primary" id="add-row-produit"><i
                                             class="fa fa-plus"></i> Ajouter une ligne
                                     </button>
                                 </div>
 
-                                <div class="col-md-8 d-flex">
-                                    <div class="d-flex form-group col-md-6">
-                                        <label>Montant HT</label>
-                                        <input type="number" readonly name="ht" id="ht" class="form-control">
+                                <div class="col-md-9 d-flex">
+                                    <div class="d-flex form-group col-md-4">
+                                        <label class="text-center">Montant HT &nbsp;&nbsp;</label>
+                                        <input type="number" readonly name="ht" value="0" id="ht" class="form-control">
                                     </div>
-                                    <div class="d-flex form-group col-md-6">
-                                        <label>Montant TTC</label>
-                                        <input type="number" readonly name="ttc" id="ttc" class="form-control">
+                                    <div class="d-flex form-group col-md-4">
+                                        <label class="text-center">Montant TVA &nbsp;&nbsp;</label>
+                                        <input type="number" readonly name="mtva" id="mtva" value="0" class="form-control">
+                                    </div>
+                                    <div class="d-flex form-group col-md-4">
+                                        <label class="text-center">Montant TTC &nbsp;&nbsp;</label>
+                                        <input type="number" readonly name="ttc" id="ttc" value="0" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -363,19 +367,29 @@
         }
 
 
+        $('select[name="tva_statut"]').on('change',function (e){
+            if ($('select[name="tva_statut"]').val()==1){
+                total();
+            }
+        });
+
         // fonction qui calcule les totaux HT et TTC
         function total(){
             var totalht = 0;
             var totalttc = 0;
+            var tva = 0;
             $('input[name="totalHT[]"]').each(function (){
                 totalht += Number($(this).val());
             });
             $('input[name="totalTTC[]"]').each(function (){
                 totalttc +=Number( $(this).val());
             });
-            // $('input[name="prix[]"]').each(function (){
-            //    prix += $(this).val();
-            // });
+            if ($('select[name="tva_statut"]').val()==1){
+                tva = 19.25;
+            }
+            var mtva = (totalht * tva )/100;
+            mtva = Number(mtva).toFixed(2)
+            $('#mtva').val(mtva);
             $('#ht').val(Number(totalht).toFixed(2));
             $('#ttc').val(Number(totalttc).toFixed(2));
         }

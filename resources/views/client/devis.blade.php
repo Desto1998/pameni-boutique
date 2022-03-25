@@ -1,6 +1,9 @@
-<div class="table-responsive">
-    <label class="h4">Liste des devis</label>
-    <table id="devis-table" class="display text-center" style="min-width: 845px">
+<div class="table-responsive col-md-12">
+    <div class="col-md-12 text-center my-2">
+        <label class="h4">Liste des devis</label>
+    </div>
+
+    <table id="devis-table" class="display display text-center detail-table w-100">
         <thead class="bg-primary">
         <tr>
             <th>#</th>

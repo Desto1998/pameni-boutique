@@ -15,8 +15,10 @@
         border-collapse: collapse;
     }
 
-    header table tr td {
-        padding-right: 30px;
+    .for-date{
+        width: 200px;
+        justify-content: right;
+        text-align: center;
     }
 
     header table .for-logo img {
@@ -149,8 +151,8 @@
             <td class="for-name">
                 <h3>{{ 'GLOBAL SOFT & COMMUNICATION Sarl' }}</h3>
                 <p>
-                    <strong>GSC:</strong> Rue foch face direction Orange, DOUALA CAMEROUN <br><br>
-{{--                    <strong>DSP: {{ $data[0]->firstname }} {{ $data[0]->lastname }} {{ $data[0]->phone }} </strong>--}}
+                    <strong>GSC:</strong> Rue Castelnau face direction commerciale MTN derrière Akwa Palace, DOUALA CAMEROUN <br>
+                    <strong style="padding-top: 8px">DSP: {{ $data[0]->firstname }} {{ $data[0]->lastname }} {{ $data[0]->phone }} </strong>
                 </p>
 
             </td>
@@ -283,15 +285,36 @@
     </table>
 </div>
 <div class="for-prix">
-    <strong>
-         ARRETEE LA PRESENTE FACTURE A LA SOMME DE:<br>
+
+
         {{--        {{ (new \App\Models\ChiffreLettre())->Conversion(number_format(( ($montantTVA * 19.25)/100)+$montantTVA,0,'.','')) }}--}}
-        @if ($data[0]->tva_statut == 1)
-            {{ ucfirst((new \App\Models\ChiffreLettre())->Conversion(number_format(( ($montantTVA * 19.25)/100)+$montantTVA,0,'.',''))) }}
-        @else
-            {{ ucfirst((new \App\Models\ChiffreLettre())->Conversion(number_format($montantTVA ,2,'.',''))) }}
-        @endif francs CFA
-    </strong>
+        <strong>
+            ARRETEE LA PRESENTE FACTURE A LA SOMME DE:<br>
+            {{--        {{ (new \App\Models\ChiffreLettre())->Conversion(number_format(( ($montantTVA * 19.25)/100)+$montantTVA,0,'.','')) }}--}}
+            @php
+
+                if ($data[0]->tva_statut == 1){
+                     $montantTVA = (($montantTVA * 19.25)/100)+ $montantTVA;
+                     //ucfirst((new \App\Models\ChiffreLettre())->Conversion(number_format($montantTVA ,2,'.','')))
+                }
+                $intpart = number_format($montantTVA ,2,'.','');
+                $intpart = floor($intpart);
+                $fraction = number_format($montantTVA ,2,'.','') - $intpart;
+                $chaine = "$fraction";
+                $chaine2 = $chaine[2];
+                $chaine2 .= $chaine[3];
+                $chaineIntPart = (new \App\Models\ChiffreLettre())->Conversion($intpart ,2,'.','');
+                $chaineDecimalPart = (new \App\Models\ChiffreLettre())->Conversion((int)($chaine2) ,2,'.','');
+
+            @endphp
+            @if ((int)$chaine2==0)
+                {{ ucfirst($chaineIntPart) }}
+            @else
+                {{ ucfirst($chaineIntPart) }} {{ "virgule" }} {{ $chaineDecimalPart }}
+            @endif
+            francs CFA
+        </strong>
+
 </div>
 
 <table class="for-garentie">

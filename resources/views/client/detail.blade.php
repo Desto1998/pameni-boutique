@@ -49,7 +49,7 @@
                                 <div class="tab-pane fade fade show active" id="infos">
 
                                     <div class="pt-4">
-                                        <table class="table text-black-50 table-active table-striped table-bordered table-hover">
+                                        <table class="table text-black-50 table-bordered table-hover">
                                             <tr>
                                                 <td>
                                                     @if ($data[0]->type_client==0)
@@ -99,7 +99,7 @@
                                             <tr>
                                                 <td>Cree par</td>
                                                 <td>
-                                                    {{ $data[0]->date_ajout }}
+                                                    {{ $data[0]->firstname }} {{ $data[0]->lastname }}
                                                 </td>
                                             </tr>
                                         </table>

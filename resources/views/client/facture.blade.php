@@ -1,5 +1,8 @@
 <div class="table-responsive">
-    <table id="facture-table" class="display text-center" style="min-width: 845px">
+    <div class="col-md-12 text-center my-2">
+        <label class="h4 text-center">Liste des factures</label>
+    </div>
+    <table id="facture-table" class="display text-center detail-table w-100">
         <thead class="bg-primary">
         <tr>
             <th>#</th>

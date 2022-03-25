@@ -184,17 +184,17 @@ class ChiffreLettre extends Model
 #AffichageResultat($enLettre);
             elseif ($nb == 1) {
                 if ($mille == 1)
-                    $this->enLettre .= 'mille ';
+                    $this->enLettre .= ' mille ';
                 else {
                     $this->Unite($mille);
-                    $this->enLettre .= 'mille ';
+                    $this->enLettre .= ' mille ';
                 }
             } elseif ($nb == 2) {
                 $this->Dizaine(1, $mille, $unite, $dizaine);
-                $this->enLettre .= 'mille ';
+                $this->enLettre .= ' mille ';
             } elseif ($nb == 3) {
                 $this->Centaine(1, $mille, $unite, $dizaine, $centaine);
-                $this->enLettre .= 'mille ';
+                $this->enLettre .= ' mille ';
             }
 #Gestion des cents
 #suppression des zéros qui précéderaient les cents dans $cent
@@ -252,7 +252,7 @@ class ChiffreLettre extends Model
             }
         }
 
-        $this->enLettre .= 'mille ';
+        $this->enLettre .= ' mille ';
 #recuperation des cens dans nombre
 #suppression des zéros qui précéderaient la saisie
         $nb = strlen($cent);

@@ -13,6 +13,23 @@
     color: black;
 
 }
+
+.detail-table>thead>tr>th{
+    color: white;
+    border:1px solid #eaeaea;
+}
+.detail-table{
+    border-collapse: collapse;
+}
+.detail-table>tbody>tr>td{
+    color: black;
+    border:1px solid #eaeaea;
+}
+.detail-table>tbody>tr>td{
+    color: black;
+
+}
+
 /*#eaeaea*/
 /*#593bdb*/
 #example tr.selected {
@@ -57,4 +74,7 @@ select{
 }
 .select2-container--default .select2-selection--single .select2-selection__rendered{
     color: black;
+}
+@media only screen and (min-width: 768px) {
+
 }

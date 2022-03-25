@@ -15,9 +15,6 @@
         border-collapse: collapse;
     }
 
-    header table tr td {
-        padding-right: 30px;
-    }
 
     header table .for-logo img {
         width: 100px;
@@ -35,7 +32,11 @@
         font-family: "Arial Black";
         color: #0c85d0;
     }
-
+    .for-date{
+        width: 200px;
+        justify-content: right;
+        text-align: center;
+    }
     .for-infos table {
         min-width: 100%;
         font-size: 13px;
@@ -151,12 +152,13 @@
 
                 {{--                    <img src="{{ asset('images/logo/logo_gssc.png') }}" class="logo" alt="Logo not found">--}}
                 <img src="{{ $ImagePath }}" class="logo" alt="Logo not found">
+{{--                <img src="{{ asset('images/logo/logo_gssc.png') }}" class="logo" alt="Logo not found">--}}
             </td>
             <td class="for-name">
                 <h3>{{ 'GLOBAL SOFT & COMMUNICATION Sarl' }}</h3>
                 <p>
-                    <strong>GSC:</strong> Rue foch face direction Orange, DOUALA CAMEROUN <br><br>
-                    <strong>DSP: {{ $data[0]->firstname }} {{ $data[0]->lastname }} {{ $data[0]->phone }} </strong>
+                    <strong>GSC:</strong> Rue Castelnau face direction commerciale MTN derrière Akwa Palace, DOUALA CAMEROUN <br>
+                    <strong style="padding-top: 8px">DSP: {{ $data[0]->firstname }} {{ $data[0]->lastname }} {{ $data[0]->phone }} </strong>
                 </p>
 
             </td>
@@ -247,12 +249,19 @@
 
             </tr>
         @endforeach
-
+{{--        <tr>--}}
+{{--            <td>jhdccd</td>--}}
+{{--            <td>jhdccd</td>--}}
+{{--            <td>jhdccd</td>--}}
+{{--            <td>jhdccd</td>--}}
+{{--            <td>jhdccd</td>--}}
+{{--            <td>jhdccd</td>--}}
+{{--            <td>jhdccd</td>--}}
+{{--        </tr>--}}
         <tr>
             <th colspan="5" rowspan="3"></th>
             <td class="total">Total HT</td>
             <td class="number total">{{ number_format($montantHT,2,'.','') }}</td>
-
         </tr>
 
         <tr>
@@ -279,15 +288,42 @@
         </tbody>
     </table>
 </div>
-<div class="for-prix">
-    <strong>
-{{--        {{ (new \App\Models\ChiffreLettre())->Conversion(number_format(( ($montantTVA * 19.25)/100)+$montantTVA,0,'.','')) }}--}}
-        @if ($data[0]->tva_statut == 1)
-            {{ ucfirst((new \App\Models\ChiffreLettre())->Conversion(number_format(( ($montantTVA * 19.25)/100)+$montantTVA,0,'.',''))) }}
-        @else
-            {{ ucfirst((new \App\Models\ChiffreLettre())->Conversion(number_format($montantTVA ,2,'.',''))) }}
-        @endif francs CFA
-    </strong>
+<div class="for-prix" style="height: 120px; margin-top: 5px">
+    <div style="float: left; display: flex; justify-content: left; align-content: center; width: 70%">
+        <strong>
+            {{--        {{ (new \App\Models\ChiffreLettre())->Conversion(number_format(( ($montantTVA * 19.25)/100)+$montantTVA,0,'.','')) }}--}}
+            @php
+
+                if ($data[0]->tva_statut == 1){
+                     $montantTVA = (($montantTVA * 19.25)/100)+ $montantTVA;
+                     //ucfirst((new \App\Models\ChiffreLettre())->Conversion(number_format($montantTVA ,2,'.','')))
+                }
+                $intpart = number_format($montantTVA ,2,'.','');
+                $intpart = floor($intpart);
+                $fraction = number_format($montantTVA ,2,'.','') - $intpart;
+                $chaine = "$fraction";
+                $chaine2 = $chaine[2];
+                $chaine2 .= $chaine[3];
+                $chaineIntPart = (new \App\Models\ChiffreLettre())->Conversion($intpart ,2,'.','');
+                $chaineDecimalPart = (new \App\Models\ChiffreLettre())->Conversion((int)($chaine2) ,2,'.','');
+
+            @endphp
+            @if ((int)$chaine2==0)
+                {{ ucfirst($chaineIntPart) }}
+            @else
+                {{ ucfirst($chaineIntPart) }} {{ "virgule" }} {{ $chaineDecimalPart }}
+            @endif
+                francs CFA
+        </strong>
+    </div>
+
+    <div style="justify-content: right">
+        @php
+            $ImagePath = $_SERVER["DOCUMENT_ROOT"] . '/images/logo/cachet_gsc.png';
+        @endphp
+{{--        <img class="cachet-img" style="float: right; width: 250px;height: 200px" src="{{ $ImagePath }}" alt="Cachet introuvable.">--}}
+        <img class="cachet-img" style="float: right; width: 200px; height: 120px" src="{{ asset('images/logo/cachet_gsc2.png') }}" alt="Cachet introuvable.">
+    </div>
 </div>
 
 <table class="for-garentie">

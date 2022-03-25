@@ -6,6 +6,7 @@ use App\Models\Categories;
 use App\Models\Clients;
 use App\Models\Commandes;
 use App\Models\Commentaires;
+use App\Models\Devis;
 use App\Models\Factures;
 use App\Models\Paiements;
 use App\Models\Pays;
@@ -350,7 +351,16 @@ class FactureController extends Controller
                 'iduser' => $iduser,
             ]);
         }
+        /** on modifie le statut de son devis et on met a 1. Pour que ca reste a valide
+         * au lieu de facture creee
+        **/
+        $fact = Factures::where('facture_id',$request->facture_id)->get();
+        if (count($fact)>0) {
+            if (isset($fact[0]->iddevis) && !empty($fact[0]->iddevis)) {
+                Devis::where('devis_id',$fact[0]->iddevis)->update(['statut'=>1]);
 
+            }
+        }
         if ($save) {
             return redirect()->route('factures.all')->with('success', 'Enregistré avec succès!');
         }
