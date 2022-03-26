@@ -5,13 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Categories;
 use App\Models\Clients;
 use App\Models\Commandes;
-use App\Models\Complements;
-use App\Models\Devis;
-use App\Models\Factures;
-use App\Models\Paiements;
+use App\Models\Comportes;
+use App\Models\Fournisseurs;
+use App\Models\Pays;
 use App\Models\Pieces;
-use App\Models\Pocedes;
-use App\Models\Produit_Factures;
 use App\Models\Produits;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -24,23 +21,30 @@ class CommandeController extends Controller
 {
     public function index()
     {
-        $data = Factures::join('clients', 'clients.client_id', 'factures.idclient')
-            ->orderBy('factures.created_at', 'desc')
+        $data = Commandes::join('fournisseurs', 'fournisseurs.fournisseur_id', 'commandes.commande_id')
+            ->orderBy('commandes.created_at', 'desc')
             ->get();
         $users = User::all();
-        $pocedes = Produit_Factures::all();
-        $paiements = Paiements::all();
-        return view('facture.index',
-            compact('data', 'users', 'paiements', 'pocedes')
+        $pocedes = Comportes::all();
+        return view('commande.index',
+            compact('data', 'users', 'pocedes')
         );
     }
 
-    public function loadCommandes()
+    public function loadCommandes($id)
     {
-        $data = Factures::join('clients', 'clients.client_id', 'factures.idclient')
-            ->join('users', 'users.id', 'factures.iduser')
-            ->orderBy('factures.created_at', 'desc')
-            ->get();
+        if ($id>0) {
+            $data = Commandes::join('fournisseurs', 'fournisseurs.fournisseur_id', 'commandes.commande_id')
+                ->join('users', 'users.id', 'commandes.iduser')
+                ->where('commandes.idfournisseur',$id)
+                ->orderBy('commandes.created_at', 'desc')
+                ->get();
+        }else{
+            $data = Commandes::join('fournisseurs', 'fournisseurs.fournisseur_id', 'commandes.commande_id')
+                ->join('users', 'users.id', 'commandes.iduser')
+                ->orderBy('commandes.created_at', 'desc')
+                ->get();
+        }
 
 //        $product  = new Array_();
         return Datatables::of($data)
@@ -48,15 +52,15 @@ class CommandeController extends Controller
             //Ajoute de la colonne action
             ->addColumn('action', function ($value) {
                 $categories = Categories::all();
-                $paiements = Paiements::where('idfacture', $value->facture_id)->get();
-                $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $value->facture_id)->get();
-                $action = view('facture.action', compact('value', 'categories', 'pocedes','paiements'));
+//                $paiements = Paiements::where('idfacture', $value->facture_id)->get();
+                $pocedes = Comportes::join('produits', 'produits.produit_id', 'comportes.idproduit')->where('idcommande', $value->commande_id)->get();
+                $action = view('commande.action', compact('value', 'categories', 'pocedes'));
 //                    $actionBtn = '<div class="d-flex"><a href="javascript:void(0)" class="edit btn btn-warning btn-sm"><i class="fa fa-edit"></i></a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm ml-1"  onclick="deleteFun()"><i class="fa fa-trash"></i></a></div>';
                 return (string)$action;
             })
             // Le nom client Ajout de la colonne
             ->addColumn('client', function ($value) {
-                $client = $value->nom_client . ' ' . $value->prenom_client . ' ' . $value->raison_s_client;
+                $client = $value->nom_fr . ' ' . $value->prenom_fr . ' ' . $value->raison_s_fr;
                 return $client;
             })
             // Ajout du statut du. colonne marque en rouge | Si le statut est 0? NValide : Valide
@@ -71,32 +75,29 @@ class CommandeController extends Controller
             })
             // calcule du montant hors taxe
             ->addColumn('montantHT', function ($value) {
-                $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $value->facture_id)->get();
+                $pocedes = Comportes::join('produits', 'produits.produit_id', 'comportes.idproduit')->where('idcommande', $value->commande_id)->get();
                 $montantHT = 0;
 
                 foreach ($pocedes as $p) {
-                    if ($p->iddevis === $value->devis_id) {
-                        $remise = ($p->prix * $p->quantite * $p->remise) / 100;
-                        $montant = ($p->quantite * $p->prix) - $remise;
-                        $montantHT += $montant;
-                    }
+                    $remise = ($p->prix * $p->quantite * $p->remise) / 100;
+                    $montant = ($p->quantite * $p->prix) - $remise;
+                    $montantHT += $montant;
                 }
                 return number_format($montantHT, 2, '.', '');
             })
             // calcule du montant TTC tout taxe comprie
             ->addColumn('montantTTC', function ($value) {
-                $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $value->facture_id)->get();
+                $pocedes = Comportes::join('produits', 'produits.produit_id', 'comportes.idproduit')->where('idcommande', $value->commande_id)->get();
                 $montantTVA = 0;
                 $montantTTC = 0;
                 foreach ($pocedes as $p) {
-                    if ($p->iddevis === $value->devis_id) {
-                        $remise = ($p->prix * $p->quantite * $p->remise) / 100;
-                        $montant = ($p->quantite * $p->prix) - $remise;
-                        $tva = ($montant * $p->tva) / 100;
-                        $montant = $tva + $montant;
+                    $remise = ($p->prix * $p->quantite * $p->remise) / 100;
+                    $montant = ($p->quantite * $p->prix) - $remise;
+                    $tva = ($montant * $p->tva) / 100;
+                    $montant = $tva + $montant;
 //                        $montant += (($montant * 19.25)/100)+$montant;
-                        $montantTVA += $montant;
-                    }
+                    $montantTVA += $montant;
+
                 }
                 if ($value->tva_statut == 1) {
                     $montantTTC = (($montantTVA * 19.25) / 100) + $montantTVA;
@@ -122,9 +123,9 @@ class CommandeController extends Controller
             }
         }
         $categories = Categories::whereIn('categorie_id',$ID )->orderBy('categories.created_at', 'desc')->get();
-
-        $clients = Clients::orderBy('created_at', 'desc')->get();
-        return view('facture.create', compact('categories', 'produits', 'clients'));
+        $pays = Pays::all();
+        $clients = Fournisseurs::orderBy('created_at', 'desc')->get();
+        return view('commande.create', compact('categories', 'produits', 'clients','pays'));
     }
 
     public function store(Request $request)
@@ -138,8 +139,8 @@ class CommandeController extends Controller
         ]);
 //        dd($request);
 //        $lastNum = Devis::whereYear('created_at', date('Y'))->ma('devis_id')->get() ;
-        $lastNum = Factures::whereYear('created_at', date('Y'))
-            ->whereRaw('facture_id = (select max(`facture_id`) from factures)')
+        $lastNum = Commandes::whereYear('created_at', date('Y'))
+            ->whereRaw('commande_id = (select max(`commande_id`) from commandes)')
             ->get();
 
         $iduser = Auth::user()->id;
@@ -152,7 +153,7 @@ class CommandeController extends Controller
         /** @var 'on' genere la  $reference */
         $reference = 'F' . date('Y');
         if (count($lastNum) > 0) {
-            $lastNum = $lastNum[0]->reference_fact;
+            $lastNum = $lastNum[0]->reference_commande;
             $actual = 0;
             for ($j = 0; $j < strlen($lastNum); $j++) {
                 if ($j > 5) {
@@ -169,20 +170,24 @@ class CommandeController extends Controller
             $reference .= $actual;
         }
 //        dd($reference);
-        $save = Factures::create([
-            'reference_fact' => $reference,
+        $save = Commandes::create([
+            'reference_commande' => $reference,
             'disponibilite' => $request->disponibilite,
-            'garentie' => $request->garentie,
-            'objet' => $request->objet,
-            'condition_financiere' => $request->condition,
-            'date_fact' => $request->date,
-            'idclient' => $request->idclient,
+            'service' => $request->service,
+            'condition_paiement' => $request->condition,
+            'mode_paiement' => $request->mode,
+            'direction' => $request->mode,
+            'delai_liv' => $request->delai,
+            'observation' => $request->observation,
+            'lieu_liv' => $request->lieu,
+            'date_commande' => $request->date,
+            'idfournisseur' => $request->idfournisseur,
             'tva_statut' => $request->tva_statut,
             'iduser' => $iduser,
         ]);
         for ($i = 0; $i < count($request->idproduit); $i++) {
-            Produit_Factures::create([
-                'idfacture' => $save->facture_id,
+            Comportes::create([
+                'idcommande' => $save->commande_id,
                 'quantite' => $request->quantite[$i],
                 'prix' => $request->prix[$i],
                 'tva' => $request->tva[$i],
@@ -204,12 +209,12 @@ class CommandeController extends Controller
                 'chemin' => $originalFile,
                 'ref' => $request->ref_bon,
                 'date_piece' => $request->date_bon,
-                'idfacture' => $save->facture_id,
+                'idcommande' => $save->commande_id,
                 'iduser' => $iduser,
             ]);
         }
         if ($save) {
-            return redirect()->route('factures.all')->with('success', 'Enregistré avec succès!');
+            return redirect()->route('commandes.all')->with('success', 'Enregistré avec succès!');
         }
         return redirect()->back()->with('danger', "Désolé une erreur s'est produite. Veillez recommencer!");
     }
@@ -218,7 +223,7 @@ class CommandeController extends Controller
         $request->validate([
             'id'=>['required']
         ]);
-        $remove = Produit_Factures::where('produit_f_id',$request->id)->delete();
+        $remove = Comportes::where('comporte_id',$request->id)->delete();
         return Response()->json($remove);
     }
 
@@ -228,9 +233,9 @@ class CommandeController extends Controller
     }
     public function showEditForm($id)
     {
-        $data = Factures::join('clients', 'clients.client_id', 'factures.idclient')
-            ->join('users', 'users.id', 'factures.iduser')
-            ->where('facture_id', $id)
+        $data = Commandes::join('fournisseurs', 'fournisseurs.fournisseur_id', 'commandes.idfournisseur')
+            ->join('users', 'users.id', 'commandes.iduser')
+            ->where('commande_id', $id)
             ->get()
         ;
 //        $categories = Categories::all();
@@ -241,11 +246,11 @@ class CommandeController extends Controller
                 $ID[$key]=$value->idcategorie;
             }
         }
-        $piece = Pieces::where('idfacture',$id)->get();
+        $piece = Pieces::where('idcommande',$id)->get();
         $categories = Categories::whereIn('categorie_id',$ID )->orderBy('categories.created_at', 'desc')->get();
-        $clients = Clients::orderBy('created_at', 'desc')->get();
-        $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $id)->get();
-        return view('facture.edit',compact('data','piece','categories','pocedes','clients','produits'));
+        $fournisseurs = Fournisseurs::orderBy('created_at', 'desc')->get();
+        $pocedes = Comportes::join('produits', 'produits.produit_id', 'comportes.idproduit')->where('idcommande', $id)->get();
+        return view('commande.edit',compact('data','piece','categories','pocedes','fournisseurs','produits'));
     }
     public function edit(Request $request)
     {
@@ -255,27 +260,33 @@ class CommandeController extends Controller
             'quantite' => ['required'],
             'prix' => ['required'],
             'ref_bon' => ['required'],
-            'facture_id' => ['required'],
+            'commande_id' => ['required'],
         ]);
 
         $iduser = Auth::user()->id;
 
 //        dd($reference); updateOrCreate
-        $save = Factures::where('facture_id',$request->facture_id)->update([
-            'objet' => $request->objet,
-            'condition_financiere' => $request->condition,
-            'date_fact' => $request->date,
-            'idclient' => $request->idclient,
+        $save = Commandes::where('commande_id',$request->commande_id)->update([
+            'disponibilite' => $request->disponibilite,
+            'service' => $request->service,
+            'condition_paiement' => $request->condition,
+            'mode_paiement' => $request->mode,
+            'direction' => $request->mode,
+            'delai_liv' => $request->delai,
+            'observation' => $request->observation,
+            'lieu_liv' => $request->lieu,
+            'date_commande' => $request->date,
+            'idfournisseur' => $request->idfournisseur,
             'tva_statut' => $request->tva_statut,
             'iduser' => $iduser,
         ]);
         for ($i = 0; $i < count($request->idproduit); $i++) {
             $pocedeId = '';
-            if (isset($request->produit_f_id[$i]) && !empty($request->produit_f_id[$i])) {
-                $pocedeId = $request->produit_f_id[$i];
+            if (isset($request->produit_f_id[$i]) && !empty($request->comporte_id[$i])) {
+                $pocedeId = $request->comporte_id[$i];
             }
-            Produit_Factures::updateOrCreate(['produit_f_id'=>$pocedeId],[
-                'idfacture' => $request->facture_id,
+            Comportes::updateOrCreate(['comporte_id'=>$pocedeId],[
+                'idcommande' => $request->commande_id,
                 'quantite' => $request->quantite[$i],
                 'prix' => $request->prix[$i],
                 'tva' => $request->tva[$i],
@@ -299,7 +310,7 @@ class CommandeController extends Controller
                 'chemin' => $originalFile,
                 'ref' => $request->ref_bon,
                 'date_piece' => $request->date_bon,
-                'idfacture' => $request->facture_id,
+                'idcommande' => $request->commande_id,
                 'iduser' => $iduser,
             ]);
         }
@@ -310,9 +321,9 @@ class CommandeController extends Controller
         return redirect()->back()->with('danger', "Désolé une erreur s'est produite. Veillez recommencer!");
     }
     public function delete(Request $request){
-        Produit_Factures::where('idfacture',$request->id)->delete();
-        Paiements::where('idfacture',$request->id)->delete();
-        $delete  = Factures::where('idfacture',$request->id)->delete();
+        Comportes::where('idcommande',$request->id)->delete();
+//        Paiements::where('idfacture',$request->id)->delete();
+        $delete  = Commandes::where('idfacture',$request->id)->delete();
         return Response()->json($delete);
     }
 
@@ -323,30 +334,30 @@ class CommandeController extends Controller
 
     public function validerCommande(Request $request)
     {
-        $statut = Factures::where('facture_id', $request->id)->update(['statut' => 1]);
+        $statut = Commandes::where('commande_id', $request->id)->update(['statut' => 1]);
         return Response()->json($statut);
     }
 
-    public function bloquerFactures(Request $request)
+    public function bloquerCommande(Request $request)
     {
-        $statut = Factures::where('facture_id', $request->id)->update(['statut' => 0]);
+        $statut = Commandes::where('commande_id', $request->id)->update(['statut' => 0]);
         return Response()->json($statut);
     }
 
     public function printCommandes($id)
     {
-        $data = Commandes::join('clients', 'clients.client_id', 'commandes.idfournisseur')
+        $data = Commandes::join('fournisseurs', 'fournisseurs.fournisseur_id', 'commandes.idfournisseur')
             ->join('users', 'users.id', 'commandes.iduser')
             ->where('commande_id', $id)
             ->get()
         ;
-        $date = new DateTime($data[0]->date_fact);
+        $date = new DateTime($data[0]->date_commande);
         $date = $date->format('m');
         $piece = Pieces::where('idcommande',$id)->get();
         $num_BC = isset($piece[0])?$piece[0]->ref:'';
         $mois = (new \App\Models\Month)->getFrenshMonth((int)$date);
         $categories = Categories::all();
-        $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $id)->get();
+        $pocedes = Comportes::join('produits', 'produits.produit_id', 'comportes.idproduit')->where('idcommande', $id)->get();
         $pdf = PDF::loadView('commande.print', compact('data', 'num_BC','mois','categories', 'pocedes'))->setPaper('a4', 'portrait')->setWarnings(false);
         return $pdf->stream($data[0]->reference_fact . '_' .date("d-m-Y H:i:s") . '.pdf');
     }

@@ -41,7 +41,7 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Refernce</th>
-                                    <th>Client</th>
+                                    <th>Fournisseur</th>
                                     <th>Objet</th>
                                     <th>Date</th>
                                     <th>Statut</th>
@@ -72,9 +72,9 @@
         function deleteFun(id) {
             var table = $('#example').DataTable();
             swal.fire({
-                title: "Supprimer ce devis?",
+                title: "Supprimer cette commande?",
                 icon: 'question',
-                text: "Ce devis sera supprimé de façon définitive.",
+                text: "Cette commande sera supprimé de façon définitive.",
                 type: "warning",
                 showCancelButton: !0,
                 confirmButtonText: "Oui, supprimer!",
@@ -90,7 +90,7 @@
                     });
                     $.ajax({
                         type: "POST",
-                        url: "{{ route('devis.delete') }}",
+                        url: "{{ route('comment.delete') }}",
                         data: {id: id},
                         dataType: 'json',
                         success: function (res) {
@@ -120,7 +120,7 @@
 
 
         // fonction qui charge les produits : les elements du tableau
-        function loadDevis() {
+        function loadCommande() {
             $('#example').dataTable().fnClearTable();
             $('#example').dataTable().fnDestroy();
             // $("#example").DataTable.destroy();
@@ -137,15 +137,15 @@
                     }
                 },
                 ajax:{
-                    url: "{{ route('devis.load') }}",
+                    url: "{{ route('commandes.load',['id'=>-1]) }}",
                 },
 
                 columns: [
                     {data: 'DT_RowIndex',name:'DT_RowIndex'},
-                    {data: 'reference_devis',name:'reference_devis'},
+                    {data: 'reference_commande',name:'reference_commande'},
                     {data: 'client',name:'client'},
-                    {data: 'objet',name:'objet'},
-                    {data: 'date_devis',name:'date_devis'},
+                    {data: 'delai_liv',name:'delai_liv'},
+                    {data: 'date_commande',name:'date_commande'},
                     {data: 'statut',name:'statut'},
                     {data: 'montantHT',name:'montantHT'},
                     {data: 'montantTTC',name:'montantTTC'},
@@ -159,15 +159,15 @@
         }
 
         $(document).ready(function () {
-            loadDevis()
+            loadCommande()
         });
 
         // cette fonction defini un devis comme valide
         function validerFun(id) {
             swal.fire({
-                title: "Valider ce devis?",
+                title: "Valider cette commande?",
                 icon: 'question',
-                text: "Il ne sera plus modifiable aprés validation.",
+                text: "Elle ne sera plus modifiable aprés validation.",
                 type: "warning",
                 showCancelButton: !0,
                 confirmButtonText: "Oui, valider!",
@@ -183,14 +183,14 @@
                     });
                     $.ajax({
                         type: "POST",
-                        url: "{{ route('devis.valider') }}",
+                        url: "{{ route('commandes.valider') }}",
                         data: {id: id},
                         dataType: 'json',
                         success: function (res) {
                             if (res) {
                                 swal.fire("Effectué!", "Validé avec succès!", "success")
                                 // toastr.success("Validé avec succès!");
-                                loadDevis();
+                                loadCommande();
 
                             } else {
                                 sweetAlert("Désolé!", "Erreur lors de la validation!", "error")
@@ -212,9 +212,9 @@
         // cette fonction defini un devis comme Non valider
         function bloquerFun(id) {
             swal.fire({
-                title: "Bloquer ce devis?",
+                title: "Bloquer cette commande?",
                 icon: 'question',
-                text: "Il ne sera pas possible de générer sa facture. Les autres pourrons editer.",
+                text: "Elle ne sera pas possible de générer sa facture. Les autres pourrons editer.",
                 type: "warning",
                 showCancelButton: !0,
                 confirmButtonText: "Oui, bloquer!",
@@ -230,7 +230,7 @@
                     });
                     $.ajax({
                         type: "POST",
-                        url: "{{ route('devis.bloquer') }}",
+                        url: "{{ route('commandes.bloquer') }}",
                         data: {id: id},
                         dataType: 'json',
                         success: function (res) {

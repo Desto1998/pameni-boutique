@@ -148,13 +148,19 @@ Route::prefix('dashboard')->group(function () {
 
             //Route for commandes
             Route::get('commandes/index',[CommandeController::class,'index'])->name('commandes.all');
+            Route::get('commandes/load/{id}',[CommandeController::class,'loadCommandes'])->name('commandes.load');
             Route::get('commandes/add',[CommandeController::class,'showAddForm'])->name('commandes.add');
             Route::post('commandes/store',[CommandeController::class,'store'])->name('commandes.store');
             Route::get('commandes/edit/{id}',[CommandeController::class,'showEditForm'])->name('commandes.edit');
             Route::post('commandes/edit/store',[CommandeController::class,'edit'])->name('commandes.edit.store');
             Route::post('commandes/delete',[CommandeController::class,'delete'])->name('commandes.delete');
+            Route::post('commandes/valider',[CommandeController::class,'validerCommande'])->name('commandes.valider');
+            Route::post('commandes/bloquer',[CommandeController::class,'bloquerCommande'])->name('commandes.bloquer');
             Route::get('commandes/details/{id}',[CommandeController::class,'view'])->name('commandes.view');
 
+            Route::get('commandes/print/{id}',[CommandeController::class,'printCommandes'])->name('commandes.print');
+
+            //Route pour les commentaires
             Route::post('factures/addcomment',[CommentsController::class,'addCommentFacture'])->name('factures.add.comment');
             Route::post('devis/addcomment',[CommentsController::class,'addCommentDevis'])->name('devis.add.comment');
             Route::post('commande/addcomment',[CommentsController::class,'addCommentCommande'])->name('commande.add.comment');

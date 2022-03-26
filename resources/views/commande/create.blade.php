@@ -5,6 +5,9 @@
         .hidden {
             display: none;
         }
+        .enterprisehide{
+            display: none;
+        }
     </style>
 @endsection
 @section('content')
@@ -12,13 +15,13 @@
         <div class="row page-titles mx-0">
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
-                    <h4>Créer une facture</h4>
+                    <h4>Créer une commande</h4>
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="javascript:void(0)">Dashboard</a></li>
-                    <li class="breadcrumb-item"><a href="javascript:void(0)">Factures</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:void(0)">Commande</a></li>
                     <li class="breadcrumb-item active"><a href="javascript:void(0)">Ajouter</a></li>
                 </ol>
             </div>
@@ -29,12 +32,12 @@
                     <div class="card-body">
                         <!-- Button trigger modal -->
                         {{--                        <h4 class="w-50">Ajouter un devis</h4>--}}
-                        <form action="{{ route('factures.store') }}" method="post" id="devis-form" enctype="multipart/form-data">
+                        <form action="{{ route('commandes.store') }}" method="post" id="devis-form" enctype="multipart/form-data">
                             @csrf
                             <div class="row">
                                 <div class="col-md-5 float-left d-flex">
                                     <div class="form-group col-md-6">
-                                        <label for="date">Date de la facture: </label>
+                                        <label for="date">Date de la commande: </label>
                                         <input type="date" name="date" id="date" class="form-control" required>
                                     </div>
                                     <div class="form-group col-md-6">
@@ -47,24 +50,29 @@
                                 </div>
                                 <div class="col-md-7 float-right d-flex" id="client-block">
                                     <div class="form-group col-md-6">
-                                        <label for="echeance">Client: </label>
+                                        <label for="echeance">Fournisseur:</label>
                                         <select name="idclient" id="single-select" class="form-control">
-                                            <option selected="selected" disabled>Sélectionez un client</option>
+                                            <option selected="selected" disabled>Sélectionez un fournisseur</option>
                                             @foreach($clients as $cl)
                                                 <option
-                                                    value="{{ $cl->client_id }}">{{ $cl->nom_client }} {{ $cl->prenom_client }}{{ $cl->raison_s_client }}</option>
+                                                    value="{{ $cl->fournisseur_id }}">{{ $cl->nom_fr }} {{ $cl->prenom_fr }}{{ $cl->raison_s_fr }}</option>
                                             @endforeach
                                         </select>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label class="text-center pl-3">Coordonnées du client</label>
+                                    <div class="form-group" id="client-block">
+                                        <label class="text-center pl-3">Coordonnées du fournisseur &nbsp;&nbsp;
+                                            <button type="button" class="btn btn-primary btn-sm float-right" data-toggle="modal"
+                                                    title="Ajouter un fournisseur"
+                                                    data-target="#fournisseursModal"><i class="fa fa-plus">&nbsp;</i>
+                                            </button>
+                                        </label>
                                         @foreach($clients as $cl)
-                                            <div class="hidden infos_client pl-3" id="infos_client{{ $cl->client_id }}">
+                                            <div class="hidden infos_client pl-3" id="infos_client{{ $cl->fournisseur_id }}">
                                                 <label
-                                                    class="h5 font-weight-bold mt-1">{{ $cl->nom_client }} {{ $cl->prenom_client }}{{ $cl->raison_s_client }}</label><br>
+                                                    class="h5 font-weight-bold mt-1">{{ $cl->nom_fr }} {{ $cl->prenom_fr }}{{ $cl->raison_s_fr }}</label><br>
                                                 <label
-                                                    class="h5 font-weight-bold mt-1">Tel: {{ $cl->phone_1_client }}  {{ $cl->phone_client }}</label><br>
+                                                    class="h5 font-weight-bold mt-1">Tel: {{ $cl->phone_1_fr }}  {{ $cl->phone_fr }}</label><br>
                                                 <label
                                                     class="h5 font-weight-bold mt-1">Bp: {{ $cl->postale }}</label><br>
                                                 {{--                                                <label class="h5 font-weight-bold mt-1"> {{ $cl->rcm }}</label><br>--}}
@@ -92,7 +100,7 @@
                                         <th>Qté</th>
                                         <th>P.U.HT.</th>
                                         <th>Remise</th>
-                                        <th>TVA</th>
+                                        {{--                                        <th>TVA</th>--}}
                                         <th>M. HT</th>
                                         <th>M. TTC</th>
                                         <th><i class="fa fa-trash"></i></th>
@@ -122,8 +130,8 @@
                                                    required></td>
                                         <td><input type="number" min="0" value="0" name="remise[]" onchange="calculeHT(0)" step="any" id="remise0"
                                                    class="form-control remise" required></td>
-                                        <td><input type="number" min="0" value="0" name="tva[]" step="any" id="tva0" onchange="calculeHT(0)"
-                                                   class="form-control tva" required></td>
+                                        {{--                                        <td><input type="number" min="0" value="0" name="tva[]" step="any" id="tva0" onchange="calculeHT(0)"--}}
+                                        {{--                                                   class="form-control tva" required></td>--}}
                                         <td><input type="number" min="0" readonly  name="totalHT[]" value="0" step="any" id="totalHT0"
                                                    class="form-control totalHT"></td>
                                         <td><input type="number" min="0" value="0" readonly name="totalTTC[]" step="any" id="totalTTC0"
@@ -138,32 +146,36 @@
                                 </table>
                             </div>
                             <div class="col-md-12 d-flex">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <button type="button" class="btn btn-sm btn-primary" id="add-row-produit"><i
                                             class="fa fa-plus"></i> Ajouter une ligne
                                     </button>
                                 </div>
 
-                                <div class="col-md-8 d-flex">
-                                    <div class="d-flex form-group col-md-6">
-                                        <label>Montant HT</label>
-                                        <input type="number" readonly name="ht" id="ht" class="form-control">
+                                <div class="col-md-9 d-flex">
+                                    <div class="d-flex form-group col-md-4">
+                                        <label class="text-center">Montant HT &nbsp;&nbsp;</label>
+                                        <input type="number" readonly name="ht" value="0" id="ht" class="form-control">
                                     </div>
-                                    <div class="d-flex form-group col-md-6">
-                                        <label>Montant TTC</label>
-                                        <input type="number" readonly name="ttc" id="ttc" class="form-control">
+                                    <div class="d-flex form-group col-md-4">
+                                        <label class="text-center">Montant TVA &nbsp;&nbsp;</label>
+                                        <input type="number" readonly name="mtva" id="mtva" value="0" class="form-control">
+                                    </div>
+                                    <div class="d-flex form-group col-md-4">
+                                        <label class="text-center">Montant TTC &nbsp;&nbsp;</label>
+                                        <input type="number" readonly name="ttc" id="ttc" value="0" class="form-control">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-12 row">
                                 <div class="col-md-6">
-                                    <label class="nav-label text-center">Informations du bon de commande</label>
+                                    <label class="nav-label text-center">Informations de la proformat</label>
                                     <div class="form-group">
-                                        <label for="ref_bon">Reference du bon de commande</label>
-                                        <input type="text" name="ref_bon" id="ref_bon" class="form-control" required>
+                                        <label for="ref_bon">Reference de la proformat</label>
+                                        <input type="text" name="ref_bon" id="ref_bon" class="form-control">
                                     </div>
                                     <div class="form-group">
-                                        <label>date du bon de commande</label>
+                                        <label>date de la proformat</label>
                                         <input type="date"  name="date_bon" id="ref_bon" class="form-control">
                                     </div>
                                     <div class="form-group">
@@ -203,6 +215,7 @@
         <input type="hidden" name="produit_categorie" value="{{ $p->idcategorie }}" id="data_p_categorie{{ $p->idcategorie }}">
 
     @endforeach
+    @include('fournisseur.modal')
 @endsection
 @section('script')
     <script>
@@ -246,11 +259,11 @@
                 row += '<td><input type="number" min="0" name="quantite[]" value="0" onchange="calculeHT('+totalProduit+')" id="quantite'+totalProduit+'" class="form-control quantite" required></td>' +
                     '<td><input type="number" min="0" name="prix[]" value="0" onchange="calculeHT('+totalProduit+')" id="prix'+totalProduit+'" class="form-control prix" required></td>' +
                     '<td><input type="number" min="0" name="remise[]" value="0" onchange="calculeHT('+totalProduit+')" id="remise'+totalProduit+'" step="any" class="form-control remise" required></td>' +
-                    '<td><input type="number" min="0"  name="tva[]" value="0" onchange="calculeHT('+totalProduit+')"  id="tva'+totalProduit+'" step="any" class="form-control tva" required></td>' +
                     '<td><input type="number" min="0" value="0"  readonly name="totalHT[]" id="totalHT'+totalProduit+'" step="any" class="form-control totalHT" ></td>' +
                     '<td><input type="number" min="0" value="0" readonly name="totalTTC[]" id="totalTTC'+totalProduit+'" step="any" class="form-control totalTTC" ></td>' +
                     '<td class="text-center"><button type="button" onclick="removeLigne(' + totalProduit + ')" class="btn btn-sm btn-danger"><i class="fa fa-trash-o"></i></button></td>' +
                     '</tr>';
+                //  '<td><input type="number" min="0"  name="tva[]" value="0" onchange="calculeHT('+totalProduit+')"  id="tva'+totalProduit+'" step="any" class="form-control tva" required></td>' +
                 $('#table-produit tbody').append(row);
 
                 $('#' + selectid).select2();
@@ -296,10 +309,12 @@
                     qte = $('#prix'+number).val()
                 }
 
-                if ($('#tva'+number).val()!=''){
-                    tva = $('#tva'+number).val()
+                // if ($('#tva'+number).val()!=''){
+                //     tva = $('#tva'+number).val()
+                // }
+                if ($('select[name="tva_statut"]').val()==1){
+                    tva = 19.25;
                 }
-
                 var montant = (qte*prix) - (qte*prix*remise)/100 ;
 
                 var ttc = (montant * tva )/100 + montant;
@@ -312,19 +327,28 @@
         }
 
 
+        $('select[name="tva_statut"]').on('change',function (e){
+            if ($('select[name="tva_statut"]').val()==1){
+                total();
+            }
+        });
         // fonction qui calcule les totaux HT et TTC
         function total(){
             var totalht = 0;
             var totalttc = 0;
+            var tva = 0;
             $('input[name="totalHT[]"]').each(function (){
                 totalht += Number($(this).val());
             });
             $('input[name="totalTTC[]"]').each(function (){
                 totalttc +=Number( $(this).val());
             });
-            // $('input[name="prix[]"]').each(function (){
-            //    prix += $(this).val();
-            // });
+            if ($('select[name="tva_statut"]').val()==1){
+                tva = 19.25;
+            }
+            var mtva = (totalht * tva )/100;
+            mtva = Number(mtva).toFixed(2)
+            $('#mtva').val(mtva);
             $('#ht').val(Number(totalht).toFixed(2));
             $('#ttc').val(Number(totalttc).toFixed(2));
         }
@@ -345,6 +369,82 @@
         $('#edit-btn').click(function (e){
             $('.form-control').removeAttr('disabled');
             $('.btn-primary').removeAttr('disabled');
+        });
+
+        // function d'ajout du client
+
+        function filterFormInput(){
+            var type = $('#type_client').val();
+            if (type==1){
+                $('.enterprisehide').show(200)
+                $('.clienthide').hide(200)
+                $('#nom_client').prop('required',false)
+                $('#raison_s_client').prop('required',true)
+                $('#raison_s_client').attr('disabled',false)
+                $('#nom_client').attr('disabled',true)
+                $('#rcm').prop('required',true)
+                $('#rcm').attr('disabled',false)
+                $('#contribuabe').attr('disabled',false)
+            }else {
+                $('#raison_s_client').prop('required',false)
+                $('#raison_s_client').attr('disabled',true)
+                $('.enterprisehide').hide(200)
+                $('.clienthide').show(200)
+                $('#nom_client').prop('required',true)
+                $('#nom_client').attr('disabled',false)
+                $('#rcm').attr('disabled',true)
+                $('#contribuabe').attr('disabled',true)
+            }
+
+        }
+
+        $("#fournisseur-form").on("submit", function (event) {
+            event.preventDefault();
+
+            $('#fournisseur-form .btn-primary').attr("disabled", true).html("En cours...")
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            var data = $('#fournisseur-form').serialize()
+
+            $.ajax({
+                type: "POST",
+                url: "{{ route('fournisseur.store') }}",
+                data: data,
+                dataType: 'json',
+                success: function (res) {
+                    console.log(res);
+                    if (res) {
+
+                        toastr.success("Enregistré avec succès!");
+                        var option =' <option selected value="'+res.fournisseur_id+'">'+ res.nom_fr +' ' + res.prenom_fr +' '+ res.raison_s_fr +'</option>'
+                        $('#single-select').append(option).select2();
+                        // $('#single-select').select2();
+                        var data = '<div class="hidden infos_client pl-3" id="infos_client'+res.client_id+'">';
+                        data += '<label class="h5 font-weight-bold mt-1">'+ res.nom_fr +' ' + res.prenom_fr +' '+ res.raison_s_fr +'</label><br>'
+                        data += '<label class="h5 font-weight-bold mt-1">Tel: '+ res.phone_1_fr +  ' / ' + res.phone_2_fr +'</label><br>'
+                        data += '  <label class="h5 font-weight-bold mt-1">Bp:'+ res.postale +'</label><br>'
+                        data += '</div>';
+                        $('#client-block').append(data);
+                        $('#infos_client'+res.fournisseur_id).show(100);
+                        // on reinitialise le formulaire
+                        $('#fournisseur-form .btn-primary').attr("disabled", false).html("Enregistrer")
+                        $('#fournisseur-form')[0].reset()
+                        $('#fournisseursModal').modal('hide');
+
+                    } else {
+                        sweetAlert("Désolé!", "Erreur lors de l'enregistrement!", "error")
+                        $('#fournisseur-form .btn-primary').attr("disabled", false).html("Enregistrer")
+                    }
+
+                },
+                error: function (resp) {
+                    sweetAlert("Désolé!", "Une erreur s'est produite.", "error");
+                    $('#fournisseur-form .btn-primary').attr("disabled", false).html("Enregistrer")
+                }
+            });
         });
     </script>
 
