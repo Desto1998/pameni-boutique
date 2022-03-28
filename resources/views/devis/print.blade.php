@@ -343,13 +343,13 @@
         <td>
             <div>
                 <label class="titre">Garentie</label><br>
-                <label>{{ $data[0]->garentie }}</label>
+                <label>{{ $data[0]->garentie }} mois</label>
             </div>
         </td>
         <td>
             <div>
                 <label class="titre">Conditions financières</label><br>
-                <label>{{ $data[0]->condition }} semaines</label>
+                <label>{{ $data[0]->condition }}</label>
             </div>
         </td>
     </tr>

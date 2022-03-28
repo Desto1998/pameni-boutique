@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('title','| FACTURE-DETAILS')
 @section('css_before')
     <link href="{{asset('template/vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">
     <link href="{{asset('template/vendor/sweetalert2/dist/sweetalert2.min.css')}}" rel="stylesheet">
@@ -8,7 +9,7 @@
             color: white!important;
         }
     </style>
-@endsection
+@stop
 @section('content')
     <div class="container-fluid">
         <div class="row page-titles mx-0">
@@ -69,7 +70,7 @@
         </div>
     </div>
     @include('facture.modal')
-@endsection
+@stop
 @section('script')
     <script>
         // delete funtion
@@ -433,4 +434,4 @@
     <script src="{{asset('template/vendor/select2/js/select2.full.min.js')}}"></script>
     <script src="{{asset('template/js/plugins-init/select2-init.js')}}"></script>
 
-@endsection
+@stop

@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('title','| DEVIS-CREER')
 @section('css_before')
     <link rel="stylesheet" href="{{asset('template/vendor/select2/css/select2.min.css')}}">
     <style>
@@ -100,17 +101,17 @@
                                         <th>Désignation</th>
                                         <th>Qté</th>
                                         <th>P.U.HT.</th>
-                                        <th>Remise</th>
+                                        <th>Remise(%)</th>
 {{--                                        <th>TVA</th>--}}
-                                        <th>M. HT</th>
-                                        <th>M. TTC</th>
+                                        <th>M. HT(FCFA)</th>
+{{--                                        <th>M. TTC</th>--}}
                                         <th><i class="fa fa-trash"></i></th>
                                     </tr>
 
                                     </thead>
                                     <tbody style="color: #000000!important;">
                                     <tr class="text-black  produit-input font-weight-bold" id="product-row0">
-                                        <td style="width: 250px;">
+                                        <td style="width: 270px;">
                                             <select name="idproduit[]" class="dropdown-groups form-control" id="select-pro0" onchange="setPrix(0)" style="color: #000000">
                                                 <option selected="selected" disabled>Sélectionez un produit</option>
                                                 @foreach($categories as $cat)
@@ -135,8 +136,8 @@
 {{--                                                   class="form-control tva" required></td>--}}
                                         <td><input type="number" min="0" readonly  name="totalHT[]" value="0" step="any" id="totalHT0"
                                                    class="form-control totalHT"></td>
-                                        <td><input type="number" min="0" value="0" readonly name="totalTTC[]" step="any" id="totalTTC0"
-                                                   class="form-control totalTTC"></td>
+{{--                                        <td><input type="number" min="0" value="0" readonly name="totalTTC[]" step="any" id="totalTTC0"--}}
+{{--                                                   class="form-control totalTTC"></td>--}}
                                         <td class="text-center">
                                             <button type="button" onclick="removeLigne(0)"
                                                     class="btn btn-sm btn-danger"><i class="fa fa-trash-o"></i></button>
@@ -177,18 +178,26 @@
                                 </div>
                                 <div class="col-md-3 form-group">
                                     <label for="disponibilite">Disponibilité<span class="text-danger"> *</span></label>
-                                    <input type="text" id="disponibilite" required min="0" name="disponibilite"
-                                           class="form-control">
+                                    <select class="form-control" name="disponibilite" id="disponibilite">
+                                        <option>En stock</option>
+                                        <option>Non disponible en stock</option>
+                                    </select>
+{{--                                    <input type="text" id="disponibilite" required min="0" name="disponibilite"--}}
+{{--                                           class="form-control">--}}
                                 </div>
                                 <div class="col-md-3 form-group">
-                                    <label>Garentie<span class="text-danger"> *</span></label>
-                                    <input type="text" min="0" name="garentie" class="form-control">
+                                    <label>Garentie(en mois)<span class="text-danger"> *</span></label>
+                                    <input type="number" min="0" name="garentie" class="form-control">
                                 </div>
                                 <div class="col-md-3 form-group">
                                     <label for="condition">Conditions financières<span
                                             class="text-danger"> *</span></label>
-                                    <input type="text" id="condition" required min="0" name="condition"
-                                           class="form-control">
+                                    <select class="form-control" name="condition" v>
+                                        <option>100% à la commande</option>
+                                        <option>50% à la commande</option>
+                                    </select>
+{{--                                    <input type="text" id="condition" required min="0" name="condition"--}}
+{{--                                           class="form-control">--}}
                                 </div>
                             </div>
                             <hr class="mt-2">
@@ -201,17 +210,17 @@
                                         <th>Désignation</th>
                                         <th>Qté</th>
                                         <th>P.U.HT.</th>
-                                        <th>Remise</th>
+                                        <th>Remise(%)</th>
 {{--                                        <th>TVA</th>--}}
-                                        <th>M. HT</th>
-                                        <th>M. TTC</th>
+                                        <th>M. HT(FCFA)</th>
+{{--                                        <th>M. TTC</th>--}}
                                         <th><i class="fa fa-trash"></i></th>
                                     </tr>
 
                                     </thead>
                                     <tbody style="color: #000000!important;">
                                     <tr class="text-black  produit-input font-weight-bold" id="complement-row0">
-                                        <td style="width: 250px;">
+                                        <td style="width: 270px;">
                                             <select name="idproduit_com[]" class="dropdown-groups form-control" id="select-com0" onchange="setComPrix(0)" style="color: #000000">
                                                 <option selected="selected" disabled>Sélectionez un produit</option>
                                                 @foreach($categories as $cat)
@@ -236,8 +245,8 @@
 {{--                                                   class="form-control tva_com"></td>--}}
                                         <td><input type="number" min="0" readonly  name="total_comHT[]" value="0" step="any" id="total_comHT0"
                                                    class="form-control total_comHT"></td>
-                                        <td><input type="number" min="0" value="0" readonly name="total_comTTC[]" step="any" id="total_comTTC0"
-                                                   class="form-control total_comTTC"></td>
+{{--                                        <td><input type="number" min="0" value="0" readonly name="total_comTTC[]" step="any" id="total_comTTC0"--}}
+{{--                                                   class="form-control total_comTTC"></td>--}}
                                         <td class="text-center">
                                             <button type="button" onclick="removeComLigne(0)"
                                                     class="btn btn-sm btn-danger"><i class="fa fa-trash-o"></i></button>
@@ -316,7 +325,7 @@
                 // $('.dropdown-groups').val(null).trigger('change');
                 var selectid = 'select-pro' + totalProduit;
                 var row = '<tr class="text-black  produit-input font-weight-bold" id="' + id + '">' +
-                    '<td style="width: 250px;">' +
+                    '<td style="width: 270px;">' +
                     '<select onchange="setPrix('+totalProduit+')" class="dropdown-groups form-control" id="' + selectid + '" style="color: #000000" name="idproduit[]">'+
                     '<option selected="selected" disabled>Sélectionez un produit</option>';
                 row += '@foreach($categories as $cat)' +
@@ -334,11 +343,10 @@
                     '<td><input type="number" min="0" name="prix[]" value="0" onchange="calculeHT('+totalProduit+')" id="prix'+totalProduit+'" class="form-control prix" required></td>' +
                     '<td><input type="number" min="0" name="remise[]" value="0" onchange="calculeHT('+totalProduit+')" id="remise'+totalProduit+'" step="any" class="form-control remise" required></td>' +
                     '<td><input type="number" min="0" value="0"  readonly name="totalHT[]" id="totalHT'+totalProduit+'" step="any" class="form-control totalHT" ></td>' +
-                    '<td><input type="number" min="0" value="0" readonly name="totalTTC[]" id="totalTTC'+totalProduit+'" step="any" class="form-control totalTTC" ></td>' +
                     '<td class="text-center"><button type="button" onclick="removeLigne(' + totalProduit + ')" class="btn btn-sm btn-danger"><i class="fa fa-trash-o"></i></button></td>' +
                     '</tr>';
                 // '<td><input type="number" min="0"  name="tva[]" value="0" onchange="calculeHT('+totalProduit+')"  id="tva'+totalProduit+'" step="any" class="form-control tva" required></td>' +
-
+                // '<td><input type="number" min="0" value="0" readonly name="totalTTC[]" id="totalTTC'+totalProduit+'" step="any" class="form-control totalTTC" ></td>' +
                 $('#table-produit tbody').append(row);
 
                 $('#' + selectid).select2();
@@ -396,7 +404,7 @@
                 ttc = Number(ttc).toFixed(2) ;
                 montant =Number(montant).toFixed(2)
                 $('#totalHT'+number).val(montant);
-                $('#totalTTC'+number).val(ttc);
+                // $('#totalTTC'+number).val(ttc);
                 total();
             }
         }
@@ -414,9 +422,9 @@
                 $('input[name="totalHT[]"]').each(function (){
                    totalht += Number($(this).val());
                 });
-                $('input[name="totalTTC[]"]').each(function (){
-                   totalttc +=Number( $(this).val());
-                });
+                // $('input[name="totalTTC[]"]').each(function (){
+                //    totalttc +=Number( $(this).val());
+                // });
             if ($('select[name="tva_statut"]').val()==1){
                 tva = 19.25;
             }
@@ -424,7 +432,7 @@
             mtva = Number(mtva).toFixed(2)
             $('#mtva').val(mtva);
             $('#ht').val(Number(totalht).toFixed(2));
-            $('#ttc').val(Number(totalttc).toFixed(2));
+            $('#ttc').val(Number(totalht+mtva).toFixed(2));
         }
 
 
@@ -440,7 +448,7 @@
             // $('.dropdown-groups').val(null).trigger('change');
             var selectid = 'select-com' + totalComplement;
             var row = '<tr class="text-black  complement-input font-weight-bold" id="' + id + '">' +
-                '<td style="width: 250px;">' +
+                '<td style="width: 270px;">' +
                 '<select onchange="setComPrix('+totalComplement+')" class="dropdown-groups form-control" id="' + selectid + '" style="color: #000000" name="idproduit_com[]">'+
                 '<option selected="selected" disabled>Sélectionez un produit</option>';
             row += '@foreach($categories as $cat)' +
@@ -458,9 +466,9 @@
                 '<td><input type="number" min="0" name="prix_com[]" value="0" onchange="calculeComHT('+totalComplement+')" id="prix_com'+totalComplement+'" class="form-control prix_com" required></td>' +
                 '<td><input type="number" min="0" name="remise_com[]" value="0" onchange="calculeComHT('+totalComplement+')" id="remise_com'+totalComplement+'" step="any" class="form-control remise_com" required></td>' +
                 '<td><input type="number" min="0" value="0"  readonly name="total_comHT[]" id="total_comHT'+totalComplement+'" step="any" class="form-control total_comHT" ></td>' +
-                '<td><input type="number" min="0" value="0" readonly name="total_comTTC[]" id="total_comTTC'+totalComplement+'" step="any" class="form-control total_comTTC" ></td>' +
                 '<td class="text-center"><button type="button" onclick="removeComLigne(' + totalComplement + ')" class="btn btn-sm btn-danger"><i class="fa fa-trash-o"></i></button></td>' +
                 '</tr>';
+            // '<td><input type="number" min="0" value="0" readonly name="total_comTTC[]" id="total_comTTC'+totalComplement+'" step="any" class="form-control total_comTTC" ></td>' +
             // '<td><input type="number" min="0"  name="tva_com[]" value="0" onchange="calculeComHT('+totalComplement+')"  id="tva_com'+totalComplement+'" step="any" class="form-control tva_com" required></td>' +
             $('#table-complement tbody').append(row);
 
@@ -511,7 +519,7 @@
                 ttc = Number(ttc).toFixed(2) ;
                 montant =Number(montant).toFixed(2)
                 $('#total_comHT'+number).val(montant);
-                $('#total_comTTC'+number).val(ttc);
+                // $('#total_comTTC'+number).val(ttc);
                 total();
             }
         }

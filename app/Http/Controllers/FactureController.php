@@ -316,6 +316,7 @@ class FactureController extends Controller
             'idclient' => $request->idclient,
             'tva_statut' => $request->tva_statut,
             'iduser' => $iduser,
+            'iddevis' => 0,
         ]);
         for ($i = 0; $i < count($request->idproduit); $i++) {
             $pocedeId = '';

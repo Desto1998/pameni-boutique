@@ -1,10 +1,11 @@
 @extends('layouts.app')
+@section('title','| TACHES')
 @section('css_before')
     <link href="{{asset('template/vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">
     <link href="{{asset('template/vendor/sweetalert2/dist/sweetalert2.min.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('template/vendor/select2/css/select2.min.css')}}">
 
-@endsection
+@stop
 @section('content')
     <div class="container-fluid">
         <div class="row page-titles mx-0">

@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>GSC-APP @yield('title')</title>
     @yield('css_before')
     <link rel="icon" type="image/png" sizes="16x16" href="{{asset('images/logo/logo_gssc.png')}}">
     <!-- Datatable css -->

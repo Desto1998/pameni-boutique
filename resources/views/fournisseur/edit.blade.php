@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('title','| FOURNISSEUR-EDIT')
 @section('css_before')
     <link rel="stylesheet" href="{{asset('template/vendor/select2/css/select2.min.css')}}">
     <style>
@@ -6,7 +7,7 @@
             display: none;
         }
     </style>
-@endsection
+@stop
 @section('content')
     <div class="container-fluid">
         <div class="row page-titles mx-0">
@@ -127,7 +128,7 @@
     </div>
 
 
-@endsection
+@stop
 @section('script')
     <script>
         $(document).ready(function(){
@@ -189,4 +190,4 @@
     <script src="{{asset('template/vendor/select2/js/select2.full.min.js')}}"></script>
     <script src="{{asset('template/js/plugins-init/select2-init.js')}}"></script>
 
-@endsection
+@stop

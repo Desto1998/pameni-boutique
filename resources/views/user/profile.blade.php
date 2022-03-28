@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title','| PROFILE')
 @section('content')
     <div class="container-fluid">
         <div class="row page-titles mx-0">
@@ -254,7 +254,7 @@
 
     </div>
 
-@endsection
+@stop
 @section('script')
 
     <script>

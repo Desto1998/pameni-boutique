@@ -1,5 +1,8 @@
-<span class="float-left h4">Liste des commandes</span>
+
 <div class="table-responsive">
+    <div class="col-md-12 text-center my-2">
+        <span class="h4 text-center">Liste des commandes</span>
+    </div>
     <table id="commande-table" class="display text-center w-100">
         <thead class="bg-primary">
         <tr>

@@ -1,7 +1,8 @@
 @extends('layouts.app')
+@section('title','| USER-ADD')
 @section('css_before')
 
-@endsection
+@stop
 @section('content')
     <div class="container-fluid">
         <div class="row page-titles mx-0">

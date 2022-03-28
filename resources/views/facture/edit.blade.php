@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('title','| FACTURES-EDIT')
 @section('css_before')
     <link rel="stylesheet" href="{{asset('template/vendor/select2/css/select2.min.css')}}">
     <style>
@@ -6,7 +7,7 @@
             display: none;
         }
     </style>
-@endsection
+@stop
 @section('content')
     <div class="container-fluid">
         <div class="row page-titles mx-0">
@@ -87,10 +88,10 @@
                                         <th>Désignation</th>
                                         <th>Qté</th>
                                         <th>P.U.HT.</th>
-                                        <th>Remise</th>
-                                        <th>TVA</th>
-                                        <th>M. HT</th>
-                                        <th>M. TTC</th>
+                                        <th>Remise(%)</th>
+{{--                                        <th>TVA</th>--}}
+                                        <th>M. HT(FCFA)</th>
+{{--                                        <th>M. TTC</th>--}}
                                         <th><i class="fa fa-trash"></i></th>
                                     </tr>
 
@@ -117,7 +118,7 @@
                                         <tr class="text-black  produit-input font-weight-bold"
                                             id="product-row{{ -$item->produit_f_id }}">
 
-                                            <td style="width: 250px;">
+                                            <td style="width: 270px;">
                                                 <input type="hidden" name="produit_f_id[]" value="{{ $item->produit_f_id }}">
                                                 <select name="idproduit[]" class="dropdown-groups form-control"
                                                         id="select-pro{{ -$item->produit_f_id }}"
@@ -157,9 +158,9 @@
                                             <td><input type="number" min="0" readonly name="totalHT[]" value="{{ $HT }}"
                                                        step="any" id="totalHT{{ -$item->produit_f_id }}"
                                                        class="form-control totalHT"></td>
-                                            <td><input type="number" min="0" value="{{ $TTC }}" readonly
-                                                       name="totalTTC[]" step="any" id="totalTTC{{ -$item->produit_f_id }}"
-                                                       class="form-control totalTTC"></td>
+{{--                                            <td><input type="number" min="0" value="{{ $TTC }}" readonly--}}
+{{--                                                       name="totalTTC[]" step="any" id="totalTTC{{ -$item->produit_f_id }}"--}}
+{{--                                                       class="form-control totalTTC"></td>--}}
 
                                             <td class="text-center">
                                                 <button type="button" onclick="removeProduit({{ $item->produit_f_id }})"
@@ -243,7 +244,7 @@
         <input type="hidden" name="produit_categorie" value="{{ $p->idcategorie }}" id="data_p_categorie{{ $p->idcategorie }}">
 
     @endforeach
-@endsection
+@stop
 @section('script')
     <script>
         //  variabes qui comptes les entrees
@@ -300,9 +301,9 @@
                     '<td><input type="number" min="0" name="prix[]" value="0" onchange="calculeHT('+totalProduit+')" id="prix'+totalProduit+'" class="form-control prix" required></td>' +
                     '<td><input type="number" min="0" name="remise[]" value="0" onchange="calculeHT('+totalProduit+')" id="remise'+totalProduit+'" step="any" class="form-control remise" required></td>' +
                     '<td><input type="number" min="0" value="0"  readonly name="totalHT[]" id="totalHT'+totalProduit+'" step="any" class="form-control totalHT" ></td>' +
-                    '<td><input type="number" min="0" value="0" readonly name="totalTTC[]" id="totalTTC'+totalProduit+'" step="any" class="form-control totalTTC" ></td>' +
                     '<td class="text-center"><button type="button" onclick="removeLigne(' + totalProduit + ')" class="btn btn-sm btn-danger"><i class="fa fa-trash-o"></i></button></td>' +
                     '</tr>';
+                // '<td><input type="number" min="0" value="0" readonly name="totalTTC[]" id="totalTTC'+totalProduit+'" step="any" class="form-control totalTTC" ></td>' +
                 // '<td><input type="number" min="0"  name="tva[]" value="0" onchange="calculeHT('+totalProduit+')"  id="tva'+totalProduit+'" step="any" class="form-control tva" required></td>' +
                 $('#table-produit tbody').append(row);
 
@@ -361,7 +362,7 @@
                 ttc = Number(ttc).toFixed(2) ;
                 montant =Number(montant).toFixed(2)
                 $('#totalHT'+number).val(montant);
-                $('#totalTTC'+number).val(ttc);
+                // $('#totalTTC'+number).val(ttc);
                 total();
             }
         }
@@ -381,9 +382,9 @@
             $('input[name="totalHT[]"]').each(function (){
                 totalht += Number($(this).val());
             });
-            $('input[name="totalTTC[]"]').each(function (){
-                totalttc +=Number( $(this).val());
-            });
+            // $('input[name="totalTTC[]"]').each(function (){
+            //     totalttc +=Number( $(this).val());
+            // });
             if ($('select[name="tva_statut"]').val()==1){
                 tva = 19.25;
             }
@@ -391,7 +392,7 @@
             mtva = Number(mtva).toFixed(2)
             $('#mtva').val(mtva);
             $('#ht').val(Number(totalht).toFixed(2));
-            $('#ttc').val(Number(totalttc).toFixed(2));
+            $('#ttc').val(Number(totalht+mtva).toFixed(2));
         }
 
         // traitement de l'image
@@ -473,4 +474,4 @@
     <script src="{{asset('template/vendor/select2/js/select2.full.min.js')}}"></script>
     <script src="{{asset('template/js/plugins-init/select2-init.js')}}"></script>
 
-@endsection
+@stop

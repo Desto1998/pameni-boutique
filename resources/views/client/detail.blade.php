@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('title','| CLIENTS-DETAILS')
 @section('css_before')
     <link href="{{asset('template/vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">
     <link href="{{asset('template/vendor/sweetalert2/dist/sweetalert2.min.css')}}" rel="stylesheet">
@@ -8,7 +9,7 @@
             color: white!important;
         }
     </style>
-@endsection
+@stop
 @section('content')
     <div class="container-fluid">
         <div class="row page-titles mx-0">
@@ -49,60 +50,68 @@
                                 <div class="tab-pane fade fade show active" id="infos">
 
                                     <div class="pt-4">
-                                        <table class="table text-black-50 table-bordered table-hover">
-                                            <tr>
-                                                <td>
-                                                    @if ($data[0]->type_client==0)
-                                                        Nom
-                                                    @else
-                                                        Raison sociale
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    {{ $data[0]->nom_client.' '.$data[0]->prenom_client.' '.$data[0]->raison_s_client }}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Tel</td>
-                                                <td>{{ $data[0]->phone_1_client }}/{{ $data[0]->phone_2_client }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Pays</td>
-                                                <td>{{ $data[0]->nom_pays }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Ville</td>
-                                                <td>{{ $data[0]->ville_client }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Adresse</td>
-                                                <td>{{ $data[0]->adresse_client }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Boite postale</td>
-                                                <td>{{ $data[0]->postale }}</td>
-                                            </tr>
-                                            @if ($data[0]->type_client==1)
+                                        <div class="col-md-12 mb-5">
+                                            <label class="float-left h4">Informations du client</label>
+                                            <a href="{{ route('client.edit',['id'=>$data[0]->client_id]) }}" class="btn btn-sm btn-whatsapp float-right" title="Editer le client">
+                                                <i class="fa fa-edit"></i>
+                                            </a>
+                                        </div>
+                                        <div class="table-responsive-sm table-responsive-md">
+                                            <table class="table text-black fs-4 font-weight-bold table-bordered table-hover">
                                                 <tr>
-                                                    <td>Contribuable</td>
-                                                    <td>{{ $data[0]->contribuable }}</td>
+                                                    <td>
+                                                        @if ($data[0]->type_client==0)
+                                                            Nom
+                                                        @else
+                                                            Raison sociale
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        {{ $data[0]->nom_client.' '.$data[0]->prenom_client.' '.$data[0]->raison_s_client }}
+                                                    </td>
                                                 </tr>
                                                 <tr>
-                                                    <td>RCM</td>
-                                                    <td>{{ $data[0]->rcm }}</td>
+                                                    <td>Tel</td>
+                                                    <td>{{ $data[0]->phone_1_client }}/{{ $data[0]->phone_2_client }}</td>
                                                 </tr>
-                                            @endif
-                                            <tr>
-                                                <td>Date creation</td>
-                                                <td>{{ $data[0]->date_ajout }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Cree par</td>
-                                                <td>
-                                                    {{ $data[0]->firstname }} {{ $data[0]->lastname }}
-                                                </td>
-                                            </tr>
-                                        </table>
+                                                <tr>
+                                                    <td>Pays</td>
+                                                    <td>{{ $data[0]->nom_pays }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Ville</td>
+                                                    <td>{{ $data[0]->ville_client }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Adresse</td>
+                                                    <td>{{ $data[0]->adresse_client }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Boite postale</td>
+                                                    <td>{{ $data[0]->postale }}</td>
+                                                </tr>
+                                                @if ($data[0]->type_client==1)
+                                                    <tr>
+                                                        <td>Contribuable</td>
+                                                        <td>{{ $data[0]->contribuable }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>RCM</td>
+                                                        <td>{{ $data[0]->rcm }}</td>
+                                                    </tr>
+                                                @endif
+                                                <tr>
+                                                    <td>Date creation</td>
+                                                    <td>{{ $data[0]->date_ajout }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Cree par</td>
+                                                    <td>
+                                                        {{ $data[0]->firstname }} {{ $data[0]->lastname }}
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="detail" role="tabpanel">
@@ -123,7 +132,7 @@
         </div>
     </div>
     @include('facture.modal')
-@endsection
+@stop
 @section('script')
     <script>
         // delete funtion
@@ -430,4 +439,4 @@
     <script src="{{asset('template/vendor/select2/js/select2.full.min.js')}}"></script>
     <script src="{{asset('template/js/plugins-init/select2-init.js')}}"></script>
 
-@endsection
+@stop

@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title','| HOME')
 @section('content')
     <div class="container-fluid">
         <div class="row page-titles mx-0">
@@ -150,57 +150,60 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-6 col-sm-12">
+                            <div class="col-lg-8 col-sm-12">
                                 <div class="card">
                                     <div class="stat-widget-two card-body">
                                         <div class="stat-content">
-                                            <div class="stat-text">Dernières activités</div>
+                                            <div class="stat-text h3">Dernières activités</div>
                                             <div class="">
                                                 @if (count($lastactivity)>0)
-                                                    <label class="my-2">Devis</label>
+                                                    <label class="my-2 h4">Devis</label>
                                                 @endif
 
                                                 @foreach($lastactivity as $key=>$value)
                                                     <a href="{{ route('devis.view',['id'=>$value->devis_id]) }}"
                                                        class="row">
                                                         <ul class="d-flex row col-md-12">
-                                                            <li class="col-md-3">{{ $value->objet }}</li>
-                                                            <li class="col-md-3">{{ $value->reference_devis }}</li>
-                                                            <li class="col-md-3">{{ $value->date_devis }}</li>
+                                                            <li class="col-md-5">{{ $value->objet }}</li>
+                                                            <li class="col-md-2">{{ $value->reference_devis }}</li>
+                                                            <li class="col-md-2">{{ $value->date_devis }}</li>
                                                             <li class="col-md-3">{{ $value->lastname }}  {{ $value->lastname }}</li>
                                                         </ul>
                                                     </a>
                                                 @endforeach
                                                 @if (count($lastactivity1)>0)
-                                                    <label class="my-2">Facture</label>
+                                                    <label class="my-2 h4">Facture</label>
                                                 @endif
 
                                                 @foreach($lastactivity1 as $key=>$value)
                                                     <a href="{{ route('factures.view',['id'=>$value->facture_id]) }}"
                                                        class="row">
                                                         <ul class="d-flex row col-md-12">
-                                                            <li class="col-md-3">{{ $value->objet }}</li>
-                                                            <li class="col-md-3">{{ $value->reference_fact }}</li>
-                                                            <li class="col-md-3">{{ $value->date_fact }}</li>
+                                                            <li class="col-md-5">{{ $value->objet }}</li>
+                                                            <li class="col-md-2">{{ $value->reference_fact }}</li>
+                                                            <li class="col-md-2">{{ $value->date_fact }}</li>
                                                             <li class="col-md-3">{{ $value->lastname }}  {{ $value->lastname }}</li>
                                                         </ul>
                                                     </a>
                                                 @endforeach
                                                     @if (count($lastactivity2)>0)
-                                                        <label class="my-2">Commandes</label>
+                                                        <label class="my-2 h4">Commandes</label>
                                                     @endif
 
                                                 @foreach($lastactivity2 as $key=>$value)
                                                     <a href="{{ route('commandes.view',['id'=>$value->commande_id]) }}"
                                                        class="row">
                                                         <ul class="d-flex row col-md-12">
-                                                            <li class="col-md-3">{{ $value->observation }}</li>
-                                                            <li class="col-md-3">{{ $value->reference_commande }}</li>
-                                                            <li class="col-md-3">{{ $value->date_commande }}</li>
+                                                            <li class="col-md-5">{{ $value->observation }}</li>
+                                                            <li class="col-md-2">{{ $value->reference_commande }}</li>
+                                                            <li class="col-md-2">{{ $value->date_commande }}</li>
                                                             <li class="col-md-3">{{ $value->lastname }}  {{ $value->lastname }}</li>
                                                         </ul>
                                                     </a>
                                                 @endforeach
+                                                    @if (count($lastactivity2)===0 && count($lastactivity1)===0 && count($lastactivity)===0)
+                                                       <h4 class="text-danger text-center my-4">Aucune activité pendant les dernière 24h</h4>
+                                                    @endif
                                             </div>
                                         </div>
 
@@ -216,4 +219,4 @@
 
     </div>
 
-@endsection
+@stop
