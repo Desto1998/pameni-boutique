@@ -132,7 +132,7 @@ class CommandeController extends Controller
     {
         $request->validate([
             'date' => ['required'],
-            'objet' => ['required', 'min:5'],
+            'mode' => ['required', 'min:5'],
             'quantite' => ['required'],
             'prix' => ['required'],
             'ref_bon' => ['required'],
@@ -151,7 +151,7 @@ class CommandeController extends Controller
 //        $date = date("Y-m-d", strtotime($date->format('Y-m-d')));
 
         /** @var 'on' genere la  $reference */
-        $reference = 'F' . date('Y');
+        $reference = 'BC' . date('Y');
         if (count($lastNum) > 0) {
             $lastNum = $lastNum[0]->reference_commande;
             $actual = 0;
@@ -172,16 +172,17 @@ class CommandeController extends Controller
 //        dd($reference);
         $save = Commandes::create([
             'reference_commande' => $reference,
+            'date_commande' => $request->date,
+            'statut' => 0,
+            'idfournisseur' => $request->idfournisseur,
             'disponibilite' => $request->disponibilite,
-            'service' => $request->service,
+           // 'service' => $request->service,
             'condition_paiement' => $request->condition,
             'mode_paiement' => $request->mode,
-            'direction' => $request->mode,
+           // 'direction' => $request->mode,
             'delai_liv' => $request->delai,
             'observation' => $request->observation,
-            'lieu_liv' => $request->lieu,
-            'date_commande' => $request->date,
-            'idfournisseur' => $request->idfournisseur,
+            'lieu_liv' => $request->lieu_livraison,
             'tva_statut' => $request->tva_statut,
             'iduser' => $iduser,
         ]);
@@ -190,7 +191,7 @@ class CommandeController extends Controller
                 'idcommande' => $save->commande_id,
                 'quantite' => $request->quantite[$i],
                 'prix' => $request->prix[$i],
-                'tva' => $request->tva[$i],
+                'tva' =>0, // $request->tva[$i],
                 'remise' => $request->remise[$i],
                 'idproduit' => $request->idproduit[$i],
                 'iduser' => $iduser,

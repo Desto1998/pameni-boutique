@@ -19,10 +19,10 @@
 
         <li class="text-center mt-2">
 
-            <a href="javascript:void(0);" data-toggle="modal"
-               data-target="#paiement-modal" onclick="getId({{ $value->commande_id }})" class="btn btn-secondary btn-sm ml-1"
-               title="Ajouter un paiement."><i
-                    class="fa fa-money"></i></a>
+{{--            <a href="javascript:void(0);" data-toggle="modal"--}}
+{{--               data-target="#paiement-modal" onclick="getId({{ $value->commande_id }})" class="btn btn-secondary btn-sm ml-1"--}}
+{{--               title="Ajouter un paiement."><i--}}
+{{--                    class="fa fa-money"></i></a>--}}
 
             @if ($value->statut===0 && Auth::user()->is_admin==1)
                 <a href="javascript:void(0);" onclick="validerFun({{ $value->commande_id}})"

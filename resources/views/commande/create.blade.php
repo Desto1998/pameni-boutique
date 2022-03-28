@@ -52,7 +52,7 @@
                                 <div class="col-md-7 float-right d-flex" id="client-block">
                                     <div class="form-group col-md-6">
                                         <label for="echeance">Fournisseur:</label>
-                                        <select name="idclient" id="single-select" class="form-control">
+                                        <select name="idfournisseur" id="single-select" class="form-control">
                                             <option selected="selected" disabled>Sélectionez un fournisseur</option>
                                             @foreach($clients as $cl)
                                                 <option
@@ -88,10 +88,10 @@
 
 
                             </div>
-                            <div class="form-group">
-                                <label for="objet">Objet: </label>
-                                <input type="text" name="objet" id="objet" class="form-control" required>
-                            </div>
+{{--                            <div class="form-group">--}}
+{{--                                <label for="objet">Objet: </label>--}}
+{{--                                <input type="text" name="objet" id="objet" class="form-control" required>--}}
+{{--                            </div>--}}
                             <div class="for-produit table-responsive" style="max-height: 300px; overflow: auto">
                                 <label class="nav-label">Produits</label>
                                 <table class="w-100 table table-striped table-bordered table-active" id="table-produit">
@@ -103,14 +103,14 @@
                                         <th>Remise</th>
                                         {{--                                        <th>TVA</th>--}}
                                         <th>M. HT</th>
-                                        <th>M. TTC</th>
+{{--                                        <th>M. TTC</th>--}}
                                         <th><i class="fa fa-trash"></i></th>
                                     </tr>
 
                                     </thead>
                                     <tbody style="color: #000000!important;">
                                     <tr class="text-black  produit-input font-weight-bold" id="product-row0">
-                                        <td style="width: 250px;">
+                                        <td style="width: 270px;">
                                             <select name="idproduit[]" class="dropdown-groups form-control" id="select-pro0" onchange="setPrix(0)" style="color: #000000">
                                                 <option selected="selected" disabled>Sélectionez un produit</option>
                                                 @foreach($categories as $cat)
@@ -135,8 +135,8 @@
                                         {{--                                                   class="form-control tva" required></td>--}}
                                         <td><input type="number" min="0" readonly  name="totalHT[]" value="0" step="any" id="totalHT0"
                                                    class="form-control totalHT"></td>
-                                        <td><input type="number" min="0" value="0" readonly name="totalTTC[]" step="any" id="totalTTC0"
-                                                   class="form-control totalTTC"></td>
+{{--                                        <td><input type="number" min="0" value="0" readonly name="totalTTC[]" step="any" id="totalTTC0"--}}
+{{--                                                   class="form-control totalTTC"></td>--}}
                                         <td class="text-center">
                                             <button type="button" onclick="removeLigne(0)"
                                                     class="btn btn-sm btn-danger"><i class="fa fa-trash-o"></i></button>
@@ -168,7 +168,42 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-12 row">
+
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="form-group col-md-4">
+                                        <label for="mode">Mode de paiement <span class="text-danger">*</span></label>
+                                        <select name="mode" id="mode" class="form-control">
+                                            <option>Espèce</option>
+                                            <option>Chèque</option>
+                                            <option>Carte de crédit</option>
+                                        </select>
+{{--                                        <input type="text" name="type_paiement" class="form-control" id="type_paiement">--}}
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="condition">Condition de paiement <span class="text-danger">*</span></label>
+{{--                                        <select name=""></select>--}}
+                                        <input type="text" name="condition" class="form-control" id="condition">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="lieu_livraison">Lieu de livraison <span class="text-danger"></span></label>
+                                        <input type="text" name="lieu_livraison" class="form-control" id="lieu_livraison">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label for="observation">Observation</label>
+                                        <textarea class="form-control" id="observation" name="observation"></textarea>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="observation">Delai de livraison</label>
+                                        <input type="text" class="form-control" id="delai" name="delai">
+                                    </div>
+                                </div>
+
+                            </div>
+                            <hr>
+                            <div class="col-md-12 row mt-1">
                                 <div class="col-md-6">
                                     <label class="nav-label text-center">Informations de la proformat</label>
                                     <div class="form-group">
@@ -186,7 +221,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="row mb-3 ml-5" title="Cliquer pour selectioner une image">
-                                        <img id="logo-zone" style="width: 300px; height: 300px; min-height: 200px; min-width: 200px" src="{{ asset('images/logo-thumbnail.png') }}" alt="Ouopps! Auncune image disponible">
+                                        <img id="logo-zone" style="width: 300px; height: 300px; min-height: 200px; min-width: 200px" src="{{ asset('images/logo-thumbnail.png') }}" alt="Ouopps! Selectionnez une image">
                                     </div>
                                     {{--                                    <div class="kv-avatar-hint">--}}
                                     {{--                                        <small>Sélectionner un fichier< 1500 KB</small>--}}
@@ -243,7 +278,7 @@
                 // $('.dropdown-groups').val(null).trigger('change');
                 var selectid = 'select-pro' + totalProduit;
                 var row = '<tr class="text-black  produit-input font-weight-bold" id="' + id + '">' +
-                    '<td style="width: 250px;">' +
+                    '<td style="width: 270px;">' +
                     '<select onchange="setPrix('+totalProduit+')" class="dropdown-groups form-control" id="' + selectid + '" style="color: #000000" name="idproduit[]">'+
                     '<option selected="selected" disabled>Sélectionez un produit</option>';
                 row += '@foreach($categories as $cat)' +
@@ -261,9 +296,9 @@
                     '<td><input type="number" min="0" name="prix[]" value="0" onchange="calculeHT('+totalProduit+')" id="prix'+totalProduit+'" class="form-control prix" required></td>' +
                     '<td><input type="number" min="0" name="remise[]" value="0" onchange="calculeHT('+totalProduit+')" id="remise'+totalProduit+'" step="any" class="form-control remise" required></td>' +
                     '<td><input type="number" min="0" value="0"  readonly name="totalHT[]" id="totalHT'+totalProduit+'" step="any" class="form-control totalHT" ></td>' +
-                    '<td><input type="number" min="0" value="0" readonly name="totalTTC[]" id="totalTTC'+totalProduit+'" step="any" class="form-control totalTTC" ></td>' +
                     '<td class="text-center"><button type="button" onclick="removeLigne(' + totalProduit + ')" class="btn btn-sm btn-danger"><i class="fa fa-trash-o"></i></button></td>' +
-                    '</tr>';
+
+                    // '</tr>';'<td><input type="number" min="0" value="0" readonly name="totalTTC[]" id="totalTTC'+totalProduit+'" step="any" class="form-control totalTTC" ></td>' +
                 //  '<td><input type="number" min="0"  name="tva[]" value="0" onchange="calculeHT('+totalProduit+')"  id="tva'+totalProduit+'" step="any" class="form-control tva" required></td>' +
                 $('#table-produit tbody').append(row);
 
@@ -322,7 +357,7 @@
                 ttc = Number(ttc).toFixed(2) ;
                 montant =Number(montant).toFixed(2)
                 $('#totalHT'+number).val(montant);
-                $('#totalTTC'+number).val(ttc);
+                // $('#totalTTC'+number).val(tot);
                 total();
             }
         }
@@ -341,9 +376,9 @@
             $('input[name="totalHT[]"]').each(function (){
                 totalht += Number($(this).val());
             });
-            $('input[name="totalTTC[]"]').each(function (){
-                totalttc +=Number( $(this).val());
-            });
+            // $('input[name="totalTTC[]"]').each(function (){
+            //     totalttc +=Number( $(this).val());
+            // });
             if ($('select[name="tva_statut"]').val()==1){
                 tva = 19.25;
             }
@@ -351,7 +386,7 @@
             mtva = Number(mtva).toFixed(2)
             $('#mtva').val(mtva);
             $('#ht').val(Number(totalht).toFixed(2));
-            $('#ttc').val(Number(totalttc).toFixed(2));
+            $('#ttc').val(Number(totalht+mtva).toFixed(2));
         }
 
         // traitement de l'image

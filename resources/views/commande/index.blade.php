@@ -15,7 +15,7 @@
         <div class="row page-titles mx-0">
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
-                    <h4>GESTION DES DEVIS</h4>
+                    <h4>GESTION DES COMMANDES</h4>
                     {{--                    <p class="mb-0">Your business dashboard template</p>--}}
                 </div>
             </div>
@@ -65,7 +65,7 @@
         </div>
     </div>
 
-@stop
+@endsection
 @section('script')
     <script>
         // delete funtion
@@ -266,4 +266,4 @@
     <script src="{{asset('template/vendor/select2/js/select2.full.min.js')}}"></script>
     <script src="{{asset('template/js/plugins-init/select2-init.js')}}"></script>
 
-@stop
+@endsection
