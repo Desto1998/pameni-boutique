@@ -32,7 +32,7 @@
                                 data-target="#chargesModal"><i class="fa fa-plus">&nbsp; Ajouter</i></button>
 
                         <div class="table-responsive">
-                            <table id="example" class="display text-center" style="min-width: 845px">
+                            <table id="example" class="display text-center w-100">
                                 <thead class="bg-primary">
                                 <tr>
                                     <th>#</th>

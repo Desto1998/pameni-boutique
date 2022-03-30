@@ -11,7 +11,7 @@
         <div class="row page-titles mx-0">
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
-                    <h4>Tâches</h4>
+                    <h4>{{--Tâches--}}Dépenses</h4>
                     {{--                    <p class="mb-0">Your business dashboard template</p>--}}
                 </div>
             </div>
@@ -19,7 +19,7 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="javascript:void(0)">Dashboard</a></li>
                     <li class="breadcrumb-item"><a href="javascript:void(0)">Gestion</a></li>
-                    <li class="breadcrumb-item active"><a href="javascript:void(0)">taches</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0)">Dépense</a></li>
                 </ol>
             </div>
         </div>
@@ -28,8 +28,8 @@
                 <div class="card px-3">
                     <div class="card-body">
                         <!-- Button trigger modal -->
-                        <span class="float-left h4">Liste des tâches</span>
-                        <button type="button" class="btn btn-primary float-right mb-3" data-toggle="modal"
+                        <span class="float-left h4">Liste des dépenses</span>
+                        <button type="button" class="btn btn-primary float-right mb-3" title="Ajouter une dépense" data-toggle="modal"
                                 data-target="#tachesModal"><i class="fa fa-plus">&nbsp; Ajouter</i></button>
 
                         <div class="table-responsive">
@@ -70,9 +70,9 @@
         function deleteFun(id) {
             var table = $('#example').DataTable();
             swal.fire({
-                title: "Supprimer cette tâches?",
+                title: "Supprimer cette dépense?",
                 icon: 'question',
-                text: "Cette tâches sera supprimé de façon définitive.",
+                text: "Cette dépense sera supprimé de façon définitive.",
                 type: "warning",
                 showCancelButton: !0,
                 confirmButtonText: "Oui, supprimer!",

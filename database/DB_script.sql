@@ -212,15 +212,15 @@ drop table if exists paiements;
 create table paiements
 (
     paiement_id   int primary key AUTO_INCREMENT,
-    mode          varchar(255)  not null,
-    date_paiement date          not null,
-    description   varchar(1000)  null,
-    montant       float         not null,
+    mode          varchar(255) not null,
+    date_paiement date         not null,
+    description   varchar(1000) null,
+    montant       float        not null,
     statut        int       default 1,
     idcommande    int null,
     iddevis       int null,
     idfacture     int null,
-    iduser        int           not null,
+    iduser        int          not null,
     created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at    DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -246,11 +246,12 @@ drop table if exists commandes;
 create table commandes
 (
     commande_id        int primary key AUTO_INCREMENT,
-    reference_commande varchar(20) not null,
-    date_commande      date        not null,
+    reference_commande varchar(20)  not null,
+    objet              varchar(1000) not null,
+    date_commande      date         not null,
     statut             int       default 0,
     tva_statut         int       default 0,
-    idfournisseur      int         not null,
+    idfournisseur      int          not null,
     service            varchar(1000) null,
     direction          varchar(1000) null,
     mode_paiement      varchar(1000) null,
@@ -259,7 +260,7 @@ create table commandes
     observation        varchar(1000) null,
     note               varchar(1000) null,
     lieu_liv           varchar(1000) null,
-    iduser             int         not null,
+    iduser             int          not null,
     created_at         TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at         DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;

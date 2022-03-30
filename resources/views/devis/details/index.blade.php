@@ -46,6 +46,10 @@
                                     <a class="nav-link" data-toggle="tab" href="#message">Commentaires({{ count($commentaires) }})</a>
                                 </li>
                             </ul>
+                            <div class="d-flex justify-content-end mt-2">
+                                <a href="{{ route('devis.edit',['id'=>$data[0]->devis_id]) }}" title="Editer ce devis" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a>
+                                <a href="{{ route('devis.print',['id'=>$data[0]->devis_id]) }}" title="Imprimer ce devis" target="_blank" class="btn btn-sm btn-light ml-2"><i class="fa fa-print"></i></a>
+                            </div>
                             <div class="tab-content">
                                 <div class="tab-pane fade show active" id="detail" role="tabpanel">
                                     <div class="pt-4">

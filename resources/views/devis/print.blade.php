@@ -301,11 +301,11 @@
                 $intpart = number_format($montantTVA ,2,'.','');
                 $intpart = floor($intpart);
                 $fraction = number_format($montantTVA ,2,'.','') - $intpart;
-                $chaine = "$fraction";
+                $chaine = "$fraction"."000";
                 $chaine2 = $chaine[2];
                 $chaine2 .= $chaine[3];
-                $chaineIntPart = (new \App\Models\ChiffreLettre())->Conversion($intpart ,2,'.','');
-                $chaineDecimalPart = (new \App\Models\ChiffreLettre())->Conversion((int)($chaine2) ,2,'.','');
+                $chaineIntPart = (new \App\Models\ChiffreLettre())->Conversion($intpart);
+                $chaineDecimalPart = (new \App\Models\ChiffreLettre())->Conversion((int)($chaine2));
 
             @endphp
             @if ((int)$chaine2==0)
@@ -426,7 +426,7 @@
             <td>
                 <div>
                     <strong>Douala</strong>-
-                    Akwa boulevard de la libertee face Direction Orange Akwa Douala<br>
+                    AKWA rue Castelneau face direction commerciale MTN derrière Akwa Palace,  DOUALA CAMEROUN<br>
                     gscdla@gsc-technology.com
                 </div>
             </td>

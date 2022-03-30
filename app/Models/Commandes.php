@@ -11,6 +11,7 @@ class Commandes extends Model
     protected $primaryKey = 'commande_id';
     protected $fillable = [
         'reference_commande',
+        'objet',
         'date_commande',
         'statut',
         'idfournisseur',

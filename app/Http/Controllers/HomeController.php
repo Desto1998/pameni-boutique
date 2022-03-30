@@ -53,18 +53,28 @@ class HomeController extends Controller
         $produit = Produits::all();
         $proFact= Produit_Factures::all();
         $prodID = [];
-//        foreach ($proFact as $key => $item){
-//            if (!in_array($item->idproduit)) {
-//
-//            }
-//        }
+        foreach ($produit as $key => $item){
+            $use = 0;
+            foreach ($proFact as $pf){
+                if ($pf->idproduit==$item->produit_id) {
+                    $use += $pf->quantite;
+                }
+            }
+            if ($item->quantite_produit-$use<=3) {
+                $prodID[$item->produit_id] = $item->produit_id;
+            }
+        }
+        $stock = Produits::whereIn('produit_id',$prodID)->get();
         $charges = Charges::all();
         $taches = Taches::all();
         $lastactivity = Devis::join('users','users.id','devis.iduser')->where('devis.created_at','>=',$date)->orderBy('devis.created_at','desc')->get();
         $lastactivity1 = Factures::join('users','users.id','factures.iduser')->where('factures.created_at','>=',$date)->orderBy('factures.created_at','desc')->get();
         $lastactivity2 = Commandes::join('users','users.id','commandes.iduser')->where('commandes.created_at','>=',$date)->orderBy('commandes.created_at','desc')->get();
+        $lastactivity3 = Taches::join('users','users.id','taches.iduser')->where('taches.created_at','>=',$date)->orderBy('taches.created_at','desc')->get();
         return view('dashboard',compact('clients','fournisseurs','devisNV',
-        'commandesNV','factureNV','devisSF','lastactivity','lastactivity1','lastactivity2','charges','taches'));
+        'commandesNV','factureNV','devisSF','lastactivity','lastactivity1','lastactivity2','charges','taches','lastactivity3','stock',
+        'produit'
+        ));
     }
 
     public function text()

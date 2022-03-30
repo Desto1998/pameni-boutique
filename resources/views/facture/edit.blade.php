@@ -464,8 +464,6 @@
             } else {
                 alert("Vous ne pouvez pas supprimer tous les elements.");
             }
-
-
         }
 
     </script>

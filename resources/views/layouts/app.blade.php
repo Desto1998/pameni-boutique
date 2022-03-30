@@ -95,59 +95,50 @@
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">
                                 <ul class="list-unstyled">
-                                    <li class="media dropdown-item">
-                                        <span class="success"><i class="ti-user"></i></span>
-                                        <div class="media-body">
-                                            <a href="#">
-                                                <p><strong>Martin</strong> has added a <strong>customer</strong>
-                                                    Successfully
-                                                </p>
-                                            </a>
-                                        </div>
-                                        <span class="notify-time">3:20 am</span>
-                                    </li>
-                                    <li class="media dropdown-item">
-                                        <span class="primary"><i class="ti-shopping-cart"></i></span>
-                                        <div class="media-body">
-                                            <a href="#">
-                                                <p><strong>Jennifer</strong> purchased Light Dashboard 2.0.</p>
-                                            </a>
-                                        </div>
-                                        <span class="notify-time">3:20 am</span>
-                                    </li>
-                                    <li class="media dropdown-item">
-                                        <span class="danger"><i class="ti-bookmark"></i></span>
-                                        <div class="media-body">
-                                            <a href="#">
-                                                <p><strong>Robin</strong> marked a <strong>ticket</strong> as unsolved.
-                                                </p>
-                                            </a>
-                                        </div>
-                                        <span class="notify-time">3:20 am</span>
-                                    </li>
-                                    <li class="media dropdown-item">
-                                        <span class="primary"><i class="ti-heart"></i></span>
-                                        <div class="media-body">
-                                            <a href="#">
-                                                <p><strong>David</strong> purchased Light Dashboard 1.0.</p>
-                                            </a>
-                                        </div>
-                                        <span class="notify-time">3:20 am</span>
-                                    </li>
-                                    <li class="media dropdown-item">
-                                        <span class="success"><i class="ti-image"></i></span>
-                                        <div class="media-body">
-                                            <a href="#">
-                                                <p><strong> James.</strong> has added a<strong>customer</strong>
-                                                    Successfully
-                                                </p>
-                                            </a>
-                                        </div>
-                                        <span class="notify-time">3:20 am</span>
-                                    </li>
+{{--                                    <li class="media dropdown-item">--}}
+{{--                                        <span class="success"><i class="ti-user"></i></span>--}}
+{{--                                        <div class="media-body">--}}
+{{--                                            <a href="#">--}}
+{{--                                                <p><strong>Martin</strong> has added a <strong>customer</strong>--}}
+{{--                                                    Successfully--}}
+{{--                                                </p>--}}
+{{--                                            </a>--}}
+{{--                                        </div>--}}
+{{--                                        <span class="notify-time">3:20 am</span>--}}
+{{--                                    </li>--}}
+{{--                                    <li class="media dropdown-item">--}}
+{{--                                        <span class="primary"><i class="ti-shopping-cart"></i></span>--}}
+{{--                                        <div class="media-body">--}}
+{{--                                            <a href="#">--}}
+{{--                                                <p><strong>Jennifer</strong> purchased Light Dashboard 2.0.</p>--}}
+{{--                                            </a>--}}
+{{--                                        </div>--}}
+{{--                                        <span class="notify-time">3:20 am</span>--}}
+{{--                                    </li>--}}
+{{--                                    <li class="media dropdown-item">--}}
+{{--                                        <span class="danger"><i class="ti-bookmark"></i></span>--}}
+{{--                                        <div class="media-body">--}}
+{{--                                            <a href="#">--}}
+{{--                                                <p><strong>Robin</strong> marked a <strong>ticket</strong> as unsolved.--}}
+{{--                                                </p>--}}
+{{--                                            </a>--}}
+{{--                                        </div>--}}
+{{--                                        <span class="notify-time">3:20 am</span>--}}
+{{--                                    </li>--}}
+{{--                                    <li class="media dropdown-item">--}}
+{{--                                        <span class="primary"><i class="ti-heart"></i></span>--}}
+{{--                                        <div class="media-body">--}}
+{{--                                            <a href="#">--}}
+{{--                                                <p><strong>David</strong> purchased Light Dashboard 1.0.</p>--}}
+{{--                                            </a>--}}
+{{--                                        </div>--}}
+{{--                                        <span class="notify-time">3:20 am</span>--}}
+{{--                                    </li>--}}
+
                                 </ul>
-                                <a class="all-notification" href="#">See all notifications <i
-                                        class="ti-arrow-right"></i></a>
+                                <a href="#" class="all-notification" id="no-notification">Aucune notification pour l'instant</a>
+{{--                                <a class="all-notification" href="#">See all notifications <i--}}
+{{--                                        class="ti-arrow-right"></i></a>--}}
                             </div>
                         </li>
                         <li class="nav-item dropdown header-profile">
@@ -203,7 +194,7 @@
                 <li><a class="" href="{{ route('home') }}" aria-expanded="false"><i
                             class="icon icon-home"></i><span class="nav-text">Tableau de bord</span></a>
                 </li>
-                <li class="nav-label">GESTION DE LA FACTURATION</li>
+                <li class="nav-label">FACTURATION ET DEVIS</li>
 
                 <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false"><i
                             class="fa fa-database"></i><span class="nav-text">Dévis</span></a>
@@ -250,14 +241,14 @@
                             class="icon icon-payment"></i><span class="nav-text">Gestions</span></a>
                     <ul aria-expanded="false">
                         <li><a href="{{ route('gestion.index') }}">Charges</a></li>
-                        <li><a href="{{ route('gestion.tache') }}">Tâches</a></li>
+                        <li><a href="{{ route('gestion.tache') }}">{{--Tâches--}} Dépenses</a></li>
                     </ul>
                 </li>
                 <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false"><i
                             class="fa fa-file-pdf-o"></i><span class="nav-text">Rapports</span></a>
                     <ul aria-expanded="false">
-                        <li><a href="{{ route('rapport.charge') }}">Rapport des charges</a></li>
-                        <li><a href="{{ route('gestion.index') }}">Rapport d'activités clients</a></li>
+                        <li><a href="{{ route('rapport.charge') }}">Rapport des dépenses</a></li>
+                        <li><a href="#">Rapport d'activités clients</a></li>
                     </ul>
                 </li>
                 @if (Auth::user()->is_admin==1)
@@ -271,19 +262,6 @@
                         </ul>
                     </li>
                 @endif
-
-                {{--                <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i--}}
-                {{--                            class="icon icon-chart-bar-33"></i><span class="nav-text">Charts</span></a>--}}
-                {{--                    <ul aria-expanded="false">--}}
-                {{--                        <li><a href="./chart-flot.html">Flot</a></li>--}}
-                {{--                        <li><a href="./chart-morris.html">Morris</a></li>--}}
-                {{--                        <li><a href="./chart-chartjs.html">Chartjs</a></li>--}}
-                {{--                        <li><a href="./chart-chartist.html">Chartist</a></li>--}}
-                {{--                        <li><a href="./chart-sparkline.html">Sparkline</a></li>--}}
-                {{--                        <li><a href="./chart-peity.html">Peity</a></li>--}}
-                {{--                    </ul>--}}
-                {{--                </li>--}}
-
 
             </ul>
         </div>
@@ -346,5 +324,6 @@
 <script src="{{asset('template/vendor/plugins/toastr/js/toastr.init.js')}}"></script>
 @include('_partial._toastr-message')
 @yield('script')
+@include('scripts.dashboard')
 </body>
 </html>

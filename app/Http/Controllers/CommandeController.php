@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Categories;
 use App\Models\Clients;
 use App\Models\Commandes;
+use App\Models\Commentaires;
 use App\Models\Comportes;
 use App\Models\Fournisseurs;
 use App\Models\Pays;
 use App\Models\Pieces;
+use App\Models\Pocedes;
 use App\Models\Produits;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -172,6 +174,7 @@ class CommandeController extends Controller
 //        dd($reference);
         $save = Commandes::create([
             'reference_commande' => $reference,
+            'objet' => $request->objet,
             'date_commande' => $request->date,
             'statut' => 0,
             'idfournisseur' => $request->idfournisseur,
@@ -230,7 +233,36 @@ class CommandeController extends Controller
 
     public function viewDetail($id)
     {
-        return 'In process';
+        $pocedes = Comportes::join('produits', 'produits.produit_id', 'comportes.idproduit')->where('idcommande', $id)->get();
+        $montantTVA = 0;
+        $montantTTC = 0;
+        foreach ($pocedes as $p) {
+
+            $remise = ($p->prix * $p->quantite * $p->remise) / 100;
+            $montant = ($p->quantite * $p->prix) - $remise;
+            $tva = ($montant * $p->tva) / 100;
+            $montant = $tva + $montant;
+//                        $montant += (($montant * 19.25)/100)+$montant;
+            $montantTVA += $montant;
+
+        }
+        $data = Commandes::join('fournisseurs', 'fournisseurs.fournisseur_id', 'commandes.idfournisseur')
+            ->join('users', 'users.id', 'commandes.iduser')
+            ->where('commande_id', $id)
+            ->get()
+        ;
+        if ($data[0]->tva_statut == 1) {
+            $montantTTC = (($montantTVA * 19.25) / 100) + $montantTVA;
+        } else {
+            $montantTTC = $montantTVA;
+        }
+
+        $commentaires = Commentaires::join('users','users.id','commentaires.iduser')->where('idcommande',$id)->get();
+
+        $piece = Pieces::where('idcommande', $id)->get();
+        return view('commande.details.index', compact('data','pocedes','montant',
+            'montantTTC','montantTVA','commentaires','piece')) ;
+
     }
     public function showEditForm($id)
     {
@@ -247,11 +279,12 @@ class CommandeController extends Controller
                 $ID[$key]=$value->idcategorie;
             }
         }
+        $pays = Pays::all();
         $piece = Pieces::where('idcommande',$id)->get();
         $categories = Categories::whereIn('categorie_id',$ID )->orderBy('categories.created_at', 'desc')->get();
         $fournisseurs = Fournisseurs::orderBy('created_at', 'desc')->get();
         $pocedes = Comportes::join('produits', 'produits.produit_id', 'comportes.idproduit')->where('idcommande', $id)->get();
-        return view('commande.edit',compact('data','piece','categories','pocedes','fournisseurs','produits'));
+        return view('commande.edit',compact('data','pays','piece','categories','pocedes','fournisseurs','produits'));
     }
     public function edit(Request $request)
     {
@@ -268,6 +301,7 @@ class CommandeController extends Controller
 
 //        dd($reference); updateOrCreate
         $save = Commandes::where('commande_id',$request->commande_id)->update([
+            'objet' => $request->objet,
             'disponibilite' => $request->disponibilite,
             'service' => $request->service,
             'condition_paiement' => $request->condition,
@@ -355,11 +389,13 @@ class CommandeController extends Controller
         $date = new DateTime($data[0]->date_commande);
         $date = $date->format('m');
         $piece = Pieces::where('idcommande',$id)->get();
+//        dd($piece);
         $num_BC = isset($piece[0])?$piece[0]->ref:'';
         $mois = (new \App\Models\Month)->getFrenshMonth((int)$date);
         $categories = Categories::all();
         $pocedes = Comportes::join('produits', 'produits.produit_id', 'comportes.idproduit')->where('idcommande', $id)->get();
-        $pdf = PDF::loadView('commande.print', compact('data', 'num_BC','mois','categories', 'pocedes'))->setPaper('a4', 'portrait')->setWarnings(false);
+        $pdf = PDF::loadView('commande.print', compact('data', 'num_BC','mois','categories', 'pocedes','piece'))->setPaper('a4', 'portrait')->setWarnings(false);
+        // dd($pdf);
         return $pdf->stream($data[0]->reference_fact . '_' .date("d-m-Y H:i:s") . '.pdf');
     }
 }

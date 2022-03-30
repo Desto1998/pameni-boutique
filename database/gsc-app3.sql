@@ -112,6 +112,7 @@ DROP TABLE IF EXISTS `commandes`;
 CREATE TABLE IF NOT EXISTS `commandes` (
   `commande_id` int(11) NOT NULL AUTO_INCREMENT,
   `reference_commande` varchar(20) NOT NULL,
+  `objet` varchar(1000) NOT NULL,
   `date_commande` date NOT NULL,
   `statut` int(11) DEFAULT '0',
   `idfournisseur` int(11) NOT NULL,

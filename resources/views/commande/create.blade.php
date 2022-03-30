@@ -88,10 +88,10 @@
 
 
                             </div>
-{{--                            <div class="form-group">--}}
-{{--                                <label for="objet">Objet: </label>--}}
-{{--                                <input type="text" name="objet" id="objet" class="form-control" required>--}}
-{{--                            </div>--}}
+                            <div class="form-group">
+                                <label for="objet">Objet: </label>
+                                <input type="text" name="objet" id="objet" class="form-control" required>
+                            </div>
                             <div class="for-produit table-responsive" style="max-height: 300px; overflow: auto">
                                 <label class="nav-label">Produits</label>
                                 <table class="w-100 table table-striped table-bordered table-active" id="table-produit">

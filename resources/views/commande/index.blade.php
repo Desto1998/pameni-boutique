@@ -37,7 +37,7 @@
                         ><i class="fa fa-plus">&nbsp; Ajouter</i></a>
 
                         <div class="table-responsive">
-                            <table id="example" class="display text-center" style="min-width: 845px">
+                            <table id="example" class="display text-center w-100">
                                 <thead class="bg-primary">
                                 <tr>
                                     <th>#</th>
@@ -145,7 +145,7 @@
                     {data: 'DT_RowIndex',name:'DT_RowIndex'},
                     {data: 'reference_commande',name:'reference_commande'},
                     {data: 'client',name:'client'},
-                    {data: 'delai_liv',name:'delai_liv'},
+                    {data: 'objet',name:'objet'},
                     {data: 'date_commande',name:'date_commande'},
                     {data: 'statut',name:'statut'},
                     {data: 'montantHT',name:'montantHT'},

@@ -1,10 +1,10 @@
 <div class="d-flex justify-content-center">
-    <a href="javascript:void(0);" class="btn btn-warning btn-sm" title="Modifier la tâches"
+    <a href="javascript:void(0);" class="btn btn-warning btn-sm" title="Modifier la dépense"
        data-toggle="modal" data-target="#tachesModal{{ $value->tache_id }}"><i
             class="fa fa-edit"></i></a>
     @if (Auth::user()->is_admin==1)
         <button class="btn btn-danger btn-sm ml-1 "
-                title="Supprimer cette tâches" id="deletebtn{{ $value->tache_id }}"
+                title="Supprimer cette dépense" id="deletebtn{{ $value->tache_id }}"
                 onclick="deleteFun({{ $value->tache_id }})"><i
                 class="fa fa-trash"></i></button>
         {{--                                            Auth::user()->id--}}

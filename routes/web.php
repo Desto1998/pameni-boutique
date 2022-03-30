@@ -11,6 +11,7 @@ use App\Http\Controllers\FactureController;
 use App\Http\Controllers\FournisserController;
 use App\Http\Controllers\GestionController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PaiementController;
 use App\Http\Controllers\ProduitController;
 use App\Http\Controllers\RapportController;
@@ -140,7 +141,7 @@ Route::prefix('dashboard')->group(function () {
             Route::post('factures/bloquer',[FactureController::class,'bloquerFactures'])->name('factures.bloquer');
 
             Route::get('factures/print/{id}',[FactureController::class,'printFactures'])->name('factures.print');
-
+            Route::post('factures/remove/produit',[FactureController::class,'removeProduit'])->name('factures.remove.produit');
 
             Route::post('factures/paiement/store',[FactureController::class,'addPaiement'])->name('factures.paiement.store');
             Route::post('factures/paiement/delete',[FactureController::class,'deletePaiement'])->name('factures.paiement.delete');
@@ -156,9 +157,10 @@ Route::prefix('dashboard')->group(function () {
             Route::post('commandes/delete',[CommandeController::class,'delete'])->name('commandes.delete');
             Route::post('commandes/valider',[CommandeController::class,'validerCommande'])->name('commandes.valider');
             Route::post('commandes/bloquer',[CommandeController::class,'bloquerCommande'])->name('commandes.bloquer');
-            Route::get('commandes/details/{id}',[CommandeController::class,'view'])->name('commandes.view');
+            Route::get('commandes/details/{id}',[CommandeController::class,'viewDetail'])->name('commandes.view');
 
             Route::get('commandes/print/{id}',[CommandeController::class,'printCommandes'])->name('commandes.print');
+            Route::post('commandes/remove/produit',[CommandeController::class,'removeProduit'])->name('commandes.remove.produit');
 
             //Route pour les commentaires
             Route::post('factures/addcomment',[CommentsController::class,'addCommentFacture'])->name('factures.add.comment');
@@ -166,6 +168,9 @@ Route::prefix('dashboard')->group(function () {
             Route::post('commande/addcomment',[CommentsController::class,'addCommentCommande'])->name('commande.add.comment');
             Route::post('comment/update',[CommentsController::class,'updateComment'])->name('comment.update');
             Route::post('comment/delete',[CommentsController::class,'deleteComment'])->name('comment.delete');
+
+            //load notification
+            Route::get('notification/notify',[NotificationController::class,'notify'])->name('notify.load');
 
             //Route for admin prefix with admin depend on  middleware to allow only admin
             Route::prefix('admin')->group(function () {

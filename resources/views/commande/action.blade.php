@@ -63,8 +63,10 @@
                 <div class="row col-md-12">
                     <div class="col-md-6">
                         <h5 class="">Bon de commande</h5>
-                        <h6>N° {{ $value->reference_comamnde }}</h6>
-                        <h6>Date: {{ $value->date_fact }}</h6>
+                        <h6>N° {{ $value->reference_commande }}</h6>
+                        <h6>Date: {{ $value->date_commande }}</h6>
+                        <strong>Devis/Proformat N°: @isset($piece[0]) {{ $piece[0]->ref }} du: {{ $piece[0]->date_piece }}@endisset</strong><br>
+                        <strong>Délai de livraison: {{ $value->delai_liv }}</strong><br>
                     </div>
                     <div class="col-md-6">
                         <h5 class="">COORDONNEES DU CLIENT</h5>
@@ -73,7 +75,7 @@
                         <h6>BP : {{ $value->postale }}</h6>
                     </div>
                 </div>
-                <label class="nav-label"><span class="font-weight-bold">Objet: </span>{{ $value->observation }}</label>
+                <label class="nav-label"><span class="font-weight-bold">Objet: </span>{{ $value->objet }}</label>
                 <div class="for-produit table-responsive" style="max-height: 300px; overflow: auto">
                     <label class="nav-label h3 text-uppercase">Produits</label>
                     <table class="w-100 table table-bordered">

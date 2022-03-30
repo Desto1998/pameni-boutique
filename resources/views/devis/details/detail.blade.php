@@ -103,6 +103,25 @@
         </tbody>
     </table>
 </div>
+
+<div class="col-md-12 my-3 row">
+    <div class="col-md-3 p-3 border">
+        <label class="titre font-weight-bold">Validité de l'offre</label><br>
+        <label>{{ $data[0]->validite }} semaines</label>
+    </div>
+    <div class="col-md-3 p-3 border">
+        <label class="titre font-weight-bold">Disponibilité</label><br>
+        <label>{{ $data[0]->disponibilite }} </label>
+    </div>
+    <div class="col-md-3 p-3 border">
+        <label class="titre font-weight-bold">Garentie</label><br>
+        <label>{{ $data[0]->garentie }} mois</label>
+    </div>
+    <div class="col-md-3 p-3 border">
+        <label class="titre font-weight-bold">Conditions financières</label><br>
+        <label>{{ $data[0]->condition }}</label>
+    </div>
+</div>
 <hr class="mt-2">
 <div class="for-produit table-responsive" style="max-height: 300px; overflow: auto">
     <label class="nav-label h3">OFFRE COMPLEMENTAIRE</label>
