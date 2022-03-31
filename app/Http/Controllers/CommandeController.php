@@ -13,8 +13,10 @@ use App\Models\Pieces;
 use App\Models\Pocedes;
 use App\Models\Produits;
 use App\Models\User;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Nette\Utils\DateTime;
 use PDF;
 use Yajra\DataTables\DataTables;
@@ -396,6 +398,21 @@ class CommandeController extends Controller
         $pocedes = Comportes::join('produits', 'produits.produit_id', 'comportes.idproduit')->where('idcommande', $id)->get();
         $pdf = PDF::loadView('commande.print', compact('data', 'num_BC','mois','categories', 'pocedes','piece'))->setPaper('a4', 'portrait')->setWarnings(false);
         // dd($pdf);
-        return $pdf->stream($data[0]->reference_fact . '_' .date("d-m-Y H:i:s") . '.pdf');
+        return $pdf->stream($data[0]->reference_commande . '_' .date("d-m-Y H:i:s") . '.pdf');
+    }
+
+    public function migrateToStock(Request $request){
+        if ($request->ajax()) {
+            $id = $request->id;
+            $productCMD = Comportes::where('idcommande',$id)->get();
+            foreach ($productCMD as $key=> $value){
+                $updateP[$key] = Produits::where('produit_id',$value->idproduit)->update(['quantite_produit'=>DB::raw('quantite_produit + '.$value->quantite)]);
+            }
+            if ($updateP) {
+                Commandes::where('commande_id',$id)->update(['statut'=>2]);
+            }
+            return Response()->json($updateP);
+        }
+        return "";
     }
 }

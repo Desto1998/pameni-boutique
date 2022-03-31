@@ -196,8 +196,8 @@
                                         <textarea class="form-control" id="observation" name="observation"></textarea>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="observation">Delai de livraison</label>
-                                        <input type="text" class="form-control" id="delai" name="delai">
+                                        <label for="observation">Delai de livraison (en jours)</label>
+                                        <input type="number" min="0" class="form-control" id="delai" name="delai">
                                     </div>
                                 </div>
 

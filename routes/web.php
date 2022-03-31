@@ -161,6 +161,7 @@ Route::prefix('dashboard')->group(function () {
 
             Route::get('commandes/print/{id}',[CommandeController::class,'printCommandes'])->name('commandes.print');
             Route::post('commandes/remove/produit',[CommandeController::class,'removeProduit'])->name('commandes.remove.produit');
+            Route::post('commandes/stock/produit',[CommandeController::class,'migrateToStock'])->name('commandes.stock.produit');
 
             //Route pour les commentaires
             Route::post('factures/addcomment',[CommentsController::class,'addCommentFacture'])->name('factures.add.comment');
@@ -175,7 +176,6 @@ Route::prefix('dashboard')->group(function () {
             //Route for admin prefix with admin depend on  middleware to allow only admin
             Route::prefix('admin')->group(function () {
                 Route::middleware([CheckAdmin::class])->group(function () {
-
                     // routes pour les compte utilisateurs
                     Route::get('user/all', [UserController::class, 'index'])->name('user.all');
                     Route::view('user/new', 'user.add')->name('user.add');

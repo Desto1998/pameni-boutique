@@ -238,7 +238,55 @@
                             if (res) {
                                 swal.fire("Effectué!", "Bloqué avec succès!", "success")
                                 // toastr.success("Bloqué avec succès!");
-                                loadDevis();
+                                loadCommande();
+
+                            } else {
+                                sweetAlert("Désolé!", "Erreur lors de l'opération!", "error")
+                            }
+
+                        },
+                        error: function (resp) {
+                            sweetAlert("Désolé!", "Une erreur s'est produite. Actulisez la page et reessayez", "error");
+                        }
+                    });
+                } else {
+                    e.dismiss;
+                }
+            }, function (dismiss) {
+                return false;
+            })
+            // }
+        }
+
+        // cette fonction ,et les produit de la commande en stock
+        function stockFun(id) {
+            swal.fire({
+                title: "Attention!",
+                icon: 'warning',
+                text: "Les produits de cette commade serons mis stock. Cette action est irreversible. Continuer?",
+                type: "warning",
+                showCancelButton: !0,
+                confirmButtonText: "Oui, continuer!",
+                cancelButtonText: "Non, annuler !",
+                reverseButtons: !0
+            }).then(function (e) {
+                if (e.value === true) {
+                    // if (confirm("Supprimer cette tâches?") == true) {
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('commandes.stock.produit') }}",
+                        data: {id: id},
+                        dataType: 'json',
+                        success: function (res) {
+                            if (res) {
+                                swal.fire("Effectué!", "Effectué avec succès!", "success")
+                                // toastr.success("Bloqué avec succès!");
+                                loadCommande();
 
                             } else {
                                 sweetAlert("Désolé!", "Erreur lors de l'opération!", "error")

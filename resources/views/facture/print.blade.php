@@ -100,7 +100,7 @@
         font-size: 12px;
         line-height: 1.6;
         padding: 8px;
-        border: #EEEEEE solid 1px;
+        border: #a5a3a3 solid 1px;
         /*height: 50px;*/
 
     }
@@ -114,7 +114,7 @@
         bottom: -70px;
         left: 0px;
         right: 0px;
-        height: 120px;
+        height: 200px;
         text-align: center;
         line-height: 1;
         font-size: 12px;
@@ -129,14 +129,15 @@
     }
 
     footer table tr div {
-        width: 200px;
+        width: 158px;
         background-color: #0c85d0;
         padding: 10px;
         border-radius: 10px;
         color: #ffffff;
+        font-size: 9px;
     }
 </style>
-<body>
+<body style="margin-left: 7px; margin-right: 5px;">
 <header class="forhead">
     <table class="heading-table">
         <tr>
@@ -345,6 +346,11 @@
 </table>
 
 <footer class="for-footer">
+    @php
+        $ImagePath = $_SERVER["DOCUMENT_ROOT"] . '/images/logo/logo-partenaire-gsc.png';
+    @endphp
+    {{--        <img class="cachet-img" style="float: right; width: 250px;height: 200px" src="{{ $ImagePath }}" alt="Cachet introuvable.">--}}
+    <img style="width: 100%;" src="{{ asset('images/logo/logo-partenaire-gsc.png') }}" alt="logo Partenaire non trouvable">
     <table class="table-footer">
         <tr>
             <td>
@@ -365,6 +371,12 @@
                 <div>
                     <strong>Garoua</strong>, centre Commercial face Direction PMUC<br>
                     gscgaroua@gsc-technology.com
+                </div>
+            </td>
+            <td>
+                <div>
+                    <strong>Ndjamena, Tchad</strong> - avenue Ngarterie Mathias axe<br>
+                    gsctchad@gsc-technology.com
                 </div>
             </td>
         </tr>

@@ -5,8 +5,8 @@
     <link href="{{asset('template/vendor/sweetalert2/dist/sweetalert2.min.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('template/vendor/select2/css/select2.min.css')}}">
     <style>
-        table thead tr th{
-            color: white!important;
+        table thead tr th {
+            color: white !important;
         }
     </style>
 @stop
@@ -23,7 +23,8 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="javascript:void(0)">Dashboard</a></li>
                     <li class="breadcrumb-item"><a href="javascript:void(0)">Devis</a></li>
-                    <li class="breadcrumb-item active"><a href="javascript:void(0)">{{ $data[0]->reference_devis }}</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0)">{{ $data[0]->reference_devis }}</a>
+                    </li>
                 </ol>
             </div>
         </div>
@@ -39,16 +40,27 @@
                                 {{--                                <li class="nav-item">--}}
                                 {{--                                    <a class="nav-link" data-toggle="tab" href="#profile">Produits({{ count($pocedes) }})</a>--}}
                                 {{--                                </li>--}}
-{{--                                <li class="nav-item">--}}
-{{--                                    <a class="nav-link" data-toggle="tab" href="#paiement">Paiements({{ count($paiements) }})</a>--}}
-{{--                                </li>--}}
+                                {{--                                <li class="nav-item">--}}
+                                {{--                                    <a class="nav-link" data-toggle="tab" href="#paiement">Paiements({{ count($paiements) }})</a>--}}
+                                {{--                                </li>--}}
                                 <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#message">Commentaires({{ count($commentaires) }})</a>
+                                    <a class="nav-link" data-toggle="tab"
+                                       href="#message">Commentaires({{ count($commentaires) }})</a>
                                 </li>
                             </ul>
                             <div class="d-flex justify-content-end mt-2">
-                                <a href="{{ route('devis.edit',['id'=>$data[0]->devis_id]) }}" title="Editer ce devis" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a>
-                                <a href="{{ route('devis.print',['id'=>$data[0]->devis_id]) }}" title="Imprimer ce devis" target="_blank" class="btn btn-sm btn-light ml-2"><i class="fa fa-print"></i></a>
+                                @if (Auth::user()->is_admin==1 || $value->statut <=1)
+                                    @if(Auth::user()->is_admin==1 || Auth::user()->id===$data[0]->id)
+                                        <a href="{{ route('devis.edit',['id'=>$data[0]->devis_id]) }}"
+                                           title="Editer ce devis" class="btn btn-sm btn-warning"><i
+                                                class="fa fa-edit"></i></a>
+                                    @endif
+                                @endif
+
+                                <a href="{{ route('devis.print',['id'=>$data[0]->devis_id]) }}"
+                                   title="Imprimer ce devis" target="_blank" class="btn btn-sm btn-light ml-2"><i
+                                        class="fa fa-print"></i></a>
+
                             </div>
                             <div class="tab-content">
                                 <div class="tab-pane fade show active" id="detail" role="tabpanel">
@@ -56,11 +68,11 @@
                                         @include('devis.details.detail')
                                     </div>
                                 </div>
-{{--                                <div class="tab-pane fade" id="paiement">--}}
-{{--                                    <div class="pt-4">--}}
-{{--                                        @include('facture.details.paiement')--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
+                                {{--                                <div class="tab-pane fade" id="paiement">--}}
+                                {{--                                    <div class="pt-4">--}}
+                                {{--                                        @include('facture.details.paiement')--}}
+                                {{--                                    </div>--}}
+                                {{--                                </div>--}}
                                 <div class="tab-pane fade" id="message">
                                     <div class="pt-4">
                                         @include('devis.details.comments')
@@ -106,7 +118,7 @@
                         success: function (res) {
                             if (res) {
                                 swal.fire("Effectué!", "Supprimé avec succès!", "success")
-                                table.row( $('#deletebtn'+id).parents('tr') )
+                                table.row($('#deletebtn' + id).parents('tr'))
                                     .remove()
                                     .draw();
 
@@ -176,6 +188,7 @@
             })
             // }
         }
+
         // cette fonction defini un devis comme Non valider
         function bloquerFun(id) {
             swal.fire({
@@ -224,10 +237,11 @@
             // }
         }
 
-        function getId(id){
+        function getId(id) {
             $('#modal-form #idfacture').val(id);
 
         }
+
         // ajouter un paiement
         $("#modal-form").on("submit", function (event) {
             event.preventDefault();
@@ -256,7 +270,7 @@
                         dataType: 'json',
                         success: function (res) {
                             console.log(res);
-                            if (res){
+                            if (res) {
                                 toastr.success("Enregistré avec succès.", "Effectué!")
 
                                 $('#modal-form .btn-primary').attr("disabled", false).html("Enregistrer")
@@ -265,7 +279,7 @@
                                 loadFactures()
 
                             }
-                            if (res===[]|| res===undefined || res==null) {
+                            if (res === [] || res === undefined || res == null) {
                                 toastr.error("Erreur lors de l'enregistrement.", "Désolé!",)
                                 $('#modal-form .btn-primary').attr("disabled", false).html("Enregistrer")
                             }
@@ -298,6 +312,7 @@
             $('.commentForm').hide(200);
             $('#commentForm' + id).show(200);
         }
+
         function deleteComment(id) {
             if (confirm("Supprimer ce commentaire?") === true) {
                 $.ajaxSetup({
@@ -351,7 +366,7 @@
                         dataType: 'json',
                         success: function (res) {
                             console.log(res);
-                            if (res){
+                            if (res) {
                                 toastr.success("Enregistré avec succès.", "Effectué!")
 
                                 $('#modal-form .btn-primary').attr("disabled", false).html("Enregistrer")
@@ -360,7 +375,7 @@
                                 window.location.reload();
 
                             }
-                            if (res===[]|| res===undefined || res==null) {
+                            if (res === [] || res === undefined || res == null) {
                                 toastr.error("Erreur lors de l'enregistrement.", "Désolé!",)
                                 $('#modal-form .btn-primary').attr("disabled", false).html("Enregistrer")
                             }

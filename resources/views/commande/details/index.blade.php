@@ -47,7 +47,11 @@
                                 </li>
                             </ul>
                             <div class="d-flex justify-content-end mt-2">
-                                <a href="{{ route('commandes.edit',['id'=>$data[0]->commande_id]) }}" title="Editer cette commande" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a>
+                                @if (Auth::user()->is_admin==1 || $value->statut <=1)
+                                    @if(Auth::user()->is_admin==1 || Auth::user()->id===$data[0]->id)
+                                        <a href="{{ route('commandes.edit',['id'=>$data[0]->commande_id]) }}" title="Editer cette commande" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a>
+                                    @endif
+                                @endif
                                 <a href="{{ route('commandes.print',['id'=>$data[0]->commande_id]) }}" title="Imprimer cette commande" target="_blank" class="btn btn-sm btn-light ml-2"><i class="fa fa-print"></i></a>
                             </div>
                             <div class="tab-content">

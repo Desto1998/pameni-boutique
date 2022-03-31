@@ -123,7 +123,7 @@
     </div>
     <div class="col-md-3 p-3 ml-1 border">
         <label class="w-100 font-weight-bold">Delai de livraison</label>
-        <small class="mt-1">{{ $data[0]->delai_liv }}</small>
+        <small class="mt-1">{{ $data[0]->delai_liv }} jours</small>
     </div>
 
 </div>

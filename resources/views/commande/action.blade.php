@@ -8,12 +8,14 @@
                title="Visualiser les details"><i
                     class="fa fa-eye"></i></a>
             <a href="{{ route('commandes.print',['id' =>$value->commande_id]) }}" target="_blank" class="btn btn-light btn-sm ml-1"
-               title="Imprimer la facture"><i
+               title="Imprimer le bon de commande"><i
                     class="fa fa-file-pdf-o"></i></a>
-            @if (Auth::user()->is_admin==1 || Auth::user()->id===$value->id && $value->statut <=1)
-                <a href="{{ route('factures.edit',['id' =>$value->commande_id]) }}" class="btn btn-warning btn-sm ml-1"
-                   title="Editer la commande"><i
-                        class="fa fa-edit"></i></a>
+            @if (Auth::user()->is_admin==1 || $value->statut <=1)
+                @if(Auth::user()->is_admin==1 || Auth::user()->id===$value->id)
+                    <a href="{{ route('commandes.edit',['id' =>$value->commande_id]) }}" class="btn btn-warning btn-sm ml-1"
+                       title="Editer la commande"><i
+                            class="fa fa-edit"></i></a>
+                @endif
             @endif
         </li>
 
@@ -38,9 +40,16 @@
                         class="fa fa-close"></i></a>
             @endif
 
+            @if ($value->statut ===1 && Auth::user()->is_admin==1)
+                <a href="javascript:void(0);" onclick="stockFun({{ $value->commande_id }})"
+                   class="btn btn-secondary btn-sm ml-1"
+                   title="Bon de commande livré? Mettre les produits en stock."><i
+                        class="fa fa-database"></i></a>
+            @endif
+
             @if (Auth::user()->is_admin==1)
                 <button class="btn btn-danger btn-sm ml-1 "
-                        title="Supprimer cette facture" id="deletebtn{{ $value->commande_id }}"
+                        title="Supprimer cette commande" id="deletebtn{{ $value->commande_id }}"
                         onclick="deleteFun({{ $value->commande_id }})"><i
                         class="fa fa-trash"></i></button>
             @endif

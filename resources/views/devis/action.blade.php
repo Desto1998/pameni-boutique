@@ -10,11 +10,14 @@
             <a href="{{ route('devis.print',['id' =>$value->devis_id]) }}" target="_blank" class="btn btn-light btn-sm ml-1"
                title="Imprimer la proformat"><i
                     class="fa fa-file-pdf-o"></i></a>
-            @if (Auth::user()->is_admin==1 || Auth::user()->id===$value->id && $value->statut <=1)
-                <a href="{{ route('devis.edit',['id' =>$value->devis_id]) }}" class="btn btn-warning btn-sm ml-1"
-                   title="Editer le devis"><i
-                        class="fa fa-edit"></i></a>
+            @if (Auth::user()->is_admin==1 || $value->statut <=1)
+                @if(Auth::user()->is_admin==1 || Auth::user()->id===$value->id)
+                    <a href="{{ route('devis.edit',['id' =>$value->devis_id]) }}" class="btn btn-warning btn-sm ml-1"
+                       title="Editer le devis"><i
+                            class="fa fa-edit"></i></a>
+                @endif
             @endif
+
         </li>
 
         <li class="text-center mt-2">

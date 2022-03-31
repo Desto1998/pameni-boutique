@@ -235,8 +235,8 @@
                                         <textarea class="form-control" id="observation" name="observation">{{ $data[0]->observation }}</textarea>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="observation">Delai de livraison</label>
-                                        <input type="text" class="form-control" value="{{ $data[0]->delai_liv }}" id="delai" name="delai">
+                                        <label for="observation">Delai de livraison (en jours</label>
+                                        <input type="number" min="0" class="form-control" value="{{ $data[0]->delai_liv }}" id="delai" name="delai">
                                     </div>
                                 </div>
 
