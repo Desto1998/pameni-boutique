@@ -181,6 +181,7 @@
                 },
                 error: function (resp) {
                     sweetAlert("Désolé!", "Une erreur s'est produite.", "error");
+                    console.log(resp)
                     $('#charge-form .btn-primary').attr("disabled", false).html("Enregistrer")
                 }
             });

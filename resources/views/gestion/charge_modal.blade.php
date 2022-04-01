@@ -1,5 +1,5 @@
 <!-- Modal ajouter une charge -->
-<div class="modal fade" id="chargesModal">
+<div class="modal fade" data-backdrop="static" id="chargesModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">

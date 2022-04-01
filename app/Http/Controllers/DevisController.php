@@ -141,7 +141,7 @@ class DevisController extends Controller
                 $ID[$key]=$value->idcategorie;
             }
         }
-        $pays = Pays::all();
+        $pays = Pays::orderBy('nom_pays','asc')->get();
         $categories = Categories::whereIn('categorie_id',$ID )->orderBy('categories.created_at', 'desc')->get();
 
         $clients = Clients::orderBy('created_at', 'desc')->get();

@@ -1,5 +1,5 @@
 <!-- Modal make facture -->
-<div class="modal fade" id="fature-modal">
+<div class="modal fade" data-backdrop="static" id="fature-modal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">

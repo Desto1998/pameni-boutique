@@ -49,7 +49,7 @@
                                 </li>
                             </ul>
                             <div class="d-flex justify-content-end mt-2">
-                                @if (Auth::user()->is_admin==1 || $value->statut <=1)
+                                @if (Auth::user()->is_admin==1 || $data[0]->statut <=1)
                                     @if(Auth::user()->is_admin==1 || Auth::user()->id===$data[0]->id)
                                         <a href="{{ route('devis.edit',['id'=>$data[0]->devis_id]) }}"
                                            title="Editer ce devis" class="btn btn-sm btn-warning"><i

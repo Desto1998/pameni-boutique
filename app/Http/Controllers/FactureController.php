@@ -139,7 +139,7 @@ class FactureController extends Controller
             }
         }
         $categories = Categories::whereIn('categorie_id', $ID)->orderBy('categories.created_at', 'desc')->get();
-        $pays = Pays::all();
+        $pays = Pays::orderBy('nom_pays','asc')->get();
         $clients = Clients::orderBy('created_at', 'desc')->get();
         return view('facture.create', compact('categories', 'produits', 'clients', 'pays'));
     }

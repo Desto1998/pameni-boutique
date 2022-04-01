@@ -1,6 +1,6 @@
 
 <!-- Modal -->
-<div class="modal fade" id="fournisseursModal">
+<div class="modal fade" data-backdrop="static" id="fournisseursModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">

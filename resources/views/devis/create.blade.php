@@ -432,7 +432,8 @@
             mtva = Number(mtva).toFixed(2)
             $('#mtva').val(mtva);
             $('#ht').val(Number(totalht).toFixed(2));
-            $('#ttc').val(Number(totalht+mtva).toFixed(2));
+            var mttc = parseFloat(totalht) + parseFloat(mtva);
+            $('#ttc').val(mttc);
         }
 
 

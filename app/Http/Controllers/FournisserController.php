@@ -16,7 +16,7 @@ class FournisserController extends Controller
     public function index()
     {
 //        $data = Fournisseurs::all();
-        $pays = Pays::all();
+        $pays = Pays::orderBy('nom_pays','asc')->get();
         return view('fournisseur.index', compact('pays'));
     }
 

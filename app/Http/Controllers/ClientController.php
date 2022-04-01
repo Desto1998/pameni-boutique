@@ -20,7 +20,7 @@ class ClientController extends Controller
     //List all clients
     public function index(){
 //        $data = Clients::orderBy('date_ajout','desc')->get();
-        $pays = Pays::all();
+        $pays = Pays::orderBy('nom_pays','asc')->get();
         return view('client.index',compact('pays'));
     }
     public function loadClients(){

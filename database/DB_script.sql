@@ -16,14 +16,15 @@ create table devises
 drop table if exists pays;
 create table pays
 (
-    pays_id    int primary key AUTO_INCREMENT,
+    pays_id     int primary key AUTO_INCREMENT,
     nom_pays   varchar(255) not null,
     code_pays  varchar(255) not null,
     drapeau    varchar(255) null,
+    visible    int       default 0,
+    iddevise   int null,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 drop table if exists clients;
 create table clients
@@ -112,7 +113,7 @@ drop table if exists charges;
 create table charges
 (
     charge_id   int primary key AUTO_INCREMENT,
-    titre       varchar(20) not null,
+    titre       varchar(255) not null,
     description varchar(1000) null,
     iduser      int,
     created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

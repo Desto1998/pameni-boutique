@@ -11,7 +11,7 @@
     @endif
 </div>
 
-<div class="modal fade" id="categoriesModal{{ $value->categorie_id }}">
+<div class="modal fade" data-backdrop="static" id="categoriesModal{{ $value->categorie_id }}">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">

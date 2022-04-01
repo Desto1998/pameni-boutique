@@ -9,7 +9,7 @@
                 class="fa fa-trash"></i></button>
     @endif
 </div>
-<div class="modal fade" id="produitsModal{{ $value->produit_id }}">
+<div class="modal fade" data-backdrop="static" id="produitsModal{{ $value->produit_id }}">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">

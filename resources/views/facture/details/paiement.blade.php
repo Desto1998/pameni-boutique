@@ -44,7 +44,7 @@
                 </td>
             </tr>
             <!-- Modal make facture -->
-            <div class="modal fade" id="paiement-modal{{ $item->paiement_id }}">
+            <div class="modal fade" data-backdrop="static" id="paiement-modal{{ $item->paiement_id }}">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">

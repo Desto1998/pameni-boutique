@@ -13,7 +13,7 @@
 </div>
 
 <!--- Modal pour editer les taches ---->
-<div class="modal fade" id="tachesModal{{ $value->tache_id }}">
+<div class="modal fade" data-backdrop="static" id="tachesModal{{ $value->tache_id }}">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">

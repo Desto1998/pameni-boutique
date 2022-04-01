@@ -127,7 +127,7 @@ class CommandeController extends Controller
             }
         }
         $categories = Categories::whereIn('categorie_id',$ID )->orderBy('categories.created_at', 'desc')->get();
-        $pays = Pays::all();
+        $pays = Pays::orderBy('nom_pays','asc')->get();
         $clients = Fournisseurs::orderBy('created_at', 'desc')->get();
         return view('commande.create', compact('categories', 'produits', 'clients','pays'));
     }

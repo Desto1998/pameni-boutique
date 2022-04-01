@@ -13,7 +13,7 @@
 
 
 <!--- Modal pour editer les charges ---->
-<div class="modal fade" id="chargesModal{{ $value->charge_id }}">
+<div class="modal fade" data-backdrop="static" id="chargesModal{{ $value->charge_id }}">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">

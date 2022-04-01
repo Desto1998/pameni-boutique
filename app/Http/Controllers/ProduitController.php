@@ -49,11 +49,11 @@ class ProduitController extends Controller
             foreach ($products as $key =>$value){
                 $product  = new Array_();
 
-                foreach ($saleDevis as $sd){
-                    if ($sd->idproduit==$value->produit_id) {
-                        $stock += $sd->quantite ;
-                    }
-                }
+//                foreach ($saleDevis as $sd){
+//                    if ($sd->idproduit==$value->produit_id) {
+//                        $stock += $sd->quantite ;
+//                    }
+//                }
 
                 foreach ($sateFacture as $sf){
                     if ($sf->idproduit==$value->produit_id) {

@@ -1,5 +1,5 @@
 <!-- Modal add categorie -->
-<div class="modal fade" id="categoriesModal">
+<div class="modal fade" data-backdrop="static" data-keyboard="false" id="categoriesModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
