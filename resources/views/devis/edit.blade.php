@@ -171,6 +171,41 @@
                                             </td>
                                         </tr>
                                     @endforeach
+                                    @if (count($pocedes)===0)
+                                        <tr class="text-black  produit-input font-weight-bold" id="product-row0">
+                                            <td style="width: 270px;">
+                                                <select name="idproduit[]" class="dropdown-groups form-control" id="select-pro0" onchange="setPrix(0)" style="color: #000000">
+                                                    <option selected="selected" disabled>Sélectionez un produit</option>
+                                                    @foreach($categories as $cat)
+                                                        <optgroup class="" label="{{ $cat->titre_cat }}">
+                                                            @foreach($produits as $p)
+                                                                @if ($p->idcategorie===$cat->categorie_id)
+                                                                    <option
+                                                                        value="{{ $p->produit_id }}">{{ $p->titre_produit }}</option>
+                                                                @endif
+                                                            @endforeach
+                                                        </optgroup>
+                                                    @endforeach
+                                                </select>
+                                            </td>
+                                            <td><input type="number" min="0" value="0" name="quantite[]" onchange="calculeHT(0)" id="quantite0" class="form-control quantite"
+                                                       required></td>
+                                            <td><input type="number" min="0" value="0" name="prix[]" onchange="calculeHT(0)" id="prix0" class="form-control prix"
+                                                       required></td>
+                                            <td><input type="number" min="0" value="0" name="remise[]" onchange="calculeHT(0)" step="any" id="remise0"
+                                                       class="form-control remise" required></td>
+                                            {{--                                        <td><input type="number" min="0" value="0" name="tva[]" step="any" id="tva0" onchange="calculeHT(0)"--}}
+                                            {{--                                                   class="form-control tva" required></td>--}}
+                                            <td><input type="number" min="0" readonly  name="totalHT[]" value="0" step="any" id="totalHT0"
+                                                       class="form-control totalHT"></td>
+                                            {{--                                        <td><input type="number" min="0" value="0" readonly name="totalTTC[]" step="any" id="totalTTC0"--}}
+                                            {{--                                                   class="form-control totalTTC"></td>--}}
+                                            <td class="text-center">
+                                                <button type="button" onclick="removeLigne(0)"
+                                                        class="btn btn-sm btn-danger"><i class="fa fa-trash-o"></i></button>
+                                            </td>
+                                        </tr>
+                                    @endif
                                     </tbody>
                                 </table>
                             </div>
@@ -323,6 +358,7 @@
                                         </tr>
 
                                     @endforeach
+
                                     </tbody>
                                 </table>
                                 <div class="col-md-12 d-flex mb-3">

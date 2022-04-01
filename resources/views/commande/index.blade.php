@@ -263,7 +263,7 @@
             swal.fire({
                 title: "Attention!",
                 icon: 'warning',
-                text: "Les produits de cette commade serons mis stock. Cette action est irreversible. Continuer?",
+                text: "Les produits de cette commande serons mis stock. Cette action est irreversible. Continuer?",
                 type: "warning",
                 showCancelButton: !0,
                 confirmButtonText: "Oui, continuer!",

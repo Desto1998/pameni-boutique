@@ -453,7 +453,7 @@ class DevisController extends Controller
                 'idclient' => $devis[0]->idclient,
                 'tva_statut' => $devis[0]->tva_statut,
                 'iduser' => $iduser,
-                'iddevis' => $devis[0]->devis_id,
+                'iddevis' => $request->iddevis,
             ]);
             if ($save) {
                 foreach ($pocedes as $key=>$p) {

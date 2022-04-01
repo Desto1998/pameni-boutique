@@ -589,6 +589,7 @@
                     if (res) {
 
                         toastr.success("Enregistré avec succès!");
+                        $('.infos_client').hide(200);
                         var option =' <option selected value="'+res.client_id+'">'+ res.nom_client +' ' + res.prenom_client +' '+ res.raison_s_client +'</option>'
                         $('#single-select').append(option).select2();
                         // $('#single-select').select2();

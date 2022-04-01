@@ -180,7 +180,7 @@ class CommandeController extends Controller
             'date_commande' => $request->date,
             'statut' => 0,
             'idfournisseur' => $request->idfournisseur,
-            'disponibilite' => $request->disponibilite,
+           // 'disponibilite' => $request->disponibilite,
            // 'service' => $request->service,
             'condition_paiement' => $request->condition,
             'mode_paiement' => $request->mode,
@@ -290,13 +290,16 @@ class CommandeController extends Controller
     }
     public function edit(Request $request)
     {
+//        dd($request);
         $request->validate([
             'date' => ['required'],
-            'objet' => ['required', 'min:5'],
+            'objet' => ['required'],
             'quantite' => ['required'],
             'prix' => ['required'],
             'ref_bon' => ['required'],
             'commande_id' => ['required'],
+            'idfournisseur' => ['required'],
+            'idproduit' => ['required'],
         ]);
 
         $iduser = Auth::user()->id;
@@ -304,29 +307,29 @@ class CommandeController extends Controller
 //        dd($reference); updateOrCreate
         $save = Commandes::where('commande_id',$request->commande_id)->update([
             'objet' => $request->objet,
-            'disponibilite' => $request->disponibilite,
-            'service' => $request->service,
+            'date_commande' => $request->date,
+            'statut' => 0,
+            'idfournisseur' => $request->idfournisseur,
+            // 'service' => $request->service,
             'condition_paiement' => $request->condition,
             'mode_paiement' => $request->mode,
-            'direction' => $request->mode,
+            // 'direction' => $request->mode,
             'delai_liv' => $request->delai,
             'observation' => $request->observation,
-            'lieu_liv' => $request->lieu,
-            'date_commande' => $request->date,
-            'idfournisseur' => $request->idfournisseur,
+            'lieu_liv' => $request->lieu_livraison,
             'tva_statut' => $request->tva_statut,
             'iduser' => $iduser,
         ]);
         for ($i = 0; $i < count($request->idproduit); $i++) {
             $pocedeId = '';
-            if (isset($request->produit_f_id[$i]) && !empty($request->comporte_id[$i])) {
+            if (isset($request->comporte_id[$i]) && !empty($request->comporte_id[$i])) {
                 $pocedeId = $request->comporte_id[$i];
             }
             Comportes::updateOrCreate(['comporte_id'=>$pocedeId],[
                 'idcommande' => $request->commande_id,
                 'quantite' => $request->quantite[$i],
                 'prix' => $request->prix[$i],
-                'tva' => $request->tva[$i],
+                'tva' => 0,//$request->tva[$i],
                 'remise' => $request->remise[$i],
                 'idproduit' => $request->idproduit[$i],
                 'iduser' => $iduser,
@@ -353,7 +356,7 @@ class CommandeController extends Controller
         }
 
         if ($save) {
-            return redirect()->route('factures.all')->with('success', 'Enregistré avec succès!');
+            return redirect()->route('commandes.all')->with('success', 'Enregistré avec succès!');
         }
         return redirect()->back()->with('danger', "Désolé une erreur s'est produite. Veillez recommencer!");
     }
