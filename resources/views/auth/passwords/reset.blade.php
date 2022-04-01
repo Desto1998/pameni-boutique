@@ -5,11 +5,19 @@
     <div class="authincation h-100">
         <div class="container-fluid h-100">
             <div class="row justify-content-center h-100 align-items-center">
+                @if ($is_validToken==0)
+                    <div class="alert alert-danger alert-dismissible fade show">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
+                        </button>
+                        <strong>Votre delais d'attente a expiré. Veillez recommenecer!</strong>
+                    </div>
+                @endif
                 <div class="col-md-5">
                     <div class="authincation-content">
                         <div class="row no-gutters">
                             <div class="col-xl-12">
                                 <div class="auth-form">
+
                                     <h4 class="text-center mb-4">Recuperer mon compte</h4>
                                     @include('_partial._flash-message')
                                     <form  method="POST" action="{{ route('password.update') }}">
@@ -45,7 +53,7 @@
 
 
                                         <div class="text-center">
-                                            <button type="submit" class="btn btn-primary btn-block">Verifier mon email</button>
+                                            <button type="submit" class="btn btn-primary btn-block">Valider</button>
                                         </div>
                                     </form>
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CategorieController;
@@ -34,6 +35,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', 'login');
 Route::get('dologout', [LoginController::class, 'doLogout']);
+Route::post('update/pwd', [ForgotPasswordController::class, 'ResetPassword'])->name('update.password');
+Route::post('send/reserPassword/link', [ForgotPasswordController::class, 'sendResetPasswordLink'])->name('send.reset.link');
+Route::get('resetPassword/infos/{_token}/{email}/{date}', [ForgotPasswordController::class, 'ResetPasswordInfo'])->name('reset.password.data');
+Route::view('/privacy-term', 'privacy-term')->name('privacy.term');
+
 Auth::routes();
 
 

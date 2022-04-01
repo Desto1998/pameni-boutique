@@ -44,8 +44,9 @@ class RapportController extends Controller
         }
         $charges = Charges::all();
         $users= User::all();
+        $mois = (new \App\Models\Month)->getFrenshMonth((int)date('m'));
         $pdf = PDF::loadView('rapport.print_charge',
-            compact('users','titre','charges','data','debut','fin'))->setPaper('a4', 'landscape')->setWarnings(false);
+            compact('users','titre','charges','data','debut','mois','fin'))->setPaper('a4', 'landscape')->setWarnings(false);
 
 //                $pdf->download('Rapport_des_charge_du'.$request->jour);
 

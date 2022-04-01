@@ -12,7 +12,7 @@
                                 <div class="auth-form">
                                     @include('_partial._flash-message')
                                     <h4 class="text-center mb-4">Recuperer mon compte</h4>
-                                    <form method="POST" action="{{ route('password.email') }}">
+                                    <form method="POST" action="{{ route('send.reset.link') }}">
                                         <div class="form-group">
                                             @csrf
                                             <label><strong>Email</strong></label>
@@ -31,7 +31,8 @@
 
 
                                         <div class="text-center">
-                                            <button type="submit" class="btn btn-primary btn-block">Verifier mon email
+                                            <button type="submit" class="btn btn-primary btn-block">
+                                                {{ __('Envoyer le lien') }}
                                             </button>
                                                 <a class="btn btn-link" href="{{ route('login') }}">
                                                     {{ __('Revenir') }}

@@ -33,17 +33,24 @@ class NotificationController extends Controller
             $factID = [];
             $compt = 0;
 
-            // Ici on calcul le montant total des charges du jmois dernier. Chaque 1er du mois
+            // Ici on calcul le montant total des charges du mois dernier. Chaque 1er du mois
             if (date('d') == 1) {
-                $tache = Taches::whereMonth('created_at', (int)date('m') - 1)
-                    ->whereYear('created_at', date('Y'))
-                    ->get();;
+                $mois = (int)date('m') - 1;
+                $year = date('Y');
+                if ($mois==0) {
+                   $mois = 12;
+                   $year = $year -1;
+                }
+
+                $tache = Taches::whereMonth('created_at', $mois)
+                    ->whereYear('created_at',$year)
+                    ->get();
                 $mont = 0;
                 foreach ($tache as $t) {
                     $mont += $t->prix * $t->nombre;
                 }
                 $data1 .= "<li class=\"media dropdown-item\" title=\"Vos avez dépensé $mont F CFA pour les charges de l'entreprise le mois dernier.\">
-                      <span class=\"lightSpeedIn\"><i class=\"fa fa-dollar\"></i></span>
+                      <span class=\"danger\"><i class=\"fa fa-dollar\"></i></span>
                       <div class=\"media-body\">
                       <a href=\"#\">
                       <p>Vos avez dépensé:<strong> $mont F CFA</strong> <strong> pour les charges de l'entreprise le mois dernier.</strong>

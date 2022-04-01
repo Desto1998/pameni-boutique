@@ -53,7 +53,7 @@ class LoginController extends Controller
 
         }else{
 
-            return back()->with('error','your username and password are wrong.');
+            return back()->with('error','Adresse email ou mot de passe incorrect.');
 
         }
 

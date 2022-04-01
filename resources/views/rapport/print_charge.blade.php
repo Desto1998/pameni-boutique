@@ -34,16 +34,16 @@
     .forhead {
         display: flex;
         justify-content: center;
-        height: 140px;
+        height: 100px;
         margin-top: 0;
-        padding-top: 10px;
-        background: #EEEEEE;
+        /*padding-top: 10px;*/
+        /*background: #EEEEEE;*/
     }
 
-    .for-logo {
-        min-width: 270px;
-        max-width: 250px;
-    }
+    /*.for-logo {*/
+    /*    min-width: 200px;*/
+    /*    max-width: 250px;*/
+    /*}*/
 
     .logo {
         width: 160px;
@@ -135,15 +135,16 @@
     }
 
     footer table tr div {
-        width: 200px;
+        width: 165px;
         background-color: #0c85d0;
         padding: 10px;
         border-radius: 10px;
         color: #ffffff;
+        font-size: 9px;
     }
 </style>
 <body>
-<div class="forhead" style="background: #EEEEEE">
+<div class="forhead">
     <header class="forhead">
         <table class="heading-table">
             <tr>
@@ -158,8 +159,7 @@
                 <td class="for-name">
                     <h3>{{ 'GLOBAL SOFT & COMMUNICATION Sarl' }}</h3>
                     <p>
-                        <strong>GSC:</strong> Rue foch face direction Orange, DOUALA CAMEROUN <br><br>
-                        <strong>DSP: {{ $data[0]->firstname }} {{ $data[0]->lastname }} {{ $data[0]->phone }} </strong>
+                        <strong>GSC:</strong> Akwa rue Castelneau face direction commerciale MTN derrière Akwa Palace, DOUALA CAMEROUN <br>
                     </p>
 
                 </td>
@@ -172,8 +172,9 @@
 </div>
 <h3 style="text-align: center; margin: 20px;text-transform: capitalize">{{ $titre }}</h3>
 <label><i>Période:</i> <strong>{{ $debut }}</strong> au <strong>{{ $fin }}</strong></label><br>
-<label><i>Date d'émission:</i> <strong>
-        <?= date('d F, Y');?></strong></label>
+<label><i>Par: </i>
+    <strong>{{ \Illuminate\Support\Facades\Auth::user()->lastname }} {{ \Illuminate\Support\Facades\Auth::user()->firstname }}</strong>
+{{--    <strong><?= date('d F, Y');?></strong></label>--}}
 <div class="for-product">
     <div class="product-table">
         <table>
@@ -218,7 +219,7 @@
             <td>
                 <div>
                     <strong>Douala</strong>-
-                    Akwa boulevard de la libertee face Direction Orange Akwa Douala<br>
+                    AKWA rue Castelneau face direction commerciale MTN derrière Akwa Palace,  DOUALA CAMEROUN<br>
                     gscdla@gsc-technology.com
                 </div>
             </td>
@@ -233,6 +234,12 @@
                 <div>
                     <strong>Garoua</strong>, centre Commercial face Direction PMUC<br>
                     gscgaroua@gsc-technology.com
+                </div>
+            </td>
+            <td>
+                <div>
+                    <strong>Ndjamena, Tchad</strong> - avenue Ngarterie Mathias axe<br>
+                    gsctchad@gsc-technology.com
                 </div>
             </td>
         </tr>
