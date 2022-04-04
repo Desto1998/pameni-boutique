@@ -159,7 +159,7 @@
                 <h3>{{ 'GLOBAL SOFT & COMMUNICATION Sarl' }}</h3>
                 <p>
                     <strong>GSC:</strong> Akwa rue Castelneau face direction commerciale MTN derrière Akwa Palace, DOUALA CAMEROUN <br>
-                    <strong style="padding-top: 8px">DSP: {{ $data[0]->firstname }} {{ $data[0]->lastname }} {{ $data[0]->phone }} </strong>
+                    <strong style="padding-top: 8px; text-transform: uppercase">DSP: {{ $data[0]->firstname }} {{ $data[0]->lastname }} {{ $data[0]->phone }} </strong>
                 </p>
 
             </td>
@@ -188,7 +188,7 @@
             <td>
                 <div class="client-details">
                     <strong style="text-decoration: underline">COORDONNEES FOURNISSEUR</strong><br>
-                    <strong>{{ $data[0]->nom_fr }} {{ $data[0]->prenom_fr }} {{ $data[0]->raison_s_fr }}</strong><br>
+                    <strong style="text-transform: uppercase">{{ $data[0]->nom_fr }} {{ $data[0]->prenom_fr }} {{ $data[0]->raison_s_fr }}</strong><br>
                     <strong>Tel: {{ $data[0]->phone_1_fr }}  {{ isset($data[0]->phone_2_fr)?'/'.$data[0]->phone_2_fr:''  }}</strong><br>
                     <strong>BP: {{ $data[0]->postale }}  </strong><br>
                     @if ($data[0]->type_fr==1)

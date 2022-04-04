@@ -12,6 +12,7 @@ use App\Http\Controllers\FactureController;
 use App\Http\Controllers\FournisserController;
 use App\Http\Controllers\GestionController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MenuController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PaiementController;
 use App\Http\Controllers\ProduitController;
@@ -191,6 +192,8 @@ Route::prefix('dashboard')->group(function () {
                     Route::post('user/delete', [UserController::class, 'deleteUser'])->name('user.delete');
                     Route::get('user/activate/{id}', [UserController::class, 'activate'])->name('activate_compte');
                     Route::get('user/block/{id}', [UserController::class, 'block'])->name('block_compte');
+
+                    Route::post('user/menu', [MenuController::class, 'storeMenu'])->name('set.user.menu');
                 });
             });
 

@@ -38,13 +38,13 @@ class CommandeController extends Controller
     public function loadCommandes($id)
     {
         if ($id>0) {
-            $data = Commandes::join('fournisseurs', 'fournisseurs.fournisseur_id', 'commandes.commande_id')
+            $data = Commandes::join('fournisseurs', 'fournisseurs.fournisseur_id', 'commandes.idfournisseur')
                 ->join('users', 'users.id', 'commandes.iduser')
                 ->where('commandes.idfournisseur',$id)
                 ->orderBy('commandes.created_at', 'desc')
                 ->get();
         }else{
-            $data = Commandes::join('fournisseurs', 'fournisseurs.fournisseur_id', 'commandes.commande_id')
+            $data = Commandes::join('fournisseurs', 'fournisseurs.fournisseur_id', 'commandes.idfournisseur')
                 ->join('users', 'users.id', 'commandes.iduser')
                 ->orderBy('commandes.created_at', 'desc')
                 ->get();
@@ -139,7 +139,7 @@ class CommandeController extends Controller
             'mode' => ['required', 'min:5'],
             'quantite' => ['required'],
             'prix' => ['required'],
-            'ref_bon' => ['required'],
+            //'ref_bon' => ['required'],
         ]);
 //        dd($request);
 //        $lastNum = Devis::whereYear('created_at', date('Y'))->ma('devis_id')->get() ;

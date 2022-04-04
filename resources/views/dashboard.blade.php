@@ -48,7 +48,7 @@
                                                 <i class="fa fa-users text-success border-success"></i>
                                             </div>
                                             <div class="stat-content d-inline-block">
-                                                <div class="stat-text">Fournss</div>
+                                                <div class="stat-text fs-6">Fournisseurs</div>
                                                 <div class="stat-digit">{{ count($fournisseurs) }}</div>
                                             </div>
                                         </div>
@@ -64,7 +64,7 @@
                                                 <i class="fa fa-dashcube text-success border-success"></i>
                                             </div>
                                             <div class="stat-content d-inline-block">
-                                                <div class="stat-text">Taches</div>
+                                                <div class="stat-text">Dépenses</div>
                                                 <div class="stat-digit">{{ count($charges) }}</div>
                                             </div>
                                         </div>
@@ -82,7 +82,7 @@
                                             <div class="stat-content">
                                                 <div class="stat-text">Devis non validés</div>
                                                 <div class="stat-digit"><i
-                                                        class="fa fa-sort-numeric-asc"></i>{{ count($devisNV) }}</div>
+                                                        class=""></i>{{ count($devisNV) }}</div>
                                             </div>
                                             {{--                                            <div class="progress">--}}
                                             {{--                                                <div class="progress-bar progress-bar-success w-25" role="progressbar"--}}
@@ -99,7 +99,7 @@
                                             <div class="stat-content">
                                                 <div class="stat-text">Factures non validées</div>
                                                 <div class="stat-digit"><i
-                                                        class="fa fa-sort-numeric-asc"></i>{{ count($factureNV) }}</div>
+                                                        class=""></i>{{ count($factureNV) }}</div>
                                             </div>
                                             {{--                                            <div class="progress">--}}
                                             {{--                                                <div class="progress-bar progress-bar-success w-25" role="progressbar"--}}
@@ -118,7 +118,7 @@
                                             <div class="stat-content">
                                                 <div class="stat-text">Commandes non validées</div>
                                                 <div class="stat-digit"><i
-                                                        class="fa fa-sort-numeric-asc"></i>{{ count($commandesNV) }}
+                                                        class=""></i>{{ count($commandesNV) }}
                                                 </div>
                                             </div>
                                             {{--                                            <div class="progress">--}}
@@ -138,7 +138,7 @@
                                             <div class="stat-content">
                                                 <div class="stat-text">Devis sans factures</div>
                                                 <div class="stat-digit"><i
-                                                        class="fa fa-sort-numeric-asc"></i>{{ count($devisSF) }}</div>
+                                                        class=""></i>{{ count($devisSF) }}</div>
                                             </div>
                                             {{--                                            <div class="progress">--}}
                                             {{--                                                <div class="progress-bar progress-bar-success w-25" role="progressbar"--}}
@@ -194,7 +194,7 @@
                                                     <a href="{{ route('commandes.view',['id'=>$value->commande_id]) }}"
                                                        class="row">
                                                         <ul class="d-flex row col-md-12">
-                                                            <li class="col-md-5">{{ $value->observation }}</li>
+                                                            <li class="col-md-5">{{ $value->objet }}</li>
                                                             <li class="col-md-2">{{ $value->reference_commande }}</li>
                                                             <li class="col-md-2">{{ $value->date_commande }}</li>
                                                             <li class="col-md-3">{{ $value->lastname }}  {{ $value->lastname }}</li>
@@ -202,7 +202,7 @@
                                                     </a>
                                                 @endforeach
                                                     @if (count($lastactivity2)===0 && count($lastactivity1)===0 && count($lastactivity)===0)
-                                                       <h4 class="text-danger text-center my-4">Aucune activité pendant les dernière 24h</h4>
+                                                       <h4 class="text-danger text-center my-4">Aucune activité durant les dernières 24h</h4>
                                                     @endif
                                             </div>
                                         </div>

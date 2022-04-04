@@ -324,3 +324,27 @@ create table num_factures
     created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at    DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+drop table if exists menus;
+create table menus
+(
+    menu_id int primary key AUTO_INCREMENT,
+    position        int,
+    code      varchar(5) ,
+    label       varchar(100),
+    description    varchar(1000) null,
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+drop table if exists user_menus;
+create table user_menus
+(
+    user_menu_id int primary key AUTO_INCREMENT,
+    idmenu        int,
+    userid        int,
+    iduser        int,
+--     FOREIGN KEY (userid) REFERENCES users(id),
+    FOREIGN KEY (idmenu) REFERENCES menus(menu_id),
+    created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at    DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;

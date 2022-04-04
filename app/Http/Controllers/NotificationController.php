@@ -77,7 +77,8 @@ class NotificationController extends Controller
                 $nbjour = (int)$cm->delai_liv - 3;
                 $date->add(new DateInterval("P{$nbjour}D"));
                 $date = date("Y-m-d", strtotime($date->format('Y-m-d')));
-                $date2 = new DateTime(date('Y-m-d'));
+                $date2 = date('Y-m-d');
+//                dd($date,$date2);
                 if ($date2 >= $date) {
                     $link = route('commandes.view', ['id' => $cm->commande_id]);
                     $ref = $cm->reference_commande;

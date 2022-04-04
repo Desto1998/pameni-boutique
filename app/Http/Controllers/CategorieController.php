@@ -26,7 +26,9 @@ class CategorieController extends Controller
         ]);
         $iduser = Auth::user()->id;
         $dataId = $request->categorie_id;
-        $checkCode = Categories::where('categorie_id','!=',$dataId)->where('code_cat', $request->code_cat)->get();
+        $checkCode = Categories::where('categorie_id','!=',$dataId)
+            ->orWhere('titre_cat',$request->titre_cat)
+            ->where('code_cat', $request->code_cat)->get();
         if (count($checkCode) > 0) {
 //            return redirect()->back()->with('warning', 'Une catégorie avec ce code existe déja!');
             $statut = 0;

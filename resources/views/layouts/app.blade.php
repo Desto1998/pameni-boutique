@@ -51,10 +51,10 @@
     ***********************************-->
     <div class="nav-header">
         <a href="{{ route('home') }}" class="brand-logo">
-            <img class="logo-abbr" style="width: 50px;height: 40px" src="{{asset('images/logo/logo_gssc.png')}}"
+            <img class="logo-abbr" style="width: 60px;height: 40px" src="{{asset('images/logo/logo_gssc.png')}}"
                  alt="Not found">
-            {{--            <img class="logo-compact" src="{{asset('images/logo/logo_gssc.png')}}" alt="">--}}
-            <img class="brand-title" src="{{asset('images/logo/logo_gssc.png')}}" alt="">
+{{--                        <img class="logo-compact" src="{{asset('images/logo/logo_gssc.png')}}" alt="">--}}
+{{--            <img class="brand-title" style="width: 500px" src="{{asset('images/logo/logo_gssc.png')}}" alt="">--}}
         </a>
 
         <div class="nav-control">
@@ -195,15 +195,17 @@
                             class="icon icon-home"></i><span class="nav-text">Tableau de bord</span></a>
                 </li>
                 <li class="nav-label">FACTURATION ET DEVIS</li>
+                @if (in_array('DE',\App\Models\User_menus::getUserMenu()))
+                    <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false"><i
+                                class="fa fa-database"></i><span class="nav-text">Dévis</span></a>
+                        <ul aria-expanded="false">
+                            <li><a href="{{ route('devis.add') }}">Créer un dévis</a></li>
+                            <li><a href="{{ route('devis.all') }}">Gestion des dévis</a></li>
+                        </ul>
+                    </li>
+                @endif
 
-                <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false"><i
-                            class="fa fa-database"></i><span class="nav-text">Dévis</span></a>
-                    <ul aria-expanded="false">
-                        <li><a href="{{ route('devis.add') }}">Créer un dévis</a></li>
-                        <li><a href="{{ route('devis.all') }}">Gestion des dévis</a></li>
-                    </ul>
-                </li>
-
+                @if (in_array('FA',\App\Models\User_menus::getUserMenu()))
                 <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false"><i
                             class="fa fa-file"></i><span class="nav-text">Factures</span></a>
                     <ul aria-expanded="false">
@@ -211,7 +213,8 @@
                         <li><a href="{{ route('factures.all') }}">Gestion des factures</a></li>
                     </ul>
                 </li>
-
+                @endif
+                @if (in_array('CA',\App\Models\User_menus::getUserMenu()))
                 <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false"><i
                             class="fa fa-cart-plus"></i><span class="nav-text">Commandes</span></a>
                     <ul aria-expanded="false">
@@ -219,13 +222,19 @@
                         <li><a href="{{ route('commandes.all') }}">Gestion des commandes</a></li>
                     </ul>
                 </li>
+                @endif
+                @if (in_array('CL',\App\Models\User_menus::getUserMenu()))
                 <li><a class="" href="{{ route('client.all') }}" aria-expanded="false"><i
                             class="fa fa-users"></i><span class="nav-text">Clients</span></a>
                 </li>
+                @endif
+                @if (in_array('FR',\App\Models\User_menus::getUserMenu()))
                 <li><a class="" href="{{ route('fournisseur.all') }}" aria-expanded="false"><i
                             class="mdi mdi-nature-people"></i><span class="nav-text">Fournisseurs</span></a>
                 </li>
+                @endif
 {{--                <li class="nav-label">PRODUITS</li>--}}
+                @if (in_array('PR',\App\Models\User_menus::getUserMenu()))
                 <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false"><i
                             class="fa fa-product-hunt"></i><span class="nav-text">Produits</span></a>
                     <ul aria-expanded="false">
@@ -236,14 +245,19 @@
                         {{--                        <li><a href="{{ route('gestion.calendrier') }}">Rapport</a></li>--}}
                     </ul>
                 </li>
+                @endif
+
                 <li class="nav-label">GESTION DE L'ENTREPRISE</li>
-                <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false"><i
-                            class="icon icon-payment"></i><span class="nav-text">Gestions</span></a>
-                    <ul aria-expanded="false">
-                        <li><a href="{{ route('gestion.index') }}">Charges</a></li>
-                        <li><a href="{{ route('gestion.tache') }}">{{--Tâches--}} Dépenses</a></li>
-                    </ul>
-                </li>
+                @if (in_array('GEC',\App\Models\User_menus::getUserMenu()))
+                    <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false"><i
+                                class="icon icon-payment"></i><span class="nav-text">Gestions</span></a>
+                        <ul aria-expanded="false">
+                            <li><a href="{{ route('gestion.index') }}">Charges</a></li>
+                            <li><a href="{{ route('gestion.tache') }}">{{--Tâches--}} Dépenses</a></li>
+                        </ul>
+                    </li>
+                @endif
+                @if (in_array('GER',\App\Models\User_menus::getUserMenu()))
                 <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false"><i
                             class="fa fa-file-pdf-o"></i><span class="nav-text">Rapports</span></a>
                     <ul aria-expanded="false">
@@ -251,7 +265,9 @@
                         <li><a href="#">Rapport d'activités clients</a></li>
                     </ul>
                 </li>
-                @if (Auth::user()->is_admin==1)
+                @endif
+
+                @if (Auth::user()->is_admin==1 && in_array('US',\App\Models\User_menus::getUserMenu()))
                     <li class="nav-label">GESTION DES UTILISATEURS</li>
                     <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false"><i
                                 class="icon icon-users-mm"></i><span class="nav-text">Comptes</span></a>

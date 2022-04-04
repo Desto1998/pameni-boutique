@@ -184,7 +184,7 @@
                 <th>Charges</th>
                 <th>Raison</th>
                 <th>Qte</th>
-                <th>Prix_u</th>
+                <th>P.U</th>
                 <th>Total</th>
             </tr>
 
@@ -194,10 +194,10 @@
                 $total=0;
             @endphp
             @foreach($data as $key=>$value)
+                @php
+                    $total +=$value->prix * $value->nombre;
+                @endphp
                 <tr>
-                    @php
-                        $total +=$value->prix * $value->nombre;
-                    @endphp
                     <td class="bold">{{ $value->date_ajout }}</td>
                     <td class="">{{ $value->titre }}</td>
                     <td class="">{{ $value->raison }}</td>

@@ -38,11 +38,11 @@
                             <div class="row">
                                 <div class="col-md-5 float-left d-flex">
                                     <div class="form-group col-md-6">
-                                        <label for="date">Date de la facture: </label>
+                                        <label for="date">Date de la facture <span class="text-danger">*</span> </label>
                                         <input type="date" value="{{ $data[0]->date_fact }}" name="date" id="date" class="form-control" required>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="statut_tva">Inclure la TVA? </label>
+                                        <label for="statut_tva">Inclure la TVA?  <span class="text-danger">*</span>  </label>
                                         <select class="form-control" name="tva_statut">
                                             <option {{ $data[0]->tva_statut==0?"selected":"" }} value="0">Non</option>
                                             <option {{ $data[0]->tva_statut==1?"selected":"" }} value="1">Oui</option>
@@ -51,8 +51,8 @@
                                 </div>
                                 <div class="col-md-7 float-right d-flex" id="client-block">
                                     <div class="form-group col-md-6">
-                                        <label for="echeance">Client: </label>
-                                        <select name="idclient" id="single-select" class="form-control">
+                                        <label for="echeance">Client  <span class="text-danger">*</span> </label>
+                                        <select name="idclient" id="single-select" class="form-control" required>
                                             @foreach($clients as $cl)
                                                 <option {{ $data[0]->client_id==$cl->client_id?"selected":"" }}
                                                         value="{{ $cl->client_id }}">{{ $cl->nom_client }} {{ $cl->prenom_client }}{{ $cl->raison_s_client }}</option>
@@ -78,7 +78,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="objet">Objet: </label>
+                                <label for="objet">Objet <span class="text-danger"></span>: </label>
                                 <input type="text" name="objet" id="objet" value="{{ $data[0]->objet }}"
                                        class="form-control" required>
                             </div>

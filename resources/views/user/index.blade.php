@@ -73,9 +73,10 @@
                                         <td>{{ $value->created_at }}</td>
                                         <td class="d-flex">
 
-                                            <a href="{{ route('user.edit', ['id'=>$value->id]) }}"                     class="btn btn-warning btn-sm" title="Modifier le compte"><i
+                                            <a href="{{ route('user.edit', ['id'=>$value->id]) }}"
+                                               class="btn btn-warning btn-sm" title="Modifier le compte"><i
                                                     class="fa fa-edit"></i></a>
-                                               @if(Auth::user()->id != $value->id)
+                                            @if(Auth::user()->id != $value->id)
 
                                                 <button class="btn btn-danger btn-sm ml-1 " title="Supprimer"
                                                         onclick="deleteUser({{ $value->id }})"><i
@@ -101,8 +102,57 @@
 
                                                 @endif
                                             @endif
+                                            <a href="javascript:void(0)" data-toggle="modal"
+                                               data-target="#menusModal{{ $value->id }}"
+                                               class="btn btn-outline-warning btn-sm mx-1" title="Definir les accès au menu"><i
+                                                    class="fa fa-universal-access"></i></a>
                                         </td>
                                     </tr>
+                                    <!-- Modal add categorie -->
+                                    <div class="modal fade" data-backdrop="static" data-keyboard="false"
+                                         id="menusModal{{ $value->id }}">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Definition des accès menu pour: {{ $value->email }}</h5>
+                                                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form action="{{ route('set.user.menu') }}" method="post" id="menu-form">
+                                                        @csrf
+                                                        <input type="hidden" value="{{ $value->id }}" name="userid">
+                                                        @foreach($menus as $m)
+                                                            @php
+                                                              $checked = '';
+                                                              foreach ($usermenu as $um){
+                                                                  if ($um->userid==$value->id && $um->idmenu==$m->menu_id) {
+                                                                     $checked = 'checked';
+                                                                  }
+                                                              }
+
+                                                            @endphp
+                                                            <div class="form-group">
+                                                                <label title="{{ $m->description }}">
+                                                                    <input type="checkbox" class="checkbox" {{ $checked }} name="idmenu[]" value="{{ $m->menu_id }}">
+                                                                    &nbsp; &nbsp; {{ $m->label }}
+                                                                </label>
+                                                            </div>
+                                                        @endforeach
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                    data-dismiss="modal">Annuler
+                                                            </button>
+                                                            <button type="submit" class="btn btn-primary">Enregistrer
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 @endforeach
                                 </tbody>
 
@@ -120,49 +170,49 @@
 @section('script')
     <script>
         function deleteUser(id) {
-                swal.fire({
-                    title: "Supprimer cette compte?",
-                    icon: 'question',
-                    text: "Ce compte sera supprimé de façon définitive.",
-                    type: "warning",
-                    showCancelButton: !0,
-                    confirmButtonText: "Oui, supprimer!",
-                    cancelButtonText: "Non, annuler !",
-                    reverseButtons: !0
-                }).then(function (e) {
-                    if (e.value === true) {
-                        // if (confirm("Supprimer cette tâches?") == true) {
-                        $.ajaxSetup({
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            }
-                        });
-                        $.ajax({
-                            type: "POST",
-                            url: "{{ route('user.delete') }}",
-                            data: {id: id},
-                            dataType: 'json',
-                            success: function (res) {
-                                if (res) {
-                                    swal.fire("Effectué!", "Supprimé avec succès!", "success")
-                                    $('#table-row-'+id).hide(100)
+            swal.fire({
+                title: "Supprimer cette compte?",
+                icon: 'question',
+                text: "Ce compte sera supprimé de façon définitive.",
+                type: "warning",
+                showCancelButton: !0,
+                confirmButtonText: "Oui, supprimer!",
+                cancelButtonText: "Non, annuler !",
+                reverseButtons: !0
+            }).then(function (e) {
+                if (e.value === true) {
+                    // if (confirm("Supprimer cette tâches?") == true) {
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('user.delete') }}",
+                        data: {id: id},
+                        dataType: 'json',
+                        success: function (res) {
+                            if (res) {
+                                swal.fire("Effectué!", "Supprimé avec succès!", "success")
+                                $('#table-row-' + id).hide(100)
 
-                                } else {
-                                    sweetAlert("Désolé!", "Erreur lors de la suppression!", "error")
-                                }
-
-                            },
-                            error: function (resp) {
-                                sweetAlert("Désolé!", "Une erreur s'est produite.", "error");
+                            } else {
+                                sweetAlert("Désolé!", "Erreur lors de la suppression!", "error")
                             }
-                        });
-                    } else {
-                        e.dismiss;
-                    }
-                }, function (dismiss) {
-                    return false;
-                })
-                // }
+
+                        },
+                        error: function (resp) {
+                            sweetAlert("Désolé!", "Une erreur s'est produite.", "error");
+                        }
+                    });
+                } else {
+                    e.dismiss;
+                }
+            }, function (dismiss) {
+                return false;
+            })
+            // }
         }
     </script>
     <!-- Datatable -->

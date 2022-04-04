@@ -38,11 +38,11 @@
                             <div class="row">
                                 <div class="col-md-5 float-left d-flex">
                                     <div class="form-group col-md-6">
-                                        <label for="date">Date de la profomat: </label>
+                                        <label for="date">Date de la profomat <span class="text-danger"> *</span></label>
                                         <input type="date" name="date" id="date" class="form-control" required>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="statut_tva">Inclure la TVA? </label>
+                                        <label for="statut_tva">Inclure la TVA? <span class="text-danger"> *</span></label>
                                         <select class="form-control" name="tva_statut">
                                             <option value="0">Non</option>
                                             <option value="1">Oui</option>
@@ -51,8 +51,8 @@
                                 </div>
                                 <div class="col-md-7 float-right d-flex" id="client-block">
                                     <div class="form-group col-md-6">
-                                        <label for="echeance">Client: </label>
-                                        <select name="idclient" id="single-select" class="form-control">
+                                        <label for="echeance">Client <span class="text-danger"> *</span> </label>
+                                        <select name="idclient" id="single-select" class="form-control" required>
                                             <option selected="selected" disabled>Sélectionez un client</option>
                                             @foreach($clients as $cl)
                                                 <option
@@ -90,7 +90,7 @@
 
                             </div>
                             <div class="form-group">
-                                <label for="objet">Objet: </label>
+                                <label for="objet">Objet <span class="text-danger"> *</span> </label>
                                 <input type="text" name="objet" id="objet" class="form-control" required>
                             </div>
                             <div class="for-produit table-responsive" style="max-height: 300px; overflow: auto">
@@ -186,13 +186,13 @@
 {{--                                           class="form-control">--}}
                                 </div>
                                 <div class="col-md-3 form-group">
-                                    <label>Garentie(en mois)<span class="text-danger"> *</span></label>
+                                    <label>Garantie(en mois)<span class="text-danger"> *</span></label>
                                     <input type="number" min="0" name="garentie" class="form-control">
                                 </div>
                                 <div class="col-md-3 form-group">
                                     <label for="condition">Conditions financières<span
                                             class="text-danger"> *</span></label>
-                                    <select class="form-control" name="condition" v>
+                                    <select class="form-control" name="condition">
                                         <option>100% à la commande</option>
                                         <option>50% à la commande</option>
                                     </select>

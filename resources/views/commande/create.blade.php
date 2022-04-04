@@ -38,11 +38,11 @@
                             <div class="row">
                                 <div class="col-md-5 float-left d-flex">
                                     <div class="form-group col-md-6">
-                                        <label for="date">Date de la commande: </label>
+                                        <label for="date">Date de la commande  <span class="text-danger">*</span> </label>
                                         <input type="date" name="date" id="date" class="form-control" required>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="statut_tva">Inclure la TVA? </label>
+                                        <label for="statut_tva">Inclure la TVA?  <span class="text-danger">*</span></label>
                                         <select class="form-control" name="tva_statut">
                                             <option value="0">Non</option>
                                             <option value="1">Oui</option>
@@ -51,7 +51,7 @@
                                 </div>
                                 <div class="col-md-7 float-right d-flex" id="client-block">
                                     <div class="form-group col-md-6">
-                                        <label for="echeance">Fournisseur:</label>
+                                        <label for="echeance">Fournisseur  <span class="text-danger">*</span></label>
                                         <select name="idfournisseur" id="single-select" class="form-control">
                                             <option selected="selected" disabled>Sélectionez un fournisseur</option>
                                             @foreach($clients as $cl)
@@ -89,7 +89,7 @@
 
                             </div>
                             <div class="form-group">
-                                <label for="objet">Objet: </label>
+                                <label for="objet">Objet <span class="text-danger">*</span> </label>
                                 <input type="text" name="objet" id="objet" class="form-control" required>
                             </div>
                             <div class="for-produit table-responsive" style="max-height: 300px; overflow: auto">

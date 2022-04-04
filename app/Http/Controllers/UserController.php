@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Menus;
 use App\Models\User;
+use App\Models\User_menus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,7 +16,9 @@ class UserController extends Controller
     protected function index()
     {
         $users = User::all();
-        return view('user.index', compact('users'));
+        $menus = Menus::all();
+        $usermenu = User_menus::all();
+        return view('user.index', compact('users','menus','usermenu'));
     }
 
 
