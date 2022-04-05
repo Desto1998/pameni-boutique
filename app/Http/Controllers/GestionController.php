@@ -28,13 +28,21 @@ class GestionController extends Controller
             $data =Charges::join('users','users.id','charges.iduser')->orderBy('charges.created_at','desc' )->get();
             return Datatables::of($data)
                 ->addIndexColumn()
+                ->addColumn('type', function($value){
+                    $type = '<span class="text-primary">Charge variable</span>';
+                    if ($value->type_charge==1) {
+                        $type = '<span class="text-success"> Charge fixe</span>';
+                    }
+//                    $actionBtn = '<div class="d-flex"><a href="javascript:void(0)" class="edit btn btn-warning btn-sm"><i class="fa fa-edit"></i></a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm ml-1"  onclick="deleteFun()"><i class="fa fa-trash"></i></a></div>';
+                    return $type;
+                })
                 ->addColumn('action', function($value){
                     $action = view('gestion.charge_action',compact('value'));
 
 //                    $actionBtn = '<div class="d-flex"><a href="javascript:void(0)" class="edit btn btn-warning btn-sm"><i class="fa fa-edit"></i></a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm ml-1"  onclick="deleteFun()"><i class="fa fa-trash"></i></a></div>';
                     return (string)$action;
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['action','type'])
                 ->make(true);
 
         }
@@ -48,11 +56,17 @@ class GestionController extends Controller
         ]);
         $iduser = Auth::user()->id;
         $dataId = $request->charge_id;
+        $jourAlerte = 0;
+        if ($request->alerte) {
+            $jourAlerte = $request->alerte;
+        }
         $save = Charges::updateOrCreate(
             ['charge_id' => $dataId],
             [
                 'titre' => $request->titre,
                 'description' => $request->description,
+                'type_charge' => $request->type_charge,
+                'alerte' => $jourAlerte,
                 'iduser' => $iduser,
 
             ])
@@ -102,7 +116,7 @@ public function loadTaches(){
     }
     return false;
 }
-    // Store or edit
+    // Store or edit les depenses
     protected function storeTask(Request $request)
     {
         $request->validate([

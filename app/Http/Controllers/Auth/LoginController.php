@@ -44,9 +44,7 @@ class LoginController extends Controller
     {
         $remember_me = $request->has('remember_me') ? true : false;
         if (auth()->attempt(['email' => $request->input('email'), 'password' => $request->input('password')], $remember_me))
-
         {
-
             $user = auth()->user();
             return back();
 //            dd($user);

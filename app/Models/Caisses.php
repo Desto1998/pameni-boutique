@@ -5,16 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Charges extends Model
+class Caisses extends Model
 {
     use HasFactory;
-    protected $primaryKey = 'charge_id';
+    protected $primaryKey = 'caisse_id';
     protected $fillable = [
-        'titre',
+        'montant',
+        'raison',
+        'date_depot',
         'description',
-        'description_cat',
-        'type_charge',
-        'alerte',
         'iduser',
+        'idtache',
+        'identre',
+        'type_operation',
     ];
 }

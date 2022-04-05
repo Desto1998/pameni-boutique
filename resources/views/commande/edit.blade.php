@@ -3,7 +3,9 @@
 @section('css_before')
     <link rel="stylesheet" href="{{asset('template/vendor/select2/css/select2.min.css')}}">
     <link href="{{asset('template/vendor/sweetalert2/dist/sweetalert2.min.css')}}" rel="stylesheet">
-
+{{--    https://www.npmjs.com/package/intl-tel-input/v/5.8.5--}}
+{{--    https://stackoverflow.com/questions/60034134/how-to-bind-country-change-intl-tel-input--}}
+{{--    https://github.com/jackocnr/intl-tel-input--}}
     <style>
         .hidden {
             display: none;
@@ -477,11 +479,10 @@
             }
         }
 
-
         $('select[name="tva_statut"]').on('change', function (e) {
-            if ($('select[name="tva_statut"]').val() == 1) {
+            // if ($('select[name="tva_statut"]').val() == 1) {
                 total();
-            }
+            // }
         });
 
         // fonction qui calcule les totaux HT et TTC

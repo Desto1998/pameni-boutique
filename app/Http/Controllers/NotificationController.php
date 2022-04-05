@@ -33,6 +33,10 @@ class NotificationController extends Controller
             $factID = [];
             $compt = 0;
 
+            /**
+             * Notification pour les charges fixes. Notifier 2 jours avant le date de paiements
+             */
+
             // Ici on calcul le montant total des charges du mois dernier. Chaque 1er du mois
             if (date('d') == 1) {
                 $mois = (int)date('m') - 1;
@@ -54,7 +58,6 @@ class NotificationController extends Controller
                       <div class=\"media-body\">
                       <a href=\"#\">
                       <p>Vos avez dépensé:<strong> $mont F CFA</strong> <strong> pour les charges de l'entreprise le mois dernier.</strong>
-
                       </p>
                       </a>
                       </div>
@@ -87,7 +90,6 @@ class NotificationController extends Controller
                       <div class=\"media-body\">
                       <a href=\"$link\">
                       <p><strong>La commande N: $ref </strong> <strong> doit se livrer dans moins de 3 jours.</strong>
-
                       </p>
                       </a>
                       </div>
@@ -114,7 +116,6 @@ class NotificationController extends Controller
                       <div class=\"media-body\">
                       <a href=\"$link\">
                       <p><strong>Le devis N: $ref </strong> <strong> expire bientot et n'a pa de facture.</strong>
-
                       </p>
                       </a>
                       </div>
@@ -160,7 +161,6 @@ class NotificationController extends Controller
                       <div class=\"media-body\">
                       <a href=\"$link\">
                       <p><strong>la facture N: $ref </strong> <strong>est non soldée</strong>
-
                       </p>
                       </a>
                       </div>

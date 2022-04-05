@@ -34,7 +34,17 @@
                                value="{{ $value->titre }}" required
                                class="form-control">
                     </div>
-
+                    <div class="form-group">
+                        <label for="titre">Type la charge <span class="text-danger">*</span></label>
+                        <select name="type_charge" id="type_charge_{{ $value->charge_id }}" onchange="showAlerte({{ $value->charge_id }})" class="form-control">
+                            <option {{ $value->type_charge !=1 ?'selected':'' }} value="0">Charge variable</option>
+                            <option {{ $value->type_charge ==1 ?'selected':'' }} value="1">Charge fixe</option>
+                        </select>
+                    </div>
+                    <div class="form-group hide" id="alerte_{{ $value->charge_id }}">
+                        <label for="titre">Jour de paiement <span class="text-danger">*</span></label>
+                        <input type="number" min="1" name="alerte" value="{{ $value->alerte }}" id="alerte{{ $value->charge_id }}" max="30" class="form-control">
+                    </div>
                     <div class="form-group">
                         <label for="description{{ $value->charge_id }}">Description
                             de la charge </label>

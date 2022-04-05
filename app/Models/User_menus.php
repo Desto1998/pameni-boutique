@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use phpDocumentor\Reflection\Types\This;
 
 class User_menus extends Model
@@ -34,6 +35,8 @@ class User_menus extends Model
         foreach ($menu as $key=>$item){
             $data[$key] = $item->code;
         }
+//        dd(Session::get('MENU'));
+//        $data = Session::get('MENU');
         return $data;
     }
 }

@@ -14,7 +14,7 @@
         <div class="row page-titles mx-0">
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
-                    <h4>Charges</h4>
+                    <h4>Encaissements</h4>
                     {{--                    <p class="mb-0">Your business dashboard template</p>--}}
                 </div>
             </div>
@@ -22,7 +22,7 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="javascript:void(0)">Dashboard</a></li>
                     <li class="breadcrumb-item active"><a href="javascript:void(0)">Gestion</a></li>
-                    <li class="breadcrumb-item active"><a href="javascript:void(0)">Taches</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0)">Encaissements</a></li>
                 </ol>
             </div>
         </div>
@@ -31,7 +31,7 @@
                 <div class="card px-3">
                     <div class="card-body">
                         <!-- Button trigger modal -->
-                        <span class="float-left h4">Liste des charges</span>
+                        <span class="float-left h4">Liste des encaissements</span>
                         <button type="button" class="btn btn-primary float-right mb-3" data-toggle="modal"
                                 data-target="#chargesModal"><i class="fa fa-plus">&nbsp; Ajouter</i></button>
 
@@ -40,9 +40,10 @@
                                 <thead class="bg-primary">
                                 <tr>
                                     <th>#</th>
-                                    <th>Titre</th>
+                                    <th>Date</th>
+                                    <th>Raison</th>
+                                    <th>Montant</th>
                                     <th>Description</th>
-                                    <th>type</th>
                                     <th>Crée par</th>
                                     <th>Action</th>
                                 </tr>
@@ -59,16 +60,51 @@
         </div>
 
     </div>
-@include('gestion.charge_modal')
+    <!-- Modal ajouter une charge -->
+    <div class="modal fade" data-backdrop="static" id="chargesModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ajouter un encaissement</h5>
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('gestion.entrees.add') }}" method="post" id="charge-form">
+                        @csrf
+                        <div class="form-group">
+                            <label for="raison">Raison <span class="text-danger">*</span></label>
+                            <input type="text" name="raison" id="raison" placeholder="Raison" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="montant">Montant <span class="text-danger">*</span></label>
+                            <input type="number" min="0" step="any" name="montant" id="montant" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description </label>
+                            <textarea name="description" id="description" placeholder="Description"
+                                      class="form-control"></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 @endsection
 @section('script')
     <script>
         function deleteFun(id) {
             var table = $('#example').DataTable();
             swal.fire({
-                title: "Supprimer cette charge?",
+                title: "Supprimer cet encaissement?",
                 icon: 'question',
-                text: "Cette charge sera supprimée de façon définitive.",
+                text: "Cet encaissement sera supprimé de façon définitive.",
                 type: "warning",
                 showCancelButton: !0,
                 confirmButtonText: "Oui, supprimer!",
@@ -84,7 +120,7 @@
                     });
                     $.ajax({
                         type: "POST",
-                        url: "{{ route('gestion.charge.delete') }}",
+                        url: "{{ route('gestion.entrees.delete') }}",
                         data: {id: id},
                         dataType: 'json',
                         success: function (res) {
@@ -111,7 +147,7 @@
             })
             // }
         }
-        function loadCharges(){
+        function loadEntrees(){
             $('#example').dataTable().fnClearTable();
             $('#example').dataTable().fnDestroy();
             $("#example").DataTable({
@@ -127,15 +163,16 @@
                     }
                 },
                 ajax:{
-                    url: "{{ route('gestion.load.charge') }}",
+                    url: "{{ route('gestion.load.entrees') }}",
 
                 },
 
                 columns: [
                     {data: 'DT_RowIndex',name:'DT_RowIndex'},
-                    {data: 'titre',name:'titre'},
-                    {data: 'description',name:'description'},
-                    {data: 'type',name:'type'},
+                    {data: 'date_entre',name:'date_entre'},
+                    {data: 'raison_entre',name:'raison_entre'},
+                    {data: 'montant_entre',name:'montant_entre'},
+                    {data: 'description_entre',name:'description_entre'},
                     {data: 'firstname',name:'firstname'},
                     {data: 'action', name: 'action', orderable: false, searchable: false},
 
@@ -145,7 +182,7 @@
         }
         // load table on page load
         $(document).ready(function () {
-            loadCharges()
+            loadEntrees()
 
         });
 
@@ -162,7 +199,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "{{ route('gestion.charge.add') }}",
+                url: "{{ route('gestion.entrees.add') }}",
                 data: data,
                 dataType: 'json',
                 success: function (res) {
@@ -172,7 +209,7 @@
                         // on recharge le tableau de produit
                         toastr.success("Enregistré avec succès!");
 
-                        loadCharges()
+                        loadEntrees()
                         // on reinitialise le formulaire qui contient les produits
                         $('#charge-form .btn-primary').attr("disabled", false).html("Enregistrer")
                         $('#charge-form')[0].reset()
@@ -193,7 +230,7 @@
             });
         });
 
-        // id cette methode fait la mise a jour d'une charge
+        // id cette methode fait la mise a jour d'un encaissement
         function editeCharge(id){
             $("#edit-charge-form"+id).on("submit", function (event) {
                 event.preventDefault();
@@ -207,7 +244,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "{{ route('gestion.charge.add') }}",
+                    url: "{{ route('gestion.entrees.add') }}",
                     data: data,
                     dataType: 'json',
                     success: function (res) {
@@ -222,7 +259,7 @@
                             $('#edit-charge-form'+id+' .btn-primary').attr("disabled", false).html("Enregistrer")
 
                             $('#chargesModal'+id).modal('hide');
-                            loadCharges()
+                            loadEntrees()
                         }
                         if (res===[]|| res===undefined || res==null) {
                             sweetAlert("Désolé!", "Erreur lors de l'enregistrement!", "error")
@@ -238,15 +275,8 @@
                 });
             });
         }
-    function showAlerte(number){
-        $('.hide').hide(1000);
-       if ($('#type_charge_'+number).val()==1){
-           $('#alerte_'+number).show(1000)
-       } else {
-           $('.hide').hide(700);
-          /// $('#alerte_'+number).hide()
-       }
-    }
+
+
     </script>
     <!-- Datatable -->
     <script src="{{asset('template/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>

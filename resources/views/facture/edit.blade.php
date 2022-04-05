@@ -406,9 +406,9 @@
 
 
         $('select[name="tva_statut"]').on('change',function (e){
-            if ($('select[name="tva_statut"]').val()==1){
+            // if ($('select[name="tva_statut"]').val()==1){
                 total();
-            }
+            // }
         });
 
         // fonction qui calcule les totaux HT et TTC

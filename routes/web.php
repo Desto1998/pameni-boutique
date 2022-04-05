@@ -3,11 +3,13 @@
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\CaisseController;
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CommandeController;
 use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\DevisController;
+use App\Http\Controllers\EntreController;
 use App\Http\Controllers\FactureController;
 use App\Http\Controllers\FournisserController;
 use App\Http\Controllers\GestionController;
@@ -78,6 +80,17 @@ Route::prefix('dashboard')->group(function () {
             Route::get('gestion/tasks/load', [GestionController::class, 'loadTaches'])->name('gestion.load.tache');
             Route::post('gestion/tasks/add', [GestionController::class, 'storeTask'])->name('gestion.taches.add');
             Route::post('gestion/tasks/delete', [GestionController::class, 'deleteTache'])->name('gestion.taches.delete');
+
+            // Route for entreee
+            Route::get('gestion/entrees', [EntreController::class, 'index'])->name('gestion.entrees');
+            Route::get('gestion/entrees/load', [EntreController::class, 'loadEntree'])->name('gestion.load.entrees');
+            Route::post('gestion/entrees/add', [EntreController::class, 'storeEntree'])->name('gestion.entrees.add');
+            Route::post('gestion/entrees/delete', [EntreController::class, 'deleteEntree'])->name('gestion.entrees.delete');
+
+            // Route for caisse
+            Route::get('gestion/caisses', [CaisseController::class, 'index'])->name('gestion.caisses');
+            Route::get('gestion/caisses/load', [CaisseController::class, 'loadCaisses'])->name('gestion.load.caisse');
+
 
             Route::post('gestion/calendar', [UserController::class, 'UpdateImage'])->name('gestion.calendrier');
 

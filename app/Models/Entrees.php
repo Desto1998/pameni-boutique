@@ -5,16 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Charges extends Model
+class Entrees extends Model
 {
     use HasFactory;
-    protected $primaryKey = 'charge_id';
+    protected $primaryKey = 'entre_id';
     protected $fillable = [
-        'titre',
-        'description',
-        'description_cat',
-        'type_charge',
-        'alerte',
+        'montant_entre',
+        'raison_entre',
+        'description_entre',
+        'date_entre',
+        'statut_entre',
         'iduser',
     ];
 }

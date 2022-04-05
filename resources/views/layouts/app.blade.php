@@ -254,7 +254,13 @@
                         <ul aria-expanded="false">
                             <li><a href="{{ route('gestion.index') }}">Charges</a></li>
                             <li><a href="{{ route('gestion.tache') }}">{{--Tâches--}} Dépenses</a></li>
+                            <li><a href="{{ route('gestion.entrees') }}">{{--Tâches--}} Encaissements</a></li>
                         </ul>
+                    </li>
+                @endif
+                @if (in_array('GCA',\App\Models\User_menus::getUserMenu()))
+                    <li><a class="" href="{{ route('gestion.caisses') }}" aria-expanded="false"><i
+                                class="fa fa-dollar"></i><span class="nav-text">Caisses</span></a>
                     </li>
                 @endif
                 @if (in_array('GER',\App\Models\User_menus::getUserMenu()))

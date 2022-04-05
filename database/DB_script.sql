@@ -16,7 +16,7 @@ create table devises
 drop table if exists pays;
 create table pays
 (
-    pays_id     int primary key AUTO_INCREMENT,
+    pays_id    int primary key AUTO_INCREMENT,
     nom_pays   varchar(255) not null,
     code_pays  varchar(255) not null,
     drapeau    varchar(255) null,
@@ -115,6 +115,8 @@ create table charges
     charge_id   int primary key AUTO_INCREMENT,
     titre       varchar(255) not null,
     description varchar(1000) null,
+    type_charge int,
+    alerte      int,
     iduser      int,
     created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at  DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -247,12 +249,12 @@ drop table if exists commandes;
 create table commandes
 (
     commande_id        int primary key AUTO_INCREMENT,
-    reference_commande varchar(20)  not null,
+    reference_commande varchar(20)   not null,
     objet              varchar(1000) not null,
-    date_commande      date         not null,
+    date_commande      date          not null,
     statut             int       default 0,
     tva_statut         int       default 0,
-    idfournisseur      int          not null,
+    idfournisseur      int           not null,
     service            varchar(1000) null,
     direction          varchar(1000) null,
     mode_paiement      varchar(1000) null,
@@ -261,7 +263,7 @@ create table commandes
     observation        varchar(1000) null,
     note               varchar(1000) null,
     lieu_liv           varchar(1000) null,
-    iduser             int          not null,
+    iduser             int           not null,
     created_at         TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at         DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -328,11 +330,11 @@ create table num_factures
 drop table if exists menus;
 create table menus
 (
-    menu_id int primary key AUTO_INCREMENT,
-    position        int,
-    code      varchar(5) ,
+    menu_id     int primary key AUTO_INCREMENT,
+    position    int,
+    code        varchar(5),
     label       varchar(100),
-    description    varchar(1000) null,
+    description varchar(1000) null,
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -340,11 +342,42 @@ drop table if exists user_menus;
 create table user_menus
 (
     user_menu_id int primary key AUTO_INCREMENT,
-    idmenu        int,
-    userid        int,
-    iduser        int,
+    idmenu       int,
+    userid       int,
+    iduser       int,
 --     FOREIGN KEY (userid) REFERENCES users(id),
-    FOREIGN KEY (idmenu) REFERENCES menus(menu_id),
-    created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at    DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    FOREIGN KEY (idmenu) REFERENCES menus (menu_id),
+    created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at   DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+drop table if exists caisses;
+create table caisses
+(
+    caisse_id      int primary key AUTO_INCREMENT,
+    montant        float not null,
+    raison         varchar(255) null,
+    date_depot     date,
+    description    varchar(1000) null,
+    idtache        int null,
+    identre        int null,
+    idpaiement     int null,
+    type_operation int   not null,
+    iduser         int   not null,
+    created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at     DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+drop table if exists entrees;
+create table entrees
+(
+    entre_id          int primary key AUTO_INCREMENT,
+    raison_entre      varchar(255) not null,
+    montant_entre     float        not null,
+    description_entre varchar(1000) null,
+    date_entre        date,
+    statut_entre      int       default 1,
+    iduser            int          not null,
+    created_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at        DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
