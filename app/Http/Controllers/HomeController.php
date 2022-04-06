@@ -34,6 +34,9 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $solde = (new CaisseController())->soldeCaisse();
+        $entre = (new CaisseController())->entree(date('m'));
+        $sortie = (new CaisseController())->sortie(date('m'));
         $clients = Clients::all();
         $fournisseurs = Fournisseurs::all();
         $devis = Devis::all();
@@ -67,13 +70,14 @@ class HomeController extends Controller
         $stock = Produits::whereIn('produit_id',$prodID)->get();
         $charges = Charges::all();
         $taches = Taches::all();
+        $taches = Taches::whereMonth('created_at',date('m') )->get();
         $lastactivity = Devis::join('users','users.id','devis.iduser')->where('devis.created_at','>=',$date)->orderBy('devis.created_at','desc')->get();
         $lastactivity1 = Factures::join('users','users.id','factures.iduser')->where('factures.created_at','>=',$date)->orderBy('factures.created_at','desc')->get();
         $lastactivity2 = Commandes::join('users','users.id','commandes.iduser')->where('commandes.created_at','>=',$date)->orderBy('commandes.created_at','desc')->get();
         $lastactivity3 = Taches::join('users','users.id','taches.iduser')->where('taches.created_at','>=',$date)->orderBy('taches.created_at','desc')->get();
         return view('dashboard',compact('clients','fournisseurs','devisNV',
         'commandesNV','factureNV','devisSF','lastactivity','lastactivity1','lastactivity2','charges','taches','lastactivity3','stock',
-        'produit'
+        'produit','solde', 'entre', 'sortie',
         ));
     }
 

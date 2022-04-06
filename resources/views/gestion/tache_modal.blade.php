@@ -38,6 +38,13 @@
                         <label for="date_debut">Date <span class="text-danger">*</span></label>
                         <input type="date" name="date_debut" required id="date_debut" class="form-control">
                     </div>
+                    <div class="form-group">
+                        <label for="statut">Statut <span class="text-danger">*</span></label>
+                        <select class="form-control" required name="statut" id="statut">
+                            <option value="1">Effectué</option>
+                            <option value="0">Mettre attente</option>
+                        </select>
+                    </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
                         <button type="submit" class="btn btn-primary">Enregistrer</button>

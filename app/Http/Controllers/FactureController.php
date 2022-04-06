@@ -435,6 +435,9 @@ class FactureController extends Controller
     public function deletePaiement(Request $request)
     {
         $delete = Paiements::where('paiement_id', $request->id)->delete();
+        if ($delete) {
+            $d = (new CaisseController())->removeFromCaisse($request->id, 'PAIEMENT');
+        }
         return Response()->json($delete);
     }
 }

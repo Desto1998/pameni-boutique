@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Paiements;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use PhpParser\Node\Expr\Array_;
 
 class PaiementController extends Controller
 {
@@ -27,7 +28,22 @@ class PaiementController extends Controller
             'statut' => 1,
             'iduser' => $iduser,
         ]);
+
         if ($save) {
+            $factData = new Array_();
+            $factData->key = 'PAIEMENT';
+            $factData->raison = 'Versement pour facture';
+            $factData->montant = $request->montant;
+            $factData->description = $request->description;
+            if ($dataID > 0) {
+                $factData->id = $dataID;
+            } else {
+                $factData->id = $save->paiement_id;
+            }
+
+            if ((new CaisseController())->storeCaisse($factData)) {
+                $statut = 2;
+            }
             return redirect()->back()->with('success', 'enregistrés avec succès!');
         }
 

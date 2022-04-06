@@ -21,41 +21,56 @@
                 <div class="card px-3">
 
                     <div class="card-body">
-
-
                         <div class="row">
+                            <div class="col-md-12 text-center">
+                                <label class="text-center fs-3 font-weight-bold">Statut de la caisse du mois en cours</label>
+                            </div>
+
                             <div class="col-lg-3 col-sm-6">
-                                <a href="{{ route('client.all') }}">
+                                <a href="{{ route('gestion.caisses') }}">
                                     <div class="card">
                                         <div class="stat-widget-one card-body">
                                             <div class="stat-icon d-inline-block">
-                                                <i class="ti-user text-success border-success"></i>
+                                                <i class="fa fa-dollar {{ $solde<=0?'text-danger border-danger':'text-primary border-primary' }}"></i>
                                             </div>
                                             <div class="stat-content d-inline-block">
-                                                <div class="stat-text">Clients</div>
-                                                <div class="stat-digit">{{ count($clients) }}</div>
+                                                <div class="stat-text">Solde</div>
+                                                <div class="stat-digit">{{ $solde }}</div>
                                             </div>
                                         </div>
                                     </div>
                                 </a>
                             </div>
-
                             <div class="col-lg-3 col-sm-6">
-                                <a href="{{ route('fournisseur.all') }}">
+                                <a href="{{ route('gestion.entrees') }}">
                                     <div class="card">
                                         <div class="stat-widget-one card-body">
                                             <div class="stat-icon d-inline-block">
-                                                <i class="fa fa-users text-success border-success"></i>
+                                                <i class="fa fa-angle-double-down text-success border-success"></i>
                                             </div>
                                             <div class="stat-content d-inline-block">
-                                                <div class="stat-text fs-6">Fournisseurs</div>
-                                                <div class="stat-digit">{{ count($fournisseurs) }}</div>
+                                                <div class="stat-text">Entrées</div>
+                                                <div class="stat-digit">{{ $entre }}</div>
                                             </div>
                                         </div>
                                     </div>
                                 </a>
                             </div>
-
+                            <div class="col-lg-3 col-sm-6">
+                                <a href="{{ route('gestion.tache') }}">
+                                    <div class="card">
+                                        <div class="stat-widget-one card-body">
+                                            <div class="stat-icon d-inline-block">
+                                                <i class="fa fa-angle-double-up text-warning border-warning"></i>
+                                            </div>
+                                            <div class="stat-content d-inline-block">
+                                                <div class="stat-text">Sorties</div>
+                                                <div class="stat-digit">{{ $sortie }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
                             <div class="col-lg-3 col-sm-6">
                                 <a href="{{ route('gestion.tache') }}">
                                     <div class="card">
@@ -65,7 +80,7 @@
                                             </div>
                                             <div class="stat-content d-inline-block">
                                                 <div class="stat-text">Dépenses</div>
-                                                <div class="stat-digit">{{ count($charges) }}</div>
+                                                <div class="stat-digit">{{ count($taches) }}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -210,6 +225,37 @@
                                     </div>
                                 </div>
 
+                            </div>
+                            <div class="col-lg-2 col-sm-6">
+                                <a href="{{ route('client.all') }}">
+                                    <div class="card">
+                                        <div class="stat-widget-one card-body">
+{{--                                            <div class="d-inline-block">--}}
+{{--                                                <i class="ti-user fs-1 text-success border-success"></i>--}}
+{{--                                            </div>--}}
+                                            <div class="stat-content d-inline-block">
+                                                <div class="stat-text">Clients</div>
+                                                <div class="stat-digit">{{ count($clients) }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="col-lg-2 col-sm-6">
+                                <a href="{{ route('fournisseur.all') }}">
+                                    <div class="card">
+                                        <div class="stat-widget-one card-body">
+{{--                                            <div class="stat-icon d-inline-block">--}}
+{{--                                                <i class="fa fa-users text-success border-success"></i>--}}
+{{--                                            </div>--}}
+                                            <div class="stat-content d-inline-block">
+                                                <div class="stat-text fs-6">Fournisseurs</div>
+                                                <div class="stat-digit">{{ count($fournisseurs) }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
                             </div>
                         </div>
                     </div>

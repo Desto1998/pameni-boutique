@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Categories;
+use App\Models\Commandes;
 use App\Models\Comportes;
+use App\Models\Factures;
 use App\Models\Pocedes;
 use App\Models\Produit_Factures;
 use App\Models\Produits;
@@ -30,34 +32,28 @@ class ProduitController extends Controller
         $categories = Categories::all();
         return view('produit.produit', compact('categories'));
     }
-    public function loadProducts() {
+
+    public function loadProducts()
+    {
         if (request()->ajax()) {
 
-            $product2  = [];
-            $data  = [];
+            $product2 = [];
+            $data = [];
             $saleDevis = Pocedes::all();
             $sateFacture = Produit_Factures::all();
             $products = Produits::join('categories', 'categories.categorie_id', 'produits.idcategorie')
                 ->join('users', 'users.id', 'produits.iduser')
                 ->orderBy('produits.created_at', 'desc')
                 ->get();
-            $categories = Categories::all();
 
             $stock = 0;
-//            $data = [];
-            $username = '';
-            foreach ($products as $key =>$value){
-                $product  = new Array_();
 
-//                foreach ($saleDevis as $sd){
-//                    if ($sd->idproduit==$value->produit_id) {
-//                        $stock += $sd->quantite ;
-//                    }
-//                }
+            foreach ($products as $key => $value) {
+                $product = new Array_();
 
-                foreach ($sateFacture as $sf){
-                    if ($sf->idproduit==$value->produit_id) {
-                        $stock += $sf->quantite ;
+                foreach ($sateFacture as $sf) {
+                    if ($sf->idproduit == $value->produit_id) {
+                        $stock += $sf->quantite;
                     }
                 }
                 $product->key = $key;
@@ -69,18 +65,18 @@ class ProduitController extends Controller
                 $product->prix = $value->prix_produit;
                 $product->description = $value->description_produit;
                 $product->categorie = $value->titre_cat;
-                $product->stock = $value->quantite_produit-$stock;
+                $product->stock = $value->quantite_produit - $stock;
                 $product->username = $value->firstname;
 //                $product->action = $value->quantite_produit-$stock;
 
-                $data[$key]=$product;
+                $data[$key] = $product;
 
             }
             return Datatables::of($data)
                 ->addIndexColumn()
-                ->addColumn('action', function($value){
+                ->addColumn('action', function ($value) {
                     $categories = Categories::all();
-                    $action = view('produit.produit_action',compact('value','categories'));
+                    $action = view('produit.produit_action', compact('value', 'categories'));
 
 //                    $actionBtn = '<div class="d-flex"><a href="javascript:void(0)" class="edit btn btn-warning btn-sm"><i class="fa fa-edit"></i></a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm ml-1"  onclick="deleteFun()"><i class="fa fa-trash"></i></a></div>';
                     return (string)$action;
@@ -94,6 +90,7 @@ class ProduitController extends Controller
 //            return Response()->json($data);
         }
     }
+
     //function create or update product
     public function storeProduct(Request $request)
     {
@@ -140,8 +137,7 @@ class ProduitController extends Controller
                     'description_produit' => $description_produit,
                     'iduser' => $iduser,
 
-                ])
-            ;
+                ]);
         }
 
         return Response()->json($save);
@@ -189,5 +185,29 @@ class ProduitController extends Controller
     {
         $delete = Produits::where('produit_id', $request->id)->delete();
         return Response()->json($delete);
+    }
+
+    public function viewProduct($id)
+    {
+        $data = Produits::join('users','users.id','produits.iduser')->join('categories', 'categories.categorie_id', 'produits.produit_id')->where('produit_id', $id)->get();
+        $devis = Pocedes::join('devis', 'devis.devis_id', 'pocedes.iddevis')->where('idproduit', $id)->orderBy('pocedes.created_at')->get();
+        $factures = Produit_Factures::join('factures', 'factures.facture_id', 'produit_factures.idfacture')->where('idproduit', $id)->orderBy('produit_factures.created_at')->get();
+        $commandes = Comportes::join('commandes', 'commandes.commande_id', 'comportes.idcommande')->where('idproduit', $id)->orderBy('comportes.created_at')->get();
+        $etatStock = $this->etatStock($id);
+        return view('produit.detail.index', compact('data', 'factures', 'commandes', 'devis','etatStock'));
+    }
+
+    public function etatStock($id)
+    {
+        $stock = 0;
+        $sateFacture = Produit_Factures::where('idproduit', $id)->get();
+        $quantites = Produits::where('produit_id', $id)->get();
+
+        foreach ($sateFacture as $sf) {
+//                if ($sf->idproduit == $value->produit_id) {
+            $stock += $sf->quantite;
+//                }
+        }
+        return $quantites[0]->quantite_produit - $stock;
     }
 }

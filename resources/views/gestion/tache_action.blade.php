@@ -1,7 +1,19 @@
 <div class="d-flex justify-content-center">
-    <a href="javascript:void(0);" class="btn btn-warning btn-sm" title="Modifier la dépense"
+
+
+    <a href="javascript:void(0);" {{ Auth::user()->id!=$value->iduser?'disabled':'' }} class="btn btn-warning btn-sm"
+       title="Modifier la dépense"
        data-toggle="modal" data-target="#tachesModal{{ $value->tache_id }}"><i
-            class="fa fa-edit"></i></a>
+            class="fa fa-edit"></i>
+    </a>
+
+    @if ($value->statut==0)
+        <a href="javascript:void(0);"
+           {{ Auth::user()->id!=$value->iduser?'disabled':'' }} class="btn btn-outline-success btn-sm ml-1"
+           title="Marquer comme effectué" onclick="markTaskAsDoneFun({{ $value->tache_id }})">
+            <i class="fa fa-check"></i>
+        </a>
+    @endif
     @if (Auth::user()->is_admin==1)
         <button class="btn btn-danger btn-sm ml-1 "
                 title="Supprimer cette dépense" id="deletebtn{{ $value->tache_id }}"
@@ -76,6 +88,14 @@
                                value="{{ $value->date_debut }}"
                                class="form-control">
                     </div>
+                    <input type="hidden" name="statut" value="{{ $value->statut }}">
+{{--                    <div class="form-group">--}}
+{{--                        <label for="statut{{ $value->tache_id }}">Statut <span class="text-danger">*</span></label>--}}
+{{--                        <select class="form-control" required name="statut" id="statut{{ $value->tache_id }}">--}}
+{{--                            <option {{ $value->statut==1?'selected':'' }} value="1">Effectué</option>--}}
+{{--                            <option {{ $value->statut==0?'selected':'' }} value="0">Mettre attente</option>--}}
+{{--                        </select>--}}
+{{--                    </div>--}}
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary"
                                 data-dismiss="modal">Annuler

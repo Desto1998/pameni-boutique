@@ -47,7 +47,7 @@
                                 </li>
                             </ul>
                             <div class="d-flex justify-content-end mt-2">
-                                @if (Auth::user()->is_admin==1 || $value->statut <=1)
+                                @if (Auth::user()->is_admin==1 || $data[0]->statut <=1)
                                     @if(Auth::user()->is_admin==1 || Auth::user()->id===$data[0]->id)
                                         <a href="{{ route('factures.edit',['id'=>$data[0]->facture_id]) }}" title="Editer cette facture" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a>
                                     @endif

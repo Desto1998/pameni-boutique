@@ -1,5 +1,7 @@
 <div class="d-flex">
-    <a href="#" class="btn btn-warning btn-sm" title="Modifier le produit"
+    <a href="{{ route('produit.details',['id'=>$value->produit_id]) }}" class="btn btn-skype btn-sm" title="Visualiser le détails du produit"
+       ><i class="fa fa-eye"></i></a>
+    <a href="#" class="btn btn-warning btn-sm ml-1" title="Modifier le produit"
        data-toggle="modal" data-target="#produitsModal{{ $value->produit_id }}"><i
             class="fa fa-edit"></i></a>
     @if (Auth::user()->is_admin==1)

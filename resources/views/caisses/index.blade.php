@@ -14,7 +14,7 @@
         <div class="row page-titles mx-0">
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
-                    <h4>Caisses</h4>
+                    <h4>Caisses</h4> solde: <span class="{{ $solde<=0? 'text-danger':'text-primary' }}">{{ $solde }} F CFA</span>
                     {{--                    <p class="mb-0">Your business dashboard template</p>--}}
                 </div>
             </div>
@@ -44,8 +44,9 @@
                                     <th>Raison</th>
                                     <th>Montant</th>
                                     <th>Description</th>
+                                    <th>Type</th>
                                     <th>Crée par</th>
-                                    <th>Action</th>
+{{--                                    <th>Action</th>--}}
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -92,8 +93,9 @@
                     {data: 'raison',name:'raison'},
                     {data: 'montant',name:'montant'},
                     {data: 'description',name:'description'},
+                    {data: 'type',name:'type'},
                     {data: 'firstname',name:'firstname'},
-                    {data: 'action', name: 'action', orderable: false, searchable: false},
+                    // {data: 'action', name: 'action', orderable: false, searchable: false},
 
                 ],
                 order: []

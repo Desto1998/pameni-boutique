@@ -79,6 +79,7 @@ Route::prefix('dashboard')->group(function () {
             Route::get('gestion/tasks', [GestionController::class, 'taches'])->name('gestion.tache');
             Route::get('gestion/tasks/load', [GestionController::class, 'loadTaches'])->name('gestion.load.tache');
             Route::post('gestion/tasks/add', [GestionController::class, 'storeTask'])->name('gestion.taches.add');
+            Route::post('gestion/tasks/markasdone', [GestionController::class, 'markTaskAsDone'])->name('gestion.taches.markasdone');
             Route::post('gestion/tasks/delete', [GestionController::class, 'deleteTache'])->name('gestion.taches.delete');
 
             // Route for entreee
@@ -107,6 +108,7 @@ Route::prefix('dashboard')->group(function () {
             //Routes for produit
             Route::get('product/index',[ProduitController::class,'listproduct'])->name('produit.all');
             Route::get('product/list',[ProduitController::class,'loadProducts'])->name('produit.load');
+            Route::get('product/details/{id}',[ProduitController::class,'viewProduct'])->name('produit.details');
             Route::post('product/store',[ProduitController::class,'storeProduct'])->name('produit.store');
             Route::post('product/update',[ProduitController::class,'updateProduct'])->name('produit.update');
             Route::post('product/delete',[ProduitController::class,'deleteProduct'])->name('produit.delete');

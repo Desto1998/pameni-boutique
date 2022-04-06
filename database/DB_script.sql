@@ -134,7 +134,7 @@ create table taches
     prix       float not null,
     idcharge   int   not null,
     iduser     int   not null,
-    staut      int       default 1,
+    statut      int       default 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;

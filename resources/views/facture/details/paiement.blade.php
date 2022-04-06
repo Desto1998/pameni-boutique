@@ -11,7 +11,7 @@
         <tr>
             <th>#</th>
             <th>Date</th>
-            <th>Type</th>
+            <th>Mode</th>
             <th>Montant</th>
             <th>Description</th>
             <th>Action</th>
@@ -32,7 +32,7 @@
                 <td>{{ $item->montant }}</td>
                 <td>{{ $item->description }}</td>
                 <td>
-                    <a href="javascript:void(0)" class="btn btn-sm btn-warning"
+                    <a href="javascript:void(0)" {{ Auth::user()->id!=$item->iduser?'disabled':'' }} class="btn btn-sm btn-warning"
                        data-toggle="modal" data-target="#paiement-modal{{ $item->paiement_id }}">
                         <i class="fa fa-warning"></i>
                     </a>
@@ -60,9 +60,9 @@
                                 <div class="form-group">
                                     <label>Mode de paiement <span class="text-danger">*</span></label>
                                     <select name="mode" class="form-control">
-                                        <option>En expèce</option>
-                                        <option>Par virement</option>
-                                        <option>Par  Dépot OM/MOMO</option>
+                                        <option>Espèce</option>
+                                        <option>Chèque</option>
+                                        <option>Carte de crédit</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -110,9 +110,9 @@
                     <div class="form-group">
                         <label for="date">Mode de paiement <span class="text-danger">*</span></label>
                         <select name="mode" class="form-control">
-                            <option>En expèce</option>
-                            <option>Par virement</option>
-                            <option>Par  Dépot OM/MOMO</option>
+                            <option>Espèce</option>
+                            <option>Chèque</option>
+                            <option>Carte de crédit</option>
                         </select>
                     </div>
                     <div class="form-group">
