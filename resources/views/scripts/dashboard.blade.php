@@ -27,8 +27,8 @@
                     }
                 },
                 error: function (resp) {
-                    toastr.warning("Une erreur s'est produite lors du chargement des notifications!");
-                    sweetAlert("Désolé!", "Une erreur s'est produite lors du chargement des notifications!", "error");
+                    // toastr.warning("Une erreur s'est produite lors du chargement des notifications!");
+                    sweetAlert("Désolé!", "Une erreur s'est produite lors du chargement des notifications! Veillez actualiser la page et reconnectez-vous", "error");
                 }
             });
         });

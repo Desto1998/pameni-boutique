@@ -120,7 +120,7 @@
                          src="{{ asset('images/piece/'.$piece[0]->chemin) }}" alt="Aucune image pour l'instant">
                 </a>
             @else
-                <p class="font-weight-bold text-danger">Aucune image entregistree pour l'instant.</p>
+                <p class="font-weight-bold text-danger">Aucune image entregistrée pour l'instant.</p>
             @endif
 
         </div>

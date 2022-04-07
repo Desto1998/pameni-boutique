@@ -105,3 +105,13 @@ select{
 @media only screen and (min-width: 768px) {
 
 }
+.auth-page{
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background: url('images/bg/bg1.jpg') no-repeat center center fixed;
+    /*background-size: 1470px; */
+    height: 100%;
+
+}

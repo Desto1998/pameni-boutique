@@ -17,11 +17,10 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link rel="icon" type="image/png" sizes="16x16" href="{{asset('images/logo/logo_gssc.png')}}">
     <!-- Styles -->
-{{--    <link href="{{ asset('css/app.css') }}" rel="stylesheet">--}}
+    <link href="{{ asset('app.css') }}" rel="stylesheet">
     <link href="{{asset('template/css/style.css')}}" rel="stylesheet">
 </head>
-<body class="h-100 mt-5" style="background-image: url('{{ asset('images/bg/bg1.jpg') }}');
-    background-size: 1470px; background-repeat: no-repeat">
+<body class="h-100 mt-5 auth-page">
 <!--*******************
        Preloader start
    ********************-->

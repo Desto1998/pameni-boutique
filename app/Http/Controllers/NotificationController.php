@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Charges;
 use App\Models\Commandes;
 use App\Models\Devis;
 use App\Models\Factures;
@@ -36,6 +37,30 @@ class NotificationController extends Controller
             /**
              * Notification pour les charges fixes. Notifier 2 jours avant le date de paiements
              */
+            $chargesFixe = Charges::where('type_charge',1)->get();
+            foreach ($chargesFixe as $cf){
+                $jour =
+                $date = '01-'."$cf->alerte".'-'.date('Y');
+                $date = new DateTime($date);
+                $date = date("m", strtotime($date->format('m')));
+                $matache = Taches::whereYear('created_at', date('Y'))->where('idcharge',$cf->charge_id)->whereMonth('created_at', $date)->get();
+                if (count($matache)<1) {
+                    $link = route('gestion.tache');
+                    $data1 .= "<li class=\"media dropdown-item\" title=\"La dépense de la charge $cf->titre n'a pas été effectué pour le mois dernier.\">
+                      <span class=\"danger\"><i class=\"fa fa-dollar\"></i></span>
+                      <div class=\"media-body\">
+                      <a href=\"$link\">
+                      <p>La dépense de la charge <strong> $cf->titre</strong> <strong> n'a pas été effectué pour le mois dernier.</strong>
+                      </p>
+                      </a>
+                      </div>
+                      <span class=\"notify-time\">$time</span>
+                      </li>";
+                    $compt++;
+                }
+
+            }
+
 
             // Ici on calcul le montant total des charges du mois dernier. Chaque 1er du mois
             if (date('d') == 1) {

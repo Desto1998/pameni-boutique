@@ -25,18 +25,17 @@ class User_menus extends Model
      * @return array @$data of int
      */
     public function getUserMenu(){
-        $data = [];
-        $iduser = Auth::user()->id;
-        $menu = User_menus::join('menus','menus.menu_id','user_menus.idmenu')
-            ->where('user_menus.userid',$iduser)
-            ->select('menus.code')
-            ->get()
-        ;
-        foreach ($menu as $key=>$item){
-            $data[$key] = $item->code;
-        }
+//        $iduser = Auth::user()->id;
+//        $menu = User_menus::join('menus','menus.menu_id','user_menus.idmenu')
+//            ->where('user_menus.userid',$iduser)
+//            ->select('menus.code')
+//            ->get()
+//        ;
+//        foreach ($menu as $key=>$item){
+//            $data[$key] = $item->code;
+//        }
 //        dd(Session::get('MENU'));
 //        $data = Session::get('MENU');
-        return $data;
+        return $value = session('USERMENU');
     }
 }

@@ -1,9 +1,12 @@
 <div class="col-md-12 mb-3">
     <label class="float-left h4">Liste des paiements pour cette facture</label>
-    <a href="javascript:void(0);" data-toggle="modal"
-       data-target="#paiement-modal" class="btn btn-secondary mb-3 btn-sm ml-1 float-right"
-       title="Ajouter un paiement."><i
-            class="fa fa-plus"></i></a>
+    @if ($data[0]->statut ==1)
+        <a href="javascript:void(0);" data-toggle="modal"
+           data-target="#paiement-modal" class="btn btn-secondary mb-3 btn-sm ml-1 float-right"
+           title="Ajouter un paiement."><i
+                class="fa fa-plus"></i></a>
+    @endif
+
 </div>
 <div class="table-responsive mt-5">
     <table id="example" class="text-center">

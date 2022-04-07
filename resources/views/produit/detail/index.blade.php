@@ -85,7 +85,6 @@
                                                     <td>Description</td>
                                                     <td>{{ $data[0]->description_produit }}</td>
                                                 </tr>
-
                                                 <tr>
                                                     <td>Quantité deja aprovisionné</td>
                                                     <td>{{ $data[0]->quantite_produit }}</td>
@@ -94,13 +93,10 @@
                                                     <td>Quantité en stock</td>
                                                     <td>{{ $etatStock }}</td>
                                                 </tr>
-
                                                     <tr>
                                                         <td>Dernière date de modification</td>
                                                         <td>{{ $data[0]->updated_at }}</td>
                                                     </tr>
-
-
                                                 <tr>
                                                     <td>Date création</td>
                                                     <td>{{ $data[0]->created_at }}</td>
