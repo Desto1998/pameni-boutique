@@ -39,8 +39,13 @@ class NotificationController extends Controller
              */
             $chargesFixe = Charges::where('type_charge',1)->get();
             foreach ($chargesFixe as $cf){
-                $jour =
-                $date = '01-'."$cf->alerte".'-'.date('Y');
+                if (date('m')-1<1) {
+                    $lastMonth = 12;
+                }else{
+                    $lastMonth = date('m')-1;
+                }
+
+                $date = $cf->alerte.'-'."$lastMonth".'-'.date('Y');
                 $date = new DateTime($date);
                 $date = date("m", strtotime($date->format('m')));
                 $matache = Taches::whereYear('created_at', date('Y'))->where('idcharge',$cf->charge_id)->whereMonth('created_at', $date)->get();
