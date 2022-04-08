@@ -9,7 +9,7 @@
 
     @if ($value->statut==0)
         <a href="javascript:void(0);"
-           {{ Auth::user()->id!=$value->iduser?'disabled':'' }} class="btn btn-outline-success btn-sm ml-1"
+           {{ Auth::user()->id!=$value->iduser?'disabled':'' }} class="btn btn-success btn-sm ml-1"
            title="Marquer comme effectué" onclick="markTaskAsDoneFun({{ $value->tache_id }})">
             <i class="fa fa-check"></i>
         </a>

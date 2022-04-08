@@ -22,10 +22,12 @@
 
         <li class="text-center mt-2">
             @if ($value->statut ==1)
-                <a href="javascript:void(0);" data-toggle="modal"
-                   data-target="#paiement-modal" onclick="getId({{ $value->facture_id }})" class="btn btn-secondary btn-sm ml-1"
-                   title="Ajouter un paiement."><i
-                        class="fa fa-money"></i></a>
+                @if ((new \App\Models\Factures())->montantTotal($value->facture_id) - (new \App\Models\Factures())->Payer($value->facture_id)>0)
+                    <a href="javascript:void(0);" data-toggle="modal"
+                       data-target="#paiement-modal" onclick="getId({{ $value->facture_id }})" class="btn btn-secondary btn-sm ml-1"
+                       title="Ajouter un paiement."><i
+                            class="fa fa-money"></i></a>
+                @endif
             @endif
 
             @if ($value->statut===0 && Auth::user()->is_admin==1)

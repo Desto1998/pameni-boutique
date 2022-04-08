@@ -7,7 +7,7 @@
         <h6>N° {{ $data[0]->reference_fact }}</h6>
         <h6>Date: {{ $data[0]->date_fact }}</h6>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-6 align-content-end justify-content-end">
         <h5 class="">COORDONNEES DU CLIENT</h5>
         <h6>{{ $data[0]->nom_client.' '.$data[0]->prenom_client.' '.$data[0]->raison_s_client }}</h6>
         <h6>Tel: {{ $data[0]->phone_1_client }}/{{ $data[0]->phone_2_client }}</h6>

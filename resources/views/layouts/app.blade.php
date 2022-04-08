@@ -268,7 +268,7 @@
                             class="fa fa-file-pdf-o"></i><span class="nav-text">Rapports</span></a>
                     <ul aria-expanded="false">
                         <li><a href="{{ route('rapport.charge') }}">Rapport des dépenses</a></li>
-                        <li><a href="#">Rapport d'activités clients</a></li>
+                        <li><a href="{{ route('rapport.vente') }}">Rapport des ventes</a></li>
                     </ul>
                 </li>
                 @endif
@@ -344,6 +344,14 @@
 <!-- Toastr -->
 <script src="{{asset('template/vendor/plugins/toastr/js/toastr.min.js')}}"></script>
 <script src="{{asset('template/vendor/plugins/toastr/js/toastr.init.js')}}"></script>
+{{--<script src="{{asset('template/vendor/plugins/tooltip/popper.min.js')}}"></script>--}}
+{{--<script src="{{asset('template/vendor/plugins/tooltip/tooltip.js')}}"></script>--}}
+{{--<script src="{{asset('template/vendor/plugins/tooltip/popover.js')}}"></script>--}}
+{{--<script src="{{asset('template/vendor/plugins/tooltip/bootstrap.bundle.min.js')}}"></script>--}}
+{{--<script src="{{asset('template/vendor/plugins/tooltip/bootstrap.bundle.js')}}"></script>--}}
+{{--<script src="{{asset('template/vendor/plugins/tooltip/bootstrap.js')}}"></script>--}}
+{{--<script src="{{asset('template/vendor/plugins/tooltip/bootstrap.min.js')}}"></script>--}}
+
 @include('_partial._toastr-message')
 @yield('script')
 @include('scripts.dashboard')

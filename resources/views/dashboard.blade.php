@@ -24,6 +24,9 @@
                         <div class="row">
                             <div class="col-md-12 text-center">
                                 <label class="text-center fs-3 font-weight-bold">Statut de la caisse du mois en cours</label>
+{{--                                <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Tooltip on top">--}}
+{{--                                    Tooltip on top--}}
+{{--                                </button>--}}
                             </div>
 
                             <div class="col-lg-3 col-sm-6">
@@ -91,7 +94,7 @@
 
                         <div class="row">
                             <div class="col-lg-3 col-sm-6">
-                                <a href="{{ route('client.all') }}">
+                                <a href="{{ route('devis.all') }}">
                                     <div class="card">
                                         <div class="stat-widget-two card-body">
                                             <div class="stat-content">
@@ -108,7 +111,7 @@
                                 </a>
                             </div>
                             <div class="col-lg-3 col-sm-6">
-                                <a href="{{ route('client.all') }}">
+                                <a href="{{ route('factures.all') }}">
                                     <div class="card">
                                         <div class="stat-widget-two card-body">
                                             <div class="stat-content">

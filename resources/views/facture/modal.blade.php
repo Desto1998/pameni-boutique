@@ -14,14 +14,17 @@
                     <div class="form-group">
                         <label for="date">Mode de paiement <span class="text-danger">*</span></label>
                         <select name="mode" class="form-control">
-                            <option>En expèce</option>
-                            <option>Par virement</option>
-                            <option>Par  Dépot OM/MOMO</option>
+                            <option>Espèce</option>
+                            <option>Chèque</option>
+                            <option>Carte de crédit</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="montant">Montant <span class="text-danger">*</span></label>
                         <input type="number" step="any" name="montant" id="montant" min="0" class="form-control" required>
+                        <div id="alert">
+
+                        </div>
                     </div>
                     <div class="form-group">
                         <label>Description  <span class="text-danger">*</span></label>
@@ -37,3 +40,4 @@
         </div>
     </div>
 </div>
+

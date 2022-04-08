@@ -1,10 +1,12 @@
 <div class="col-md-12 mb-3">
     <label class="float-left h4">Liste des paiements pour cette facture</label>
     @if ($data[0]->statut ==1)
-        <a href="javascript:void(0);" data-toggle="modal"
-           data-target="#paiement-modal" class="btn btn-secondary mb-3 btn-sm ml-1 float-right"
-           title="Ajouter un paiement."><i
-                class="fa fa-plus"></i></a>
+        @if((new \App\Models\Factures())->montantTotal($data[0]->facture_id) - (new \App\Models\Factures())->Payer($data[0]->facture_id)>0)
+            <a href="javascript:void(0);" data-toggle="modal"
+               data-target="#paiement-modal" class="btn btn-secondary mb-3 btn-sm ml-1 float-right"
+               title="Ajouter un paiement."><i
+                    class="fa fa-plus"></i></a>
+        @endif
     @endif
 
 </div>
@@ -69,8 +71,8 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="montant{{ $item->paiement_id }}">Montant <span class="text-danger">*</span></label>
-                                    <input type="number" step="any" name="montant" value="{{ $item->montant }}" id="montant{{ $item->paiement_id }}" min="0" class="form-control" required>
+                                    <label for="montant{{ $item->paiement_id }}">Montant <span class="text-danger">(max: {{ (new \App\Models\Factures())->montantTotal($data[0]->facture_id) - (new \App\Models\Factures())->Payer($data[0]->facture_id) + $item->montant }} F FCA)*</span></label>
+                                    <input type="number" step="any" name="montant" max="{{ (new \App\Models\Factures())->montantTotal($data[0]->facture_id) - (new \App\Models\Factures())->Payer($data[0]->facture_id) + $item->montant }}" value="{{ $item->montant }}" id="montant{{ $item->paiement_id }}" min="0" class="form-control" required>
                                 </div>
                                 <div class="form-group">
                                     <label>Description  <span class="text-danger">*</span></label>
@@ -121,6 +123,9 @@
                     <div class="form-group">
                         <label for="montant">Montant <span class="text-danger">*</span></label>
                         <input type="number" step="any" name="montant" id="montant" min="0" class="form-control" required>
+                        <div id="alert">
+
+                        </div>
                     </div>
                     <div class="form-group">
                         <label>Description  <span class="text-danger">*</span></label>

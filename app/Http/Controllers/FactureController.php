@@ -17,9 +17,11 @@ use App\Models\User;
 use DateInterval;
 use DateTime;
 use http\Env\Response;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use PDF;
+use PhpParser\Node\Expr\Array_;
 use Yajra\DataTables\DataTables;
 
 class FactureController extends Controller
@@ -53,7 +55,6 @@ class FactureController extends Controller
                 ->get();
         }
 
-
 //        $product  = new Array_();
         return Datatables::of($data)
             ->addIndexColumn()
@@ -73,8 +74,7 @@ class FactureController extends Controller
             })
             // ajout d'une colonne pour le montant de paieent deja effectueerr
             ->addColumn('paye', function ($value) {
-                $paye = Paiements::where('idfacture', $value->facture_id)->sum('montant');
-                return $paye;
+                return (new Factures())->Payer($value->facture_id);
             })
             // Ajout du statut du. colonne marque en rouge | Si le statut est 0? NValide : Valide
             ->addColumn('statut', function ($value) {
@@ -102,26 +102,8 @@ class FactureController extends Controller
             })
             // calcule du montant TTC tout taxe comprie
             ->addColumn('montantTTC', function ($value) {
-                $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $value->facture_id)->get();
-                $montantTVA = 0;
-                $montantTTC = 0;
-                foreach ($pocedes as $p) {
 
-                    $remise = ($p->prix * $p->quantite * $p->remise) / 100;
-                    $montant = ($p->quantite * $p->prix) - $remise;
-                    $tva = ($montant * $p->tva) / 100;
-                    $montant = $tva + $montant;
-//                        $montant += (($montant * 19.25)/100)+$montant;
-                    $montantTVA += $montant;
-
-                }
-                if ($value->tva_statut == 1) {
-                    $montantTTC = (($montantTVA * 19.25) / 100) + $montantTVA;
-                } else {
-                    $montantTTC = $montantTVA;
-                }
-
-                return number_format($montantTTC, 2, '.', '');
+                return (new Factures())->montantTotal($value->facture_id);
 
             })
             ->rawColumns(['action', 'montantHT', 'montantTTC', 'statut', 'paye'])
@@ -244,17 +226,8 @@ class FactureController extends Controller
     {
         $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $id)->get();
         $montantTVA = 0;
-        $montantTTC = 0;
-        foreach ($pocedes as $p) {
 
-            $remise = ($p->prix * $p->quantite * $p->remise) / 100;
-            $montant = ($p->quantite * $p->prix) - $remise;
-            $tva = ($montant * $p->tva) / 100;
-            $montant = $tva + $montant;
-//                        $montant += (($montant * 19.25)/100)+$montant;
-            $montantTVA += $montant;
-
-        }
+        $montantTVA = (new Factures())->montantHT($id);
         $data = Factures::join('clients', 'clients.client_id', 'factures.idclient')
         ->join('users', 'users.id', 'factures.iduser')
         ->where('facture_id', $id)
@@ -269,7 +242,7 @@ class FactureController extends Controller
         $commentaires = Commentaires::join('users','users.id','commentaires.iduser')->where('idfacture',$id)->get();
 
         $piece = Pieces::where('idfacture', $id)->get();
-        return view('facture.details.index', compact('data','pocedes','montant',
+        return view('facture.details.index', compact('data','pocedes',
         'montantTTC','montantTVA','commentaires','paiements','piece')) ;
     }
 
@@ -428,6 +401,18 @@ class FactureController extends Controller
             'statut' => 1,
             'iduser' => $iduser,
         ]);
+        if ($save) {
+            $factData = new Array_();
+            $factData->key = 'PAIEMENT';
+            $factData->raison = 'Versement pour facture';
+            $factData->montant = $request->montant;
+            $factData->description = $request->description;
+            $factData->id = $save->paiement_id;
+
+            if ((new CaisseController())->storeCaisse($factData)) {
+                $statut = 2;
+            }
+        }
         return Response()->json($save);
 
     }
@@ -439,5 +424,10 @@ class FactureController extends Controller
             $d = (new CaisseController())->removeFromCaisse($request->id, 'PAIEMENT');
         }
         return Response()->json($delete);
+    }
+
+    public function checkAmount(Request $request){
+
+        return (new Factures())->montantTotal($request->id)- (new Factures())->Payer($request->id);
     }
 }

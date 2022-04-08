@@ -120,6 +120,67 @@
             // }
         }
 
+        // ajouter un paiement
+        $("#modal-form").on("submit", function (event) {
+            event.preventDefault();
+            swal.fire({
+                title: "Voulez-vous enregistre ce paiement?",
+                icon: 'question',
+                text: "Vous pouvez le modifier plus tard dans les details.",
+                type: "warning",
+                showCancelButton: !0,
+                confirmButtonText: "Oui, Continuer!",
+                cancelButtonText: "Non, annuler !",
+                reverseButtons: !0
+            }).then(function (e) {
+                if (e.value === true) {
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $('#modal-form .btn-primary').attr("disabled", true).html("En cours...")
+                    var data = $('#modal-form').serialize()
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('factures.paiement.store') }}",
+                        data: data,
+                        dataType: 'json',
+                        success: function (res) {
+                            console.log(res);
+                            if (res) {
+                                toastr.success("Enregistré avec succès.", "Effectué!")
+
+                                $('#modal-form .btn-primary').attr("disabled", false).html("Enregistrer")
+                                $('#modal-form')[0].reset()
+                                $('#paiement-modal').modal('hide');
+                                loadFactures()
+
+                            }
+                            if (res === [] || res === undefined || res == null) {
+                                toastr.error("Erreur lors de l'enregistrement.", "Désolé!",)
+                                $('#modal-form .btn-primary').attr("disabled", false).html("Enregistrer")
+                            }
+
+                        },
+                        error: function (resp) {
+                            sweetAlert("Désolé!", "Une erreur s'est produite. Actualisez la page et reessayez.", "error");
+                            $('#modal-form .btn-primary').attr("disabled", false).html("Enregistrer")
+                        }
+                    });
+                } else {
+
+                    $('#modal-form .btn-primary').attr("disabled", false).html("Enregistrer")
+                    $('#paiement-modal').modal('hide');
+                    e.dismiss;
+                }
+            }, function (dismiss) {
+                $('#modal-form .btn-primary').attr("disabled", false).html("Enregistrer")
+                $('#paiement-modal').modal('hide');
+                return false;
+            })
+
+        });
 
         // fonction qui charge les produits : les elements du tableau
         function loadFactures() {
@@ -260,71 +321,8 @@
             // }
         }
 
-        function getId(id){
-            $('#modal-form #idfacture').val(id);
 
-        }
-        // ajouter un paiement
-        $("#modal-form").on("submit", function (event) {
-            event.preventDefault();
-            swal.fire({
-                title: "Voulez-vous enregistre ce paiement?",
-                icon: 'question',
-                text: "Vous pouvez le modifier plus tard dans les details.",
-                type: "warning",
-                showCancelButton: !0,
-                confirmButtonText: "Oui, Continuer!",
-                cancelButtonText: "Non, annuler !",
-                reverseButtons: !0
-            }).then(function (e) {
-                if (e.value === true) {
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
-                    $('#modal-form .btn-primary').attr("disabled", true).html("En cours...")
-                    var data = $('#modal-form').serialize()
-                    $.ajax({
-                        type: "POST",
-                        url: "{{ route('factures.paiement.store') }}",
-                        data: data,
-                        dataType: 'json',
-                        success: function (res) {
-                            console.log(res);
-                            if (res){
-                                toastr.success("Enregistré avec succès.", "Effectué!")
-
-                                $('#modal-form .btn-primary').attr("disabled", false).html("Enregistrer")
-                                $('#modal-form')[0].reset()
-                                $('#paiement-modal').modal('hide');
-                                loadFactures()
-
-                            }
-                            if (res===[]|| res===undefined || res==null) {
-                                toastr.error("Erreur lors de l'enregistrement.", "Désolé!",)
-                                $('#modal-form .btn-primary').attr("disabled", false).html("Enregistrer")
-                            }
-
-                        },
-                        error: function (resp) {
-                            sweetAlert("Désolé!", "Une erreur s'est produite. Actualisez la page et reessayez.", "error");
-                            $('#modal-form .btn-primary').attr("disabled", false).html("Enregistrer")
-                        }
-                    });
-                } else {
-
-                    $('#modal-form .btn-primary').attr("disabled", false).html("Enregistrer")
-                    $('#paiement-modal').modal('hide');
-                    e.dismiss;
-                }
-            }, function (dismiss) {
-                $('#modal-form .btn-primary').attr("disabled", false).html("Enregistrer")
-                $('#paiement-modal').modal('hide');
-                return false;
-            })
-
-        });
+        @include('facture.comon_script')
     </script>
     <!-- Datatable -->
     <script src="{{asset('template/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
