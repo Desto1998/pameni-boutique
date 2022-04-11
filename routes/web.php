@@ -22,6 +22,7 @@ use App\Http\Controllers\RapportController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\AccountValidation;
 use App\Http\Middleware\CheckAdmin;
+use App\Http\Middleware\LicenceCheck;
 use App\Http\Middleware\MenuCaisse;
 use App\Http\Middleware\MenuClient;
 use App\Http\Middleware\MenuCommande;
@@ -68,8 +69,8 @@ Route::prefix('dashboard')->group(function () {
 
     Route::group(['middleware' => 'auth'], function () {
 
-        //Route for user only for active user
-        Route::middleware([AccountValidation::class])->group(function () {
+        //Route for user only for active user with valid licence
+        Route::middleware([AccountValidation::class, LicenceCheck::class])->group(function () {
             Route::get('home', [HomeController::class, 'index'])->name('home');
 
             //Route for for profile account

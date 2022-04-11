@@ -17,6 +17,7 @@ class Caisses extends Model
         'iduser',
         'idtache',
         'identre',
+        'idpaiement',
         'type_operation',
     ];
 }

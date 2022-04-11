@@ -401,7 +401,7 @@ class FactureController extends Controller
             'statut' => 1,
             'iduser' => $iduser,
         ]);
-        if ($save) {
+        if ($save && $request->mode == "Espèce") {
             $factData = new Array_();
             $factData->key = 'PAIEMENT';
             $factData->raison = 'Versement pour facture';

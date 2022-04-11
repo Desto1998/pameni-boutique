@@ -28,22 +28,28 @@ class PaiementController extends Controller
             'statut' => 1,
             'iduser' => $iduser,
         ]);
+        if ($request->oldmode == "Espèce" && $request->mode != "Espèce") {
 
+            $d = (new CaisseController())->removeFromCaisse($dataID, 'PAIEMENT');
+        }
         if ($save) {
-            $factData = new Array_();
-            $factData->key = 'PAIEMENT';
-            $factData->raison = 'Versement pour facture';
-            $factData->montant = $request->montant;
-            $factData->description = $request->description;
-            if ($dataID > 0) {
-                $factData->id = $dataID;
-            } else {
-                $factData->id = $save->paiement_id;
+            if ($request->mode == "Espèce") {
+                $factData = new Array_();
+                $factData->key = 'PAIEMENT';
+                $factData->raison = 'Versement pour facture';
+                $factData->montant = $request->montant;
+                $factData->description = $request->description;
+                if ($dataID > 0) {
+                    $factData->id = $dataID;
+                } else {
+                    $factData->id = $save->paiement_id;
+                }
+
+                if ((new CaisseController())->storeCaisse($factData)) {
+                    $statut = 2;
+                }
             }
 
-            if ((new CaisseController())->storeCaisse($factData)) {
-                $statut = 2;
-            }
             return redirect()->back()->with('success', 'enregistrés avec succès!');
         }
 

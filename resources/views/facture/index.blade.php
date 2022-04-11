@@ -320,10 +320,8 @@
             })
             // }
         }
-
-
-        @include('facture.comon_script')
     </script>
+    @include('facture.comon_script')
     <!-- Datatable -->
     <script src="{{asset('template/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
     <script src="{{asset('template/js/plugins-init/datatables.init.js')}}"></script>

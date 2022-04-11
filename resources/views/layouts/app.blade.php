@@ -23,9 +23,13 @@
     <link rel="stylesheet" href="{{ asset('app.css') }}">
     <link href="{{asset('template/css/style.css')}}" rel="stylesheet">
     <!-- Toastr -->
+
     <link href="{{asset('template/vendor/plugins/toastr/css/toastr.min.css')}}" rel="stylesheet">
+    <!-- Javascript -->
+    <script src="{{ asset('app.js') }}" defer></script>
 
     <script src="{{ asset('template/vendor/jquery/jquery.min.js') }}"></script>
+
 </head>
 <body>
 <!--*******************

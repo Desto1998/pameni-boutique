@@ -62,12 +62,13 @@
                                 @csrf
                                 <input type="hidden" name="idfacture" id="idfacture" value="{{ $data[0]->facture_id }}" required>
                                 <input type="hidden" name="paiement_id" id="paiement_id" value="{{ $item->paiement_id }}" required>
+                                <input type="hidden" name="oldmode" id="oldmode{{ $item->paiement_id }}" value="{{ $item->mode }}" required>
                                 <div class="form-group">
                                     <label>Mode de paiement <span class="text-danger">*</span></label>
                                     <select name="mode" class="form-control">
-                                        <option>Espèce</option>
-                                        <option>Chèque</option>
-                                        <option>Carte de crédit</option>
+                                        <option {{ $item->mode=='Espèce'?'selected':'' }} value="Espèce">Espèce</option>
+                                        <option {{ $item->mode=='Chèque'?'selected':'' }} value="Chèque">Chèque</option>
+                                        <option {{ $item->mode=='Carte de crédit'?'selected':'' }} value="Carte de crédit">Carte de crédit</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
