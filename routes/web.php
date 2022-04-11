@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CaisseController;
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\ClientController;
@@ -32,7 +31,7 @@ use App\Http\Middleware\MenuFournisseur;
 use App\Http\Middleware\MenuGestion;
 use App\Http\Middleware\MenuProduit;
 use App\Http\Middleware\MenuRapport;
-use App\Models\Fournisseurs;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
