@@ -1,8 +1,4 @@
-Create
-database if not exists gsc-app;
 
-USE
-`gsc-app`;
 drop table if exists devises;
 create table devises
 (
@@ -334,7 +330,7 @@ create table menus
     position    int,
     code        varchar(5),
     label       varchar(100),
-    description varchar(1000) null,
+    description varchar(1000) null
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
