@@ -22,12 +22,13 @@
                         // toastr.warning("Vous pourrez avoir des nofications non lues!",'Alerte');
 
                         $('#no-notification').hide();
-                    } else {
-                        toastr.success("Aucune notification!",'Alerte');
-                    }
+                    } 
+                    // else {
+                    //     toastr.success("Aucune notification!",'Alerte');
+                    // }
                 },
                 error: function (resp) {
-                    // toastr.warning("Une erreur s'est produite lors du chargement des notifications!");
+                    // toastr.warning("Une erreur s'est produite lors du chargement des notifications! Veillez actuliser la page. Merci!");
                     sweetAlert("Désolé!", "Une erreur s'est produite lors du chargement des notifications! Veillez actualiser la page et reconnectez-vous", "error");
                 }
             });
