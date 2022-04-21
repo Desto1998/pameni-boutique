@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\AvoirController;
+use App\Http\Controllers\BonLivraisonController;
 use App\Http\Controllers\CaisseController;
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\ClientController;
@@ -171,6 +173,9 @@ Route::prefix('dashboard')->group(function () {
                 Route::post('devis/remove/produit',[DevisController::class,'removeProduit'])->name('devis.remove.produit');
                 Route::post('devis/remove/complement',[DevisController::class,'removeComplement'])->name('devis.remove.comp');
                 Route::post('devis/delete',[DevisController::class,'delete'])->name('devis.delete');
+
+                // Route pour bon de livraison
+                Route::get('bonLivraison/index',[BonLivraisonController::class,'index'])->name('bon.index');
             });
 
             Route::middleware([MenuFactures::class])->group(function () {
@@ -193,6 +198,10 @@ Route::prefix('dashboard')->group(function () {
                 Route::post('factures/paiement/delete',[FactureController::class,'deletePaiement'])->name('factures.paiement.delete');
                 Route::post('factures/paiement/update',[PaiementController::class,'updatePaiement'])->name('factures.paiement.update');
                 Route::post('factures/checkAmount',[FactureController::class,'checkAmount'])->name('factures.checkAmount');
+
+                // Route pour facture avoir
+                Route::get('avoirs/index',[AvoirController::class,'index'])->name('avoir.index');
+
             });
 
             Route::middleware([MenuCommande::class])->group(function () {

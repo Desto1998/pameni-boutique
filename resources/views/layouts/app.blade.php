@@ -205,6 +205,7 @@
                         <ul aria-expanded="false">
                             <li><a href="{{ route('devis.add') }}">Créer un dévis</a></li>
                             <li><a href="{{ route('devis.all') }}">Gestion des dévis</a></li>
+                            <li><a href="{{ route('bon.index') }}">Bons de livraisons</a></li>
                         </ul>
                     </li>
                 @endif
@@ -215,6 +216,7 @@
                     <ul aria-expanded="false">
                         <li><a href="{{ route('factures.add') }}">Créer une facture</a></li>
                         <li><a href="{{ route('factures.all') }}">Gestion des factures</a></li>
+                        <li><a href="{{ route('avoir.index') }}">Factures avoirs</a></li>
                     </ul>
                 </li>
                 @endif

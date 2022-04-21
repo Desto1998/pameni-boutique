@@ -134,7 +134,7 @@ create table taches
     prix       float not null,
     idcharge   int   not null,
     iduser     int   not null,
-    statut      int       default 1,
+    statut     int       default 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -380,4 +380,77 @@ create table entrees
     iduser            int          not null,
     created_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at        DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+drop table if exists avoirs;
+create table avoirs
+(
+    avoir_id           int primary key AUTO_INCREMENT,
+    reference_avoir    varchar(20)   not null,
+    objet              varchar(1000) not null,
+    date_avoir         date          not null,
+    statut             int       default 0,
+    tva_statut         int       default 0,
+    idfacture          int           not null,
+    service            varchar(1000) null,
+    direction          varchar(1000) null,
+    mode_paiement      varchar(1000) null,
+    condition_paiement varchar(1000) null,
+    delai_liv          varchar(1000) null,
+    observation        varchar(1000) null,
+    note               varchar(1000) null,
+    lieu_liv           varchar(1000) null,
+    iduser             int           not null,
+    created_at         TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at         DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+drop table if exists produit_avoir;
+create table produit_avoir
+(
+    produit_avoir_id int primary key AUTO_INCREMENT,
+    quantite         int   not null,
+    prix             float not null,
+    remise           float     default 0,
+    tva              float     default 0,
+    idavoir          int   not null,
+    idproduit        int   not null,
+    iduser           int   not null,
+    created_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at       DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+drop table if exists bon_livraisons;
+create table bon_livraisons
+(
+    bon_livraison_id     int primary key AUTO_INCREMENT,
+    reference_bl         varchar(20) not null,
+    date_bl              date        not null,
+    statut               int       default 0,
+    iddevis              int         not null,
+    validite             int         not null,
+    tva_statut           int       default 0,
+    objet                varchar(1000) null,
+    disponibilite        varchar(1000) null,
+    garentie             varchar(1000) null,
+    condition_financiere varchar(1000) null,
+    iduser               int         not null,
+    created_at           TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at           DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+drop table if exists produit_bon;
+create table produit_bon
+(
+    produit_bon_id int primary key AUTO_INCREMENT,
+    quantite       int   not null,
+    prix           float not null,
+    remise         float     default 0,
+    tva            float     default 0,
+    idbonlivraison int   not null,
+    idproduit      int   not null,
+    iduser         int   not null,
+    created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at     DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
