@@ -405,7 +405,7 @@ create table avoirs
 drop table if exists produit_avoir;
 create table produit_avoir
 (
-    produit_avoir_id int primary key AUTO_INCREMENT,
+    produitavoir_id int primary key AUTO_INCREMENT,
     quantite         int   not null,
     prix             float not null,
     remise           float     default 0,
@@ -420,7 +420,7 @@ create table produit_avoir
 drop table if exists bon_livraisons;
 create table bon_livraisons
 (
-    bon_livraison_id     int primary key AUTO_INCREMENT,
+    bonlivraison_id     int primary key AUTO_INCREMENT,
     reference_bl         varchar(20) not null,
     date_bl              date        not null,
     statut               int       default 0,
@@ -431,6 +431,8 @@ create table bon_livraisons
     disponibilite        varchar(1000) null,
     garentie             varchar(1000) null,
     condition_financiere varchar(1000) null,
+    delai_liv          varchar(1000) null,
+    lieu_liv           varchar(1000) null,
     iduser               int         not null,
     created_at           TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at           DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -439,7 +441,7 @@ create table bon_livraisons
 drop table if exists produit_bon;
 create table produit_bon
 (
-    produit_bon_id int primary key AUTO_INCREMENT,
+    produitbon_id int primary key AUTO_INCREMENT,
     quantite       int   not null,
     prix           float not null,
     remise         float     default 0,
@@ -450,3 +452,7 @@ create table produit_bon
     created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at     DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE commentaires add column idbonlivraison int default null ;
+ALTER TABLE commentaires add column idavoir int default null ;
+

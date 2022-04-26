@@ -37,7 +37,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="email_fr">Email<span class="text-danger">*</span></label>
+                        <label for="email_fr">Email<span class="text-danger"></span></label>
                         <input type="email" name="email_fr" id="email_fr" required placeholder="Email" class="form-control">
                     </div>
                     <div class="row">

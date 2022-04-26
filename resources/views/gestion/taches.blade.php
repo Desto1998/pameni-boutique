@@ -281,7 +281,7 @@
                 text: "Ce montant sera déduit de la caisse. Cette action est irreversible!",
                 type: "warning",
                 showCancelButton: !0,
-                confirmButtonText: "Oui, supprimer!",
+                confirmButtonText: "Oui, continuer!",
                 cancelButtonText: "Non, annuler !",
                 reverseButtons: !0
             }).then(function (e) {

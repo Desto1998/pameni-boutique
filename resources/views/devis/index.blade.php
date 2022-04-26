@@ -41,7 +41,7 @@
                                 <thead class="bg-primary">
                                 <tr>
                                     <th>#</th>
-                                    <th>Refernce</th>
+                                    <th>Reference</th>
                                     <th>Client</th>
                                     <th>Objet</th>
                                     <th>Date</th>

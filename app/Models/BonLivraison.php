@@ -9,7 +9,7 @@ class BonLivraison extends Model
 {
     use HasFactory;
     protected $table = 'bon_livraisons';
-    protected $primaryKey = 'bon_livraison_id';
+    protected $primaryKey = 'bonlivraison_id';
     protected $fillable =[
         'reference_bl',
         'objet',
@@ -22,6 +22,8 @@ class BonLivraison extends Model
         'condition_paiement',
         'garentie',
         'validite',
+        'delai_liv',
+        'lieu_liv',
         'iduser',
     ];
 }

@@ -62,8 +62,8 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="email_fr">Email<span class="text-danger">*</span></label>
-                                <input type="email" value="{{ $fournisseur->email_fr }}"name="email_fr" id="email_fr" required placeholder="Email" class="form-control">
+                                <label for="email_fr">Email<span class="text-danger"></span></label>
+                                <input type="email" value="{{ $fournisseur->email_fr }}"name="email_fr" id="email_fr" placeholder="Email" class="form-control">
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-6">

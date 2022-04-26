@@ -9,7 +9,7 @@ class ProduitAvoir extends Model
 {
     use HasFactory;
     protected $table = 'produit_avoir';
-    protected $primaryKey = 'produit_avoir_id';
+    protected $primaryKey = 'produitavoir_id';
     protected $fillable =[
         'quantite',
         'prix',
@@ -19,4 +19,9 @@ class ProduitAvoir extends Model
         'idproduit',
         'iduser',
     ];
+
+    public function produitAvoir($id)
+    {
+        return $this::join('produits','produits.produit_id','produit_avoir.idproduit')->where('idavoir',$id)->get();
+    }
 }

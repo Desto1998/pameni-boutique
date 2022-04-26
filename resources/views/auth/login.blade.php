@@ -26,7 +26,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label><strong>Mot de passe</strong></label>
-                                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+                                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="Mot de passe">
 
                                             @error('password')
                                             <span class="invalid-feedback" role="alert">

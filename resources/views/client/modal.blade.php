@@ -36,8 +36,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="email_client">Email<span class="text-danger">*</span></label>
-                        <input type="email" name="email_client" id="email_client" required placeholder="Email" class="form-control">
+                        <label for="email_client">Email<span class="text-danger"></span></label>
+                        <input type="email" name="email_client" id="email_client" placeholder="Email" class="form-control">
                     </div>
                     <div class="row">
                         <div class="form-group col-md-6">

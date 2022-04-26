@@ -18,6 +18,7 @@ class Commentaires extends Model
         'iddevis',
         'idfacture',
         'iduser',
-
+        'idbonlivraison',
+        'idavoir'
     ];
 }
