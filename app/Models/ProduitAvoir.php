@@ -18,6 +18,7 @@ class ProduitAvoir extends Model
         'idbonlivraison',
         'idproduit',
         'iduser',
+        'idavoir',
     ];
 
     public function produitAvoir($id)

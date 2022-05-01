@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BonLivraison;
 use App\Models\Categories;
 use App\Models\Clients;
 use App\Models\Complements;
 use App\Models\Devis;
+use App\Models\Factures;
 use App\Models\Pays;
 use App\Models\Pocedes;
 use App\Models\Produits;
@@ -173,6 +175,9 @@ class ClientController extends Controller
         return view('client.edit',compact('client','pays'));
     }
     public function delete(Request $request){
+        Factures::where('idclient',$request->id)->delete();
+        Devis::where('idclient',$request->id)->delete();
+        BonLivraison::where('idclient',$request->id)->delete();
         $delete = Clients::where('client_id',$request->id)->delete();
         return Response()->json($delete);
     }

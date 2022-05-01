@@ -301,7 +301,7 @@
                             if (res) {
                                 swal.fire("Effectué!", "Bloqué avec succès!", "success")
                                 // toastr.success("Bloqué avec succès!");
-                                loadDevis();
+                                loadFactures();
 
                             } else {
                                 sweetAlert("Désolé!", "Erreur lors de l'opération!", "error")

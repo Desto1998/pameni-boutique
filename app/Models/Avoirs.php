@@ -9,6 +9,7 @@ class Avoirs extends Model
 {
     use HasFactory;
     protected $primaryKey = 'avoir_id';
+    protected  $table = 'avoirs';
     protected $fillable =[
         'reference_avoir',
         'objet',
@@ -16,14 +17,6 @@ class Avoirs extends Model
         'statut',
         'tva_statut',
         'idfacture',
-        'service',
-        'direction',
-        'mode_paiement',
-        'condition_paiement',
-        'delai_liv',
-        'observation',
-        'note',
-        'lieu_liv',
         'iduser',
     ];
     public function montantHT($id){
@@ -41,9 +34,7 @@ class Avoirs extends Model
     }
 
     public function montantTotal($id){
-        $data = $this::where('facture_id', $id)
-            ->get()
-        ;
+        $data = Avoirs::where('avoir_id', $id)->get();
         $pocedes = ProduitAvoir::where('idavoir', $id)->get();
         $montantTVA = 0;
         $montantTTC = 0;

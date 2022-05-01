@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Clients;
+use App\Models\Commandes;
 use App\Models\Fournisseurs;
 use App\Models\Pays;
 use Illuminate\Http\Request;
@@ -180,6 +181,7 @@ class FournisserController extends Controller
 
     public function delete(Request $request)
     {
+        Commandes::where('idfournisseur',$request->id)->delete();
         $delete = Fournisseurs::where('fournisseur_id', $request->id)->delete();
         return Response()->json($delete);
     }

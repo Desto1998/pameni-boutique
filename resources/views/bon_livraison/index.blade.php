@@ -1,4 +1,3 @@
-<?php
 @extends('layouts.app')
 @section('title','| BONS DE LIVRAISON')
 @section('css_before')
@@ -125,7 +124,12 @@
             $('#example').dataTable().fnClearTable();
             $('#example').dataTable().fnDestroy();
             // $("#example").DataTable.destroy();
-            $("#example").DataTable({
+            $("#example")
+                .on( 'error.dt', function ( e, settings, techNote, message ) {
+                    alert('Erreur delai d\'attente expire, veillez actualiser la page.')
+                    console.log( 'An error has been reported by DataTables: ', message );
+                } )
+                .DataTable({
                 Processing: true,
                 searching: true,
                 LengthChange: true, // desactive le module liste deroulante(d'affichage du nombre de resultats par page)

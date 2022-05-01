@@ -206,13 +206,13 @@ Route::prefix('dashboard')->group(function () {
 
                 // Route pour facture avoir
                 Route::get('avoirs/index',[AvoirController::class,'index'])->name('avoir.index');
-                Route::get('avoir/load/{id}',[AvoirController::class,'loadBon'])->name('avoir.loadAll');
-                Route::post('avoir/store',[AvoirController::class,'loadBon'])->name('avoir.store');
-                Route::get('avoir/print/{id}',[AvoirController::class,'printBon'])->name('avoir.print');
+                Route::get('avoir/load/{id}',[AvoirController::class,'loadAvoir'])->name('avoir.loadAll');
+                Route::post('avoir/store',[AvoirController::class,'store'])->name('avoir.store');
+                Route::get('avoir/print/{id}',[AvoirController::class,'printFactures'])->name('avoir.print');
                 Route::get('avoir/view/{id}',[AvoirController::class,'viewDetail'])->name('avoir.view');
                 Route::post('avoir/delete',[AvoirController::class,'delete'])->name('avoir.delete');
-                Route::post('avoir/delete',[AvoirController::class,'delete'])->name('avoir.delete');
-                Route::post('avoir/delete',[AvoirController::class,'delete'])->name('avoir.delete');
+                Route::post('avoir/valider',[AvoirController::class,'validerAvoir'])->name('avoir.valider');
+                Route::post('avoir/bloquer',[AvoirController::class,'bloquerAvoir'])->name('avoir.bloquer');
             });
 
             Route::middleware([MenuCommande::class])->group(function () {
@@ -238,6 +238,7 @@ Route::prefix('dashboard')->group(function () {
             Route::post('factures/addcomment',[CommentsController::class,'addCommentFacture'])->name('factures.add.comment');
             Route::post('devis/addcomment',[CommentsController::class,'addCommentDevis'])->name('devis.add.comment');
             Route::post('commande/addcomment',[CommentsController::class,'addCommentCommande'])->name('commande.add.comment');
+            Route::post('avoir/addcomment',[CommentsController::class,'addCommentAvoir'])->name('avoir.add.comment');
             Route::post('comment/update',[CommentsController::class,'updateComment'])->name('comment.update');
             Route::post('comment/delete',[CommentsController::class,'deleteComment'])->name('comment.delete');
 

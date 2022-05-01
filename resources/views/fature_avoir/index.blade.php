@@ -8,6 +8,9 @@
         table thead tr th{
             color: white!important;
         }
+        .hide{
+            display: none;
+        }
     </style>
 @stop
 @section('content')
@@ -33,8 +36,9 @@
                     <div class="card-body">
                         <!-- Button trigger modal -->
                         <span class="float-left h4">Liste des factures avoirs</span>
-                        <a href="{{ route('factures.add') }}" class="btn btn-primary float-right mb-3"
-                        ><i class="fa fa-plus">&nbsp; Ajouter</i></a>
+                        <button type="button" class="btn btn-primary float-right align-self-end mb-3"
+                                data-toggle="modal"
+                                data-target=".bd-example-modal-lg"><i class="fa fa-plus">&nbsp; Ajouter</i></button>
 
                         <div class="table-responsive">
                             <table id="example" class="display text-center w-100">
@@ -45,9 +49,10 @@
                                     <th>Client</th>
                                     <th>Objet</th>
                                     <th>Date</th>
+                                    <th>Ref. Facture</th>
                                     <th>Statut</th>
-                                    <th>Mon. HT</th>
-                                    <th>Mon. TTC</th>
+{{--                                    <th>Mon. HT</th>--}}
+                                    <th>Net à déduire</th>
 {{--                                    <th>Payé</th>--}}
                                     <th>Par</th>
                                     <th>Action</th>
@@ -65,7 +70,7 @@
             </div>
         </div>
     </div>
-    @include('facture.modal')
+    @include('fature_avoir.modal')
 @stop
 @section('script')
     <script>
@@ -92,7 +97,7 @@
                     });
                     $.ajax({
                         type: "POST",
-                        url: "{{ route('factures.delete') }}",
+                        url: "{{ route('avoir.delete') }}",
                         data: {id: id},
                         dataType: 'json',
                         success: function (res) {
@@ -183,11 +188,17 @@
         {{--});--}}
 
         // fonction qui charge les produits : les elements du tableau
-        function loadFactures() {
+        function loadAvoir() {
             $('#example').dataTable().fnClearTable();
             $('#example').dataTable().fnDestroy();
             // $("#example").DataTable.destroy();
-            $("#example").DataTable({
+            $("#example")
+                .on( 'error.dt', function ( e, settings, techNote, message ) {
+                    alert('Erreur delai d\'attente expire, veillez actualiser la page.')
+                    console.log( 'An error has been reported by DataTables: ', message );
+                    console.log(e, settings, techNote,)
+                } )
+                .DataTable({
                 Processing: true,
                 searching: true,
                 LengthChange: true, // desactive le module liste deroulante(d'affichage du nombre de resultats par page)
@@ -200,17 +211,18 @@
                     }
                 },
                 ajax:{
-                    url: "{{ route('factures.load',['id'=>-1]) }}",
+                    url: "{{ route('avoir.loadAll',['id'=>-1]) }}",
                 },
 
                 columns: [
                     {data: 'DT_RowIndex',name:'DT_RowIndex'},
-                    {data: 'reference_fact',name:'reference_fact'},
+                    {data: 'reference_avoir',name:'reference_avoir'},
                     {data: 'client',name:'client'},
                     {data: 'objet',name:'objet'},
-                    {data: 'date_fact',name:'date_fact'},
+                    {data: 'date_avoir',name:'date_avoir'},
+                    {data: 'facture',name:'facture'},
                     {data: 'statut',name:'statut'},
-                    {data: 'montantHT',name:'montantHT'},
+                    // {data: 'montantHT',name:'montantHT'},
                     {data: 'montantTTC',name:'montantTTC'},
                     // {data: 'paye',name:'paye'},
                     {data: 'firstname',name:'firstname'},
@@ -223,7 +235,7 @@
         }
 
         $(document).ready(function () {
-            loadFactures()
+            loadAvoir();
         });
 
         // cette fonction defini un devis comme valide
@@ -231,7 +243,7 @@
             swal.fire({
                 title: "Valider cette facture?",
                 icon: 'question',
-                text: "Elle ne sera plus modifiable aprés validation.",
+                text: "Les produit de cette facture seront retourné en stock. Cette opération est irreversible",
                 type: "warning",
                 showCancelButton: !0,
                 confirmButtonText: "Oui, valider!",
@@ -247,14 +259,14 @@
                     });
                     $.ajax({
                         type: "POST",
-                        url: "{{ route('factures.valider') }}",
+                        url: "{{ route('avoir.valider') }}",
                         data: {id: id},
                         dataType: 'json',
                         success: function (res) {
                             if (res) {
                                 swal.fire("Effectué!", "Validé avec succès!", "success")
                                 // toastr.success("Validé avec succès!");
-                                loadFactures();
+                                loadAvoir();
 
                             } else {
                                 sweetAlert("Désolé!", "Erreur lors de la validation!", "error")
@@ -294,14 +306,14 @@
                     });
                     $.ajax({
                         type: "POST",
-                        url: "{{ route('factures.bloquer') }}",
+                        url: "{{ route('avoir.bloquer') }}",
                         data: {id: id},
                         dataType: 'json',
                         success: function (res) {
                             if (res) {
                                 swal.fire("Effectué!", "Bloqué avec succès!", "success")
                                 // toastr.success("Bloqué avec succès!");
-                                loadDevis();
+                                loadAvoir();
 
                             } else {
                                 sweetAlert("Désolé!", "Erreur lors de l'opération!", "error")
@@ -320,8 +332,119 @@
             })
             // }
         }
+        $('.facture').on('change',function (e){
+            var id = $('select[name="idfacture"]').val();
+            // var id = $('.facture').val();
+           // $('input [name="checkbox"]').each().prop('checked',false);
+            $('.produit_f_id').prop('checked',false);
+            $('.f-product-block').hide(800);
+            $('#f-product-block'+id).show(800);
+            $('#montantNet').val(0);
+        })
+        $('.produit_f_id').on('change', function (e){
+            calulNetAPayer();
+        })
+        $('.quantite').on('change', function (e){
+            calulNetAPayer();
+        })
+        // store function on form submit
+        $('#newAvoir-form').on('submit', function (e){
+            e.preventDefault();
+            swal.fire({
+                title: "Voulez-vous enregistrer cette facture avoir?",
+                icon: 'question',
+                text: "Cette opération est irreversible.",
+                type: "warning",
+                showCancelButton: !0,
+                confirmButtonText: "Oui, Continuer!",
+                cancelButtonText: "Non, annuler !",
+                reverseButtons: !0
+            }).then(function (e) {
+                if (e.value === true) {
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $('#newAvoir-form #register-btn').attr("disabled", true).html("En cours...")
+                    var data = $('#newAvoir-form').serialize()
+                    console.log(data);
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('avoir.store') }}",
+                        data: data,
+                        dataType: 'json',
+                        success: function (res) {
+                            console.log(res);
+                            if (res){
+                                // swal.fire("Effectué!", "Enregistré avec succès!", "success")
+
+
+                                $('#newAvoir-form #register-btn').attr("disabled", false).html("Enregistrer")
+                                $('#newAvoir-form')[0].reset();
+                                $('.bd-example-modal-lg').modal('hide');
+                                // $('#single-select');
+                                $('#single-select').val(null).trigger('change').select2();
+                                loadAvoir();
+
+                                swal.fire({
+                                    icon: 'success',
+                                    title: 'Effectué avec succès',
+                                    text: "L'opération s'est bien terminé!",
+                                    footer: '<a href="/dashboard/avoir/print/'+res.avoir_id+'" target="_blank"><i class="fa fa-eye"></i> Cliquer pour voir la facture avoir.</a>'
+                                });
+
+                            }else {
+                                sweetAlert("Désolé!", "Erreur lors de l'enregistrement!", "error");
+                                $('#newAvoir-form #register-btn').attr("disabled", false).html("Enregistrer");
+                            }
+
+
+                        },
+                        error: function (resp) {
+                            console.log(resp);
+                            sweetAlert("Désolé!", "Une erreur s'est produite.", "error");
+                            $('#newAvoir-form #register-btn').attr("disabled", false).html("Enregistrer");
+                        }
+                    });
+                } else {
+
+                    $('#newAvoir-form #register-btn').attr("disabled", false).html("Enregistrer");
+                    $('.bd-example-modal-lg').modal('hide');
+                    e.dismiss;
+                }
+            }, function (dismiss) {
+                $('#newAvoir-form #register-btn').attr("disabled", false).html("Enregistrer");
+                $('.bd-example-modal-lgl').modal('hide');
+                return false;
+            })
+        });
+        function calulNetAPayer(){
+            var T_ID = [];
+            // $('#montantNet').val(0);
+            var total = 0;
+            // var remise = 0;
+            var tva_statut = $('tva_statut'+$('select[name="idfacture"]').val()).val();
+            var tva = 0;
+            $('input:checkbox[name="produit_f_id[]"]:checked').each(function(){
+                T_ID.push($(this).val());
+                var id = $(this).val();
+                var remise = $('#remise'+id).val();
+                var prix = $('#prix'+id).val();
+                var qte = $('#qte'+id).val();
+                remise = parseFloat(remise) * parseFloat(prix) * parseInt(qte)/100;
+                total += -remise + prix * qte;
+            });
+            if (parseInt(tva_statut)===1){
+                var mtva = (total *19.25)/100;
+                total += mtva;
+            }
+            console.log(T_ID);
+            $('#montantNet').val(Number(total).toFixed(2));
+        }
+
     </script>
-    @include('facture.comon_script')
+{{--    @include('facture.comon_script')--}}
     <!-- Datatable -->
     <script src="{{asset('template/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
     <script src="{{asset('template/js/plugins-init/datatables.init.js')}}"></script>

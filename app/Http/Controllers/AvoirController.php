@@ -21,6 +21,7 @@ use DateTime;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use PDF;
 use PhpParser\Node\Expr\Array_;
 use Yajra\DataTables\DataTables;
@@ -30,19 +31,24 @@ class AvoirController extends Controller
     //
     public function index()
     {
-        $devis = Devis::where('statut','>',0)->get();
-        $data = BonLivraison::join('users', 'users.id', 'bon_livraisons.iduser')
-            ->orderBy('bon_livraisons.created_at', 'desc')
+        $factures = Factures::where('statut',1)->get();
+        $data = Avoirs::join('users', 'users.id', 'avoirs.iduser')
+            ->orderBy('avoirs.created_at', 'desc')
             ->get()
         ;
-        $users = User::all();
 
+        $users = User::all();
+        $TID = [];
+        foreach ($factures as $key=>$value){
+            $TID[$key] = $value->facture_id;
+        }
+        $produits = Produit_Factures::join('produits','produits.produit_id','produit_factures.idproduit')->get();
         return view('fature_avoir.index',
-            compact('data', 'users')
+            compact('data', 'users','factures','produits')
         );
     }
 
-    public function loadFactures($id)
+    public function loadAvoir($id)
     {
         if ($id<=0) {
             $data = Avoirs::join('users', 'users.id', 'avoirs.iduser')
@@ -50,7 +56,7 @@ class AvoirController extends Controller
                 ->get()
             ;
         }else {
-            $data = Avoirs::whereRaw('idfacture in (select facture_id from factures where idclient = '.$id.')  ')
+            $data = Avoirs::whereRaw('avoirs.idfacture in (select facture_id from factures where idclient = '.$id.')  ')
                 ->join('users', 'users.id', 'avoirs.iduser')
                 ->orderBy('avoirs.created_at', 'desc')
                 ->get()
@@ -63,12 +69,12 @@ class AvoirController extends Controller
             //Ajoute de la colonne action
             ->addColumn('action', function ($value) {
                 $categories = Categories::all();
-                $paiements = Paiements::where('idfacture', $value->facture_id)->get();
+//                $paiements = Paiements::where('idfacture', $value->facture_id)->get();
                 $pocedes = (new ProduitAvoir)->produitAvoir($value->avoir_id);
                 $factures = Factures::join('clients', 'clients.client_id', 'factures.idclient')
                     ->where('factures.facture_id',$value->idfacture)
                     ->get();
-                $action = view('fature_avoir.action', compact('value', 'categories', 'pocedes','factures', 'paiements'));
+                $action = view('fature_avoir.action', compact('value', 'categories', 'pocedes','factures', ));
 //                    $actionBtn = '<div class="d-flex"><a href="javascript:void(0)" class="edit btn btn-warning btn-sm"><i class="fa fa-edit"></i></a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm ml-1"  onclick="deleteFun()"><i class="fa fa-trash"></i></a></div>';
                 return (string)$action;
             })
@@ -78,6 +84,17 @@ class AvoirController extends Controller
                     ->where('factures.facture_id',$value->idfacture)
                     ->get();
                 $client = $factures[0]->nom_client . ' ' . $factures[0]->prenom_client . ' ' . $factures[0]->raison_s_client;
+                return $client;
+            })
+            // Reference de la facture
+            ->addColumn('facture', function ($value) {
+                $factures = Factures::join('clients', 'clients.client_id', 'factures.idclient')
+                    ->where('factures.facture_id',$value->idfacture)
+                    ->get();
+                $factID = $factures[0]->facture_id;
+                $route = route('factures.view',['id'=>$factID]);
+                $ref = $factures[0]->reference_fact;
+                $client ="<a href=\" $route \" target='_blank' title='Cliquer pour voir la facture.' class='link'>$ref</a>" ;
                 return $client;
             })
             // ajout d'une colonne pour le montant de paieent deja effectueerr
@@ -111,10 +128,10 @@ class AvoirController extends Controller
             // calcule du montant TTC tout taxe comprie
             ->addColumn('montantTTC', function ($value) {
 
-                return (new Avoirs())->montantTotal($value->facture_id);
+                return (new Avoirs())->montantTotal($value->avoir_id);
 
             })
-            ->rawColumns(['action', 'montantHT', 'montantTTC', 'statut'])
+            ->rawColumns(['action', 'montantHT', 'montantTTC', 'statut', 'facture'])
             ->make(true);
     }
 
@@ -140,13 +157,12 @@ class AvoirController extends Controller
             'date' => ['required'],
             'objet' => ['required', 'min:5'],
             'quantite' => ['required'],
-            'prix' => ['required'],
+            // 'prix' => ['required'],
             // 'ref_bon' => ['required'],
         ]);
-//        dd($request);
-//        $lastNum = Devis::whereYear('created_at', date('Y'))->ma('devis_id')->get() ;
-        $lastNum = Factures::whereYear('created_at', date('Y'))
-            ->whereRaw('facture_id = (select max(`facture_id`) from factures)')
+
+        $lastNum = Avoirs::whereYear('created_at', date('Y'))
+            ->whereRaw('avoir_id = (select max(`avoir_id`) from avoirs)')
             ->get();
 
         $iduser = Auth::user()->id;
@@ -157,9 +173,9 @@ class AvoirController extends Controller
 //        $date = date("Y-m-d", strtotime($date->format('Y-m-d')));
 
         /** @var 'on' genere la  $reference */
-        $reference = 'F' . date('Y');
+        $reference = 'FA' . date('Y');
         if (count($lastNum) > 0) {
-            $lastNum = $lastNum[0]->reference_fact;
+            $lastNum = $lastNum[0]->reference_avoir;
             $actual = 0;
             for ($j = 0; $j < strlen($lastNum); $j++) {
                 if ($j > 5) {
@@ -176,49 +192,34 @@ class AvoirController extends Controller
             $reference .= $actual;
         }
 //        dd($reference);
-        $save = Factures::create([
-            'reference_fact' => $reference,
-            'disponibilite' => $request->disponibilite,
-            'garentie' => $request->garentie,
+        $save = Avoirs::create([
+            'reference_avoir' => $reference,
             'objet' => $request->objet,
-            'condition_financiere' => $request->condition,
-            'date_fact' => $request->date,
-            'idclient' => $request->idclient,
-            'tva_statut' => $request->tva_statut,
+            'date_avoir' => $request->date,
+            'idfacture' => $request->idfacture,
+            'tva_statut' => $request->tva_statut[$request->idfacture],
             'iduser' => $iduser,
+            'statut' => 0,
         ]);
-        for ($i = 0; $i < count($request->idproduit); $i++) {
-            Produit_Factures::create([
-                'idfacture' => $save->facture_id,
-                'quantite' => $request->quantite[$i],
-                'prix' => $request->prix[$i],
+        for ($i = 0; $i < count($request->produit_f_id); $i++) {
+            $produtInfos = Produit_Factures::where('produit_f_id', $request->produit_f_id[$i])->get();
+            ProduitAvoir::create([
+                'idavoir' => $save->avoir_id,
+                'quantite' => $request->quantite[$request->produit_f_id[$i]],
+                'prix' => $produtInfos[0]->prix,
                 'tva' => 0, //$request->tva[$i],
-                'remise' => $request->remise[$i],
-                'idproduit' => $request->idproduit[$i],
+                'remise' => $produtInfos[0]->remise,
+                'idproduit' => $produtInfos[0]->idproduit,
                 'iduser' => $iduser,
             ]);
         }
         // On enregistre les infos du bon de commande
-        if (isset($request->ref_bon)) {
-            $file = $request->file('logo');
-            $destinationPath = 'images/piece';
-            $originalFile = "";
-            if ($file) {
-                $originalFile = $file->getClientOriginalName();
-                $file->move($destinationPath, $originalFile);
-            }
-            Pieces::create([
-                'chemin' => $originalFile,
-                'ref' => $request->ref_bon,
-                'date_piece' => $request->date_bon,
-                'idfacture' => $save->facture_id,
-                'iduser' => $iduser,
-            ]);
-        }
-        if ($save) {
-            return redirect()->route('factures.all')->with('success', 'Enregistré avec succès!');
-        }
-        return redirect()->back()->with('danger', "Désolé une erreur s'est produite. Veillez recommencer!");
+        return Response()->json($save);
+//
+//        if ($save) {
+//
+//        }
+//        return '';
     }
 
     public function removeProduit(Request $request)
@@ -235,23 +236,24 @@ class AvoirController extends Controller
         $pocedes = (new ProduitAvoir())->produitAvoir($id);
         $montantTVA = 0;
 
-        $montantTVA = (new Factures())->montantHT($id);
-        $data = Factures::join('clients', 'clients.client_id', 'factures.idclient')
-            ->join('users', 'users.id', 'factures.iduser')
-            ->where('facture_id', $id)
+        $montantTVA = (new Avoirs())->montantHT($id);
+
+        $data = Avoirs::join('users', 'users.id', 'avoirs.iduser')
+            ->orderBy('avoirs.created_at', 'desc')
             ->get()
         ;
+        $factures = Factures::join('clients', 'clients.client_id', 'factures.idclient')
+            ->where('factures.facture_id',$data[0]->idfacture)
+            ->get();
         if ($data[0]->tva_statut == 1) {
             $montantTTC = (($montantTVA * 19.25) / 100) + $montantTVA;
         } else {
             $montantTTC = $montantTVA;
         }
-        $paiements = Paiements::where('idfacture',$id)->get();
-        $commentaires = Commentaires::join('users','users.id','commentaires.iduser')->where('idfacture',$id)->get();
+        $commentaires = Commentaires::join('users','users.id','commentaires.iduser')->where('idavoir',$id)->get();
 
-        $piece = Pieces::where('idfacture', $id)->get();
-        return view('facture.details.index', compact('data','pocedes',
-            'montantTTC','montantTVA','commentaires','paiements','piece')) ;
+        return view('fature_avoir.details.index', compact('data','pocedes',
+            'montantTTC','montantTVA','commentaires','factures')) ;
     }
 
     public function showEditForm($id)
@@ -365,6 +367,10 @@ class AvoirController extends Controller
     public function validerAvoir(Request $request)
     {
         $statut = Avoirs::where('avoir_id', $request->id)->update(['statut' => 1]);
+        $produits = ProduitAvoir::where('idavoir',$request->id)->get();
+        foreach ($produits as $key=>$value){
+            $updateP[$key] = Produits::where('produit_id',$value->idproduit)->update(['quantite_produit'=>DB::raw('quantite_produit + '.$value->quantite)]);
+        }
         return Response()->json($statut);
     }
 
@@ -376,11 +382,11 @@ class AvoirController extends Controller
 
     public function printFactures($id)
     {
-        $data = Avoirs::join('users', 'users.id', 'bon_livraisons.iduser')
-            ->orderBy('bon_livraisons.created_at', 'desc')
+        $data = Avoirs::join('users', 'users.id', 'avoirs.iduser')
+            ->orderBy('avoirs.created_at', 'desc')
             ->get()
         ;
-        $date = new DateTime($data[0]->date_bl);
+        $date = new DateTime($data[0]->date_avoir);
         $date = $date->format('m');
         $factures = Factures::join('clients', 'clients.client_id', 'factures.idclient')
             ->where('factures.facture_id',$data[0]->idfacture)
@@ -389,55 +395,8 @@ class AvoirController extends Controller
         $mois = (new Month)->getFrenshMonth((int)$date);
         $categories = Categories::all();
 //        $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $id)->get();
-        $pdf = PDF::loadView('facture_avoir.print', compact('data',  'mois', 'categories', 'pocedes','factures'))->setPaper('a4', 'portrait')->setWarnings(false);
+        $pdf = PDF::loadView('fature_avoir.print', compact('data',  'mois', 'categories', 'pocedes','factures'))->setPaper('a4', 'portrait')->setWarnings(false);
         return $pdf->stream($data[0]->reference_avoir . '_' . date("d-m-Y H:i:s") . '.pdf');
     }
 
-    public function addPaiement(Request $request)
-    {
-        $request->validate([
-            'montant' => ['required'],
-            'mode' => ['required'],
-            'idfacture' => ['required'],
-        ]);
-        $dataID = $request->paiement_id;
-        $iduser = Auth::user()->id;
-        $save = Paiements::updateOrCreate(['paiement_id' => $dataID], [
-            'idfacture' => $request->idfacture,
-            'mode' => $request->mode,
-            'montant' => $request->montant,
-            'description' => $request->description,
-            'date_paiement' => date('Y-m-d'),
-            'statut' => 1,
-            'iduser' => $iduser,
-        ]);
-        if ($save && $request->mode == "Espèce") {
-            $factData = new Array_();
-            $factData->key = 'PAIEMENT';
-            $factData->raison = 'Versement pour facture';
-            $factData->montant = $request->montant;
-            $factData->description = $request->description;
-            $factData->id = $save->paiement_id;
-
-            if ((new CaisseController())->storeCaisse($factData)) {
-                $statut = 2;
-            }
-        }
-        return Response()->json($save);
-
-    }
-
-    public function deletePaiement(Request $request)
-    {
-        $delete = Paiements::where('paiement_id', $request->id)->delete();
-        if ($delete) {
-            $d = (new CaisseController())->removeFromCaisse($request->id, 'PAIEMENT');
-        }
-        return Response()->json($delete);
-    }
-
-    public function checkAmount(Request $request){
-
-        return (new Factures())->montantTotal($request->id)- (new Factures())->Payer($request->id);
-    }
 }

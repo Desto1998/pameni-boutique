@@ -15,6 +15,11 @@
         border-collapse: collapse;
     }
 
+    .for-date{
+        width: 200px;
+        justify-content: right;
+        text-align: center;
+    }
 
     header table .for-logo img {
         width: 100px;
@@ -32,11 +37,7 @@
         font-family: "Arial Black";
         color: #0c85d0;
     }
-    .for-date{
-        width: 200px;
-        justify-content: right;
-        text-align: center;
-    }
+
     .for-infos table {
         min-width: 100%;
         font-size: 13px;
@@ -72,15 +73,6 @@
         padding: 5px;
     }
 
-    .for-complement {
-        margin: 20px 0
-    }
-
-    .for-complement table thead tr th, .for-complement table tbody tr td {
-        border: #000000 1px solid;
-        padding: 5px;
-    }
-
     .bg-primary {
         background-color: #0c85d0;
         padding: 2em;
@@ -98,16 +90,19 @@
 
     .for-garentie {
         width: 100%;
-        margin-top: 20px;
+        margin: 40px 0;
     }
 
+    .for-garentie tr td  {
+        width: 50%;
+    }
     .for-garentie tr td div {
         font-size: 12px;
         line-height: 1.6;
         padding: 8px;
         border: #a5a3a3 solid 1px;
-        height: 50px;
-        width: 155px;
+        /*height: 50px;*/
+
     }
 
     .for-garentie tr td div .titre {
@@ -153,7 +148,6 @@
 
                 {{--                    <img src="{{ asset('images/logo/logo_gssc.png') }}" class="logo" alt="Logo not found">--}}
                 <img src="{{ $ImagePath }}" class="logo" alt="Logo not found">
-                {{--                <img src="{{ asset('images/logo/logo_gssc.png') }}" class="logo" alt="Logo not found">--}}
             </td>
             <td class="for-name">
                 <h3>{{ 'GLOBAL SOFT & COMMUNICATION Sarl' }}</h3>
@@ -164,8 +158,7 @@
 
             </td>
             <td class="for-date">
-
-                <strong>{{ (new DateTime($data[0]->date_devis))->format('d').' '.$mois.' '.(new DateTime($data[0]->date_devis))->format('Y') }}</strong>
+                <strong>{{ (new DateTime($data[0]->date_avoir))->format('d').' '.$mois.' '.(new DateTime($data[0]->date_avoir))->format('Y') }}</strong>
             </td>
         </tr>
     </table>
@@ -176,22 +169,32 @@
         <tr>
             <td class="devis-info">
                 <div class="devis-details">
-                    <strong style="text-decoration: underline">PROFORMAT</strong><br>
-                    <strong>{{ $data[0]->reference_devis }}</strong><br>
+                    <strong style="text-decoration: underline">FACTURE AVOIR</strong><br>
+                    <strong>{{ $data[0]->reference_avoir }}</strong><br>
                     <strong>Contibibuable n°</strong><br>
                     <strong>M06191391224E</strong><br>
+                </div>
+
+                <div class="devis-details" style="margin-top: 15px">
+                    <strong style="text-decoration: underline">Coordonnée bancaire</strong><br>
+                    <strong>CCA-Bank</strong><br>
+                    <strong>N° de compte: 00258112901</strong><br>
+                    <strong>Code banque: 10039</strong><br>
+                    <strong>Code Guichet: 10039</strong><br>
+                    <strong>clé: 30</strong><br>
+
                 </div>
 
             </td>
             <td>
                 <div class="client-details">
                     <strong style="text-decoration: underline">COORDONNEES CLIENT</strong><br>
-                    <strong style="text-transform: uppercase">{{ $data[0]->nom_client }} {{ $data[0]->prenom_client }} {{ $data[0]->raison_s_client }}</strong><br>
-                    <strong>Tel: {{ $data[0]->phone_1_client }}  {{ isset($data[0]->phone_2_client)?'/'.$data[0]->phone_2_client:''  }}</strong><br>
-                    <strong>BP: {{ $data[0]->postale }}  </strong><br>
-                    @if ($data[0]->type_client==1)
-                        <strong>{{ $data[0]->contribuable }}  </strong><br>
-                        <strong>NC: {{ $data[0]->rcm }}  </strong><br>
+                    <strong style="text-transform: uppercase">{{ $factures[0]->nom_client }} {{ $factures[0]->prenom_client }} {{ $factures[0]->raison_s_client }}</strong><br>
+                    <strong>Tel: {{ $factures[0]->phone_1_client }}  {{ isset($factures[0]->phone_2_client)?'/'.$factures[0]->phone_2_client:''  }}</strong><br>
+                    <strong>BP: {{ $factures[0]->postale }}  </strong><br>
+                    @if ($factures[0]->type_client==1)
+                        <strong>{{ $factures[0]->contribuable }}  </strong><br>
+                        <strong>NC: {{ $factures[0]->rcm }}  </strong><br>
                     @endif
                 </div>
             </td>
@@ -250,19 +253,12 @@
 
             </tr>
         @endforeach
-        {{--        <tr>--}}
-        {{--            <td>jhdccd</td>--}}
-        {{--            <td>jhdccd</td>--}}
-        {{--            <td>jhdccd</td>--}}
-        {{--            <td>jhdccd</td>--}}
-        {{--            <td>jhdccd</td>--}}
-        {{--            <td>jhdccd</td>--}}
-        {{--            <td>jhdccd</td>--}}
-        {{--        </tr>--}}
+
         <tr>
             <th colspan="5" rowspan="3"></th>
             <td class="total">Total HT</td>
             <td class="number total">{{ number_format($montantHT,2,'.','') }}</td>
+
         </tr>
 
         <tr>
@@ -277,7 +273,7 @@
 
         </tr>
         <tr>
-            <td class="total">Montant TTC</td>
+            <td class="total">Net à déduire</td>
             <td class="number total">
                 @if ($data[0]->tva_statut == 1)
                     {{ number_format(( ($montantTVA * 19.25)/100)+$montantTVA,2,'.','') }}
@@ -289,138 +285,66 @@
         </tbody>
     </table>
 </div>
-<div class="for-prix" style="height: 120px; margin-top: 5px">
-    <div style="float: left; display: flex; justify-content: left; align-content: center; width: 70%">
-        <strong>
-            {{--        {{ (new \App\Models\ChiffreLettre())->Conversion(number_format(( ($montantTVA * 19.25)/100)+$montantTVA,0,'.','')) }}--}}
-            @php
+<div class="for-prix">
 
-                if ($data[0]->tva_statut == 1){
-                     $montantTVA = (($montantTVA * 19.25)/100)+ $montantTVA;
-                     //ucfirst((new \App\Models\ChiffreLettre())->Conversion(number_format($montantTVA ,2,'.','')))
-                }
-                $intpart = number_format($montantTVA ,2,'.','');
-                $intpart = floor($intpart);
-                $fraction = number_format($montantTVA ,2,'.','') - $intpart;
-                $chaine = "$fraction"."000";
-                $chaine2 = $chaine[2];
-                $chaine2 .= $chaine[3];
-                $chaineIntPart = (new \App\Models\ChiffreLettre())->Conversion($intpart);
-                $chaineDecimalPart = (new \App\Models\ChiffreLettre())->Conversion((int)($chaine2));
 
-            @endphp
-            @if ((int)$chaine2==0)
-                {{ ucfirst($chaineIntPart) }}
-            @else
-                {{ ucfirst($chaineIntPart) }} {{ "virgule" }} {{ $chaineDecimalPart }}
-            @endif
-            francs CFA
-        </strong>
-    </div>
-
-    <div style="justify-content: right">
+    {{--        {{ (new \App\Models\ChiffreLettre())->Conversion(number_format(( ($montantTVA * 19.25)/100)+$montantTVA,0,'.','')) }}--}}
+    <strong>
+        Montant  net à déduire:<br>
+        {{--        {{ (new \App\Models\ChiffreLettre())->Conversion(number_format(( ($montantTVA * 19.25)/100)+$montantTVA,0,'.','')) }}--}}
         @php
-            $ImagePath = $_SERVER["DOCUMENT_ROOT"] . '/images/logo/cachet_gsc.png';
+
+            if ($data[0]->tva_statut == 1){
+                 $montantTVA = (($montantTVA * 19.25)/100)+ $montantTVA;
+                 //ucfirst((new \App\Models\ChiffreLettre())->Conversion(number_format($montantTVA ,2,'.','')))
+            }
+            $intpart = number_format($montantTVA ,2,'.','');
+            $intpart = floor($intpart);
+            $fraction = number_format($montantTVA ,2,'.','') - $intpart;
+            $chaine = "$fraction"."000";
+            $chaine2 = $chaine[2];
+            $chaine2 .= $chaine[3];
+            $chaineIntPart = (new \App\Models\ChiffreLettre())->Conversion($intpart);
+            $chaineDecimalPart = (new \App\Models\ChiffreLettre())->Conversion((int)($chaine2));
+
         @endphp
-        {{--        <img class="cachet-img" style="float: right; width: 250px;height: 200px" src="{{ $ImagePath }}" alt="Cachet introuvable.">--}}
-        <img class="cachet-img" style="float: right; width: 200px; height: 120px" src="{{ asset('images/logo/cachet_gsc2.png') }}" alt="Cachet introuvable.">
-    </div>
+        @if ((int)$chaine2==0)
+            {{ ucfirst($chaineIntPart) }}
+        @else
+            {{ ucfirst($chaineIntPart) }} {{ "virgule" }} {{ $chaineDecimalPart }}
+        @endif
+        francs CFA
+    </strong>
+
 </div>
 
-<table class="for-garentie">
+<table class="for-garentie" style="text-align: justify">
     <tr>
         <td>
             <div>
-                <label class="titre">Validité de l'offre</label><br>
-                <label>{{ $data[0]->validite }} semaines</label>
+                <label class="titre">CONDITION DE GARANTIE:</label><br>
+                <small>
+                    La garantie est valable dans le cas de défauts d'usine et ainsi que les pannes dues aux
+                    défauts de fabrication.<br>
+                    Les équipements électroniques livrés par nos soins doivent etre sous protection électrique recommandé par le constructeur.
+                </small>
             </div>
         </td>
+
         <td>
             <div>
-                <label class="titre">Disponibilité</label><br>
-                <label>{{ $data[0]->disponibilite }} </label>
-            </div>
-        </td>
-        <td>
-            <div>
-                <label class="titre">Garentie</label><br>
-                <label>{{ $data[0]->garentie }} mois</label>
-            </div>
-        </td>
-        <td>
-            <div>
-                <label class="titre">Conditions financières</label><br>
-                <label>{{ $data[0]->condition_financiere }}</label>
+                <label class="titre">Note: </label><br>
+                <small>Toutes les fournitures restent la priopriété exclusive
+                    de Global Soft and Communication Sarl jusqu'au règlement intégral de la facture par le client.
+                    Nos Tarifs sont confidentiels. ne sont utilisable et adressés qu'a nos clients,
+                    lq diffusion de cette facture et contenu sont strictemment interdits.
+
+                </small>
             </div>
         </td>
     </tr>
 </table>
-<div class="for-complement">
-    <div style="margin-bottom: 10px">
-        <strong style="text-decoration: underline;">OFFRE COMPLEMENTAIRE</strong><br>
-    </div>
-    <table class="table-complement">
-        <thead class="bg-primary text-white text-center">
-        <tr>
-            <th>Réf.</th>
-            <th>Désignation</th>
-            <th>Qté</th>
-            <th>P.U.HT.</th>
-            <th>Remise</th>
-            {{--            <th>TVA</th>--}}
-            <th>M. HT(FCFA)</th>
-            <th>M. TTC</th>
-        </tr>
-        </thead>
-        <tbody style="color: #000000!important;">
 
-        @php
-            $montantTTC = 0;
-           $montantHT=0;
-           $montantTVA = 0;
-        @endphp
-        @foreach($complements as $p)
-            @php
-                $remise = ($p->prix * $p->quantite *$p->remise)/100;
-                $montant = ($p->quantite * $p->prix) - $remise;
-                $HT = $montant;
-
-                $montantHT += $montant;
-                $tva = ($montant * $p->tva)/100;
-                $montant = $tva + $montant;
-                $TTC = $montant;
-                $montantTVA += $montant;
-            @endphp
-            <tr class="text-black  produit-input">
-
-                <td>{{ $p->reference }}</td>
-                <td>{{ $p->titre_produit }}</td>
-                <td class="number">{{ $p->quantite }}</td>
-                <td class="number">{{ $p->prix }}</td>
-                <td class="number">{{ $p->remise }}%</td>
-                {{--                <td class="number">{{ $p->tva }}%</td>--}}
-                <td class="number">
-                    {{ number_format($HT,2, '.', '') }}
-                </td>
-                <td class="number">
-                    {{  number_format($TTC, 2, '.', '')  }}
-                </td>
-
-            </tr>
-        @endforeach
-        @if (count($complements)===0)
-            <td colspan="3"></td>
-            <td colspan="3"></td>
-            <td colspan="3"></td>
-            <td colspan="3"></td>
-            <td colspan="3"></td>
-            <td colspan="3"></td>
-            <td colspan="3"></td>
-            <td colspan="3"></td>
-        @endif
-        </tbody>
-    </table>
-</div>
 <footer class="for-footer">
     @php
         $ImagePath = $_SERVER["DOCUMENT_ROOT"] . '/images/logo/logo-partenaire-gsc.png';

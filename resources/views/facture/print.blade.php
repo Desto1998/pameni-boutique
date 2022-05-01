@@ -318,7 +318,7 @@
 
 </div>
 
-<table class="for-garentie">
+<table class="for-garentie" style="text-align: justify">
     <tr>
         <td>
             <div>

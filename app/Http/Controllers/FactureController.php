@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Avoirs;
 use App\Models\Categories;
 use App\Models\Clients;
 use App\Models\Commandes;
@@ -240,10 +241,15 @@ class FactureController extends Controller
         }
         $paiements = Paiements::where('idfacture',$id)->get();
         $commentaires = Commentaires::join('users','users.id','commentaires.iduser')->where('idfacture',$id)->get();
-
+        $avoirs = Avoirs::join('users', 'users.id', 'avoirs.iduser')
+            ->where('idfacture',$id)
+            ->orderBy('avoirs.created_at', 'desc')
+            ->select('avoirs.*','users.*','avoirs.created_at as date_created')
+            ->get()
+        ;
         $piece = Pieces::where('idfacture', $id)->get();
         return view('facture.details.index', compact('data','pocedes',
-            'montantTTC','montantTVA','commentaires','paiements','piece')) ;
+            'montantTTC','montantTVA','commentaires','paiements','piece','avoirs')) ;
     }
 
     public function showEditForm($id)
@@ -343,6 +349,7 @@ class FactureController extends Controller
     public function delete(Request $request)
     {
         Produit_Factures::where('idfacture', $request->id)->delete();
+        Avoirs::where('idfacture', $request->id)->delete();
         Paiements::where('idfacture', $request->id)->delete();
         $delete = Factures::where('idfacture', $request->id)->delete();
         return Response()->json($delete);

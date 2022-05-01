@@ -169,7 +169,7 @@
                 $('#raison_s_fr').prop('required',true)
                 $('#raison_s_fr').attr('disabled',false)
                 $('#nom_fr').attr('disabled',true)
-                $('#rcm').prop('required',true)
+                // $('#rcm').prop('required',true)
                 $('#rcm').attr('disabled',false)
                 $('#contribuabe').attr('disabled',false)
             }else {

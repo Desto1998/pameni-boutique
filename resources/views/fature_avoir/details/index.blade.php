@@ -15,7 +15,7 @@
         <div class="row page-titles mx-0">
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
-                    <h4>DETAILS FACTURE "{{ $data[0]->reference_fact }}"</h4>
+                    <h4>DETAILS FACTURE AVOIR "{{ $data[0]->reference_avoir }}"</h4>
                     {{--                    <p class="mb-0">Your business dashboard template</p>--}}
                 </div>
             </div>
@@ -23,7 +23,7 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="javascript:void(0)">Dashboard</a></li>
                     <li class="breadcrumb-item"><a href="javascript:void(0)">Factures</a></li>
-                    <li class="breadcrumb-item active"><a href="javascript:void(0)">{{ $data[0]->reference_fact }}</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0)">{{ $data[0]->reference_avoir }}</a></li>
                 </ol>
             </div>
         </div>
@@ -39,43 +39,35 @@
 {{--                                <li class="nav-item">--}}
 {{--                                    <a class="nav-link" data-toggle="tab" href="#profile">Produits({{ count($pocedes) }})</a>--}}
 {{--                                </li>--}}
-                                <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#paiement">Paiements({{ count($paiements) }})</a>
-                                </li>
+{{--                                <li class="nav-item">--}}
+{{--                                    <a class="nav-link" data-toggle="tab" href="#paiement">Paiements({{ count($paiements) }})</a>--}}
+{{--                                </li>--}}
                                 <li class="nav-item">
                                     <a class="nav-link" data-toggle="tab" href="#message">Commentaires({{ count($commentaires) }})</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#avoir">Facture avoir({{ count($avoirs) }})</a>
-                                </li>
                             </ul>
                             <div class="d-flex justify-content-end mt-2">
-                                @if (Auth::user()->is_admin==1 || $data[0]->statut <=1)
-                                    @if(Auth::user()->is_admin==1 || Auth::user()->id===$data[0]->id)
-                                        <a href="{{ route('factures.edit',['id'=>$data[0]->facture_id]) }}" title="Editer cette facture" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a>
-                                    @endif
-                                @endif
-                                <a href="{{ route('factures.print',['id'=>$data[0]->facture_id]) }}" title="Imprimer cette facture" target="_blank" class="btn btn-sm btn-light ml-2"><i class="fa fa-print"></i></a>
+{{--                                @if (Auth::user()->is_admin==1 || $data[0]->statut <=1)--}}
+{{--                                    @if(Auth::user()->is_admin==1 || Auth::user()->id===$data[0]->id)--}}
+{{--                                        <a href="{{ route('avoi',['id'=>$data[0]->facture_id]) }}" title="Editer cette facture" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a>--}}
+{{--                                    @endif--}}
+{{--                                @endif--}}
+                                <a href="{{ route('avoir.print',['id'=>$data[0]->avoir_id]) }}" title="Imprimer cette facture" target="_blank" class="btn btn-sm btn-light ml-2"><i class="fa fa-print"></i></a>
                             </div>
                             <div class="tab-content">
                                 <div class="tab-pane fade show active" id="detail" role="tabpanel">
                                     <div class="pt-4">
-                                        @include('facture.details.detail')
+                                        @include('fature_avoir.details.detail')
                                     </div>
                                 </div>
-                                <div class="tab-pane fade" id="paiement">
-                                    <div class="pt-4">
-                                        @include('facture.details.paiement')
-                                    </div>
-                                </div>
+{{--                                <div class="tab-pane fade" id="paiement">--}}
+{{--                                    <div class="pt-4">--}}
+{{--                                        @include('facture.details.paiement')--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
                                 <div class="tab-pane fade" id="message">
                                     <div class="pt-4">
-                                        @include('facture.details.comments')
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade" id="avoir">
-                                    <div class="pt-4">
-                                        @include('facture.details.avoir')
+                                        @include('fature_avoir.details.comments')
                                     </div>
                                 </div>
                             </div>
