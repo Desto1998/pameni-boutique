@@ -552,7 +552,7 @@
                 $('#raison_s_client').prop('required',true)
                 $('#raison_s_client').attr('disabled',false)
                 $('#nom_client').attr('disabled',true)
-                $('#rcm').prop('required',true)
+                // $('#rcm').prop('required',true)
                 $('#rcm').attr('disabled',false)
                 $('#contribuabe').attr('disabled',false)
             }else {

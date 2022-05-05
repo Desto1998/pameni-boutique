@@ -326,7 +326,7 @@
             $ImagePath = $_SERVER["DOCUMENT_ROOT"] . '/images/logo/cachet_gsc.png';
         @endphp
         {{--        <img class="cachet-img" style="float: right; width: 250px;height: 200px" src="{{ $ImagePath }}" alt="Cachet introuvable.">--}}
-        <img class="cachet-img" style="float: right; width: 200px; height: 120px" src="{{ asset('images/logo/cachet_gsc2.png') }}" alt="Cachet introuvable.">
+{{--        <img class="cachet-img" style="float: right; width: 200px; height: 120px" src="{{ asset('images/logo/cachet_gsc2.png') }}" alt="Cachet introuvable.">--}}
     </div>
 </div>
 
@@ -353,7 +353,7 @@
         <td>
             <div>
                 <label class="titre">Lieu de livraison</label><br>
-                <label>{{ $data[0]->lieu_liv }} jours</label>
+                <label>{{ $data[0]->lieu_liv }}</label>
             </div>
         </td>
     </tr>

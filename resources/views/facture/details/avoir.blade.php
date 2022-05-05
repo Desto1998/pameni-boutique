@@ -27,7 +27,7 @@
                 <td>{{ $k+1 }}</td>
                 <td>{{ $item->date_avoir }}</td>
                 <td>
-                    <a href="{{ route('avoir.view',['id'=>$item->avoir_id]) }}" title="Cliquez pour visualise les détails de la facture." target="_blank" class="text-primary">
+                    <a href="{{ route('avoir.view',['id'=>$item->avoir_id]) }}" title="Cliquez pour visualiser les détails de la facture." target="_blank" class="text-primary">
                         {{ $item->reference_avoir }}
                     </a>
                 </td>
