@@ -126,13 +126,13 @@ select{
     color: #495057;
     background-color: #fff;
     background-clip: padding-box;
-    border: 1px solid #bfb9b9;
+    border: 1px solid #bfb9b9!important;
     border-radius: 0.25rem;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 .form-control {
     background: #fff;
-    border: 1px solid #bfb9b9;
+    border: 1px solid #bfb9b9!important;
     color: #454545;
 }
 .form-control:focus {
