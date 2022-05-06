@@ -284,68 +284,30 @@ class AvoirController extends Controller
             'date' => ['required'],
             'objet' => ['required', 'min:5'],
             'quantite' => ['required'],
-            'prix' => ['required'],
             // 'ref_bon' => ['required'],
-            'facture_id' => ['required'],
+            'avoir_id' => ['required'],
         ]);
 
         $iduser = Auth::user()->id;
 
 //        dd($reference); updateOrCreate
-        $save = Factures::where('facture_id', $request->facture_id)->update([
+        $save = Avoirs::where('facture_id', $request->facture_id)->update([
             'objet' => $request->objet,
-            'condition_financiere' => $request->condition,
-            'date_fact' => $request->date,
-            'idclient' => $request->idclient,
-            'tva_statut' => $request->tva_statut,
+            'date_avoir' => $request->date,
             'iduser' => $iduser,
         ]);
         for ($i = 0; $i < count($request->idproduit); $i++) {
             $pocedeId = '';
-            if (isset($request->produit_f_id[$i]) && !empty($request->produit_f_id[$i])) {
-                $pocedeId = $request->produit_f_id[$i];
+            if (isset($request->produitavoir_id[$i]) && !empty($request->produitavoir_id[$i])) {
+                $pocedeId = $request->produitavoir_id[$i];
             }
-            Produit_Factures::updateOrCreate(['produit_f_id' => $pocedeId], [
-                'idfacture' => $request->facture_id,
-                'quantite' => $request->quantite[$i],
-                'prix' => $request->prix[$i],
-                'tva' => 0, //$request->tva[$i],
-                'remise' => $request->remise[$i],
-                'idproduit' => $request->idproduit[$i],
-                'iduser' => $iduser,
+            ProduitAvoir::where('produitavoir_id', $pocedeId)->update([
+                'quantite' => $request->quantite[$request->produitavoir_id[$i]],
             ]);
         }
-        // On enregistre les infos du bon de commande
-        if (isset($request->ref_bon)) {
-            $file = $request->file('logo');
-            $destinationPath = 'images/piece';
-            $originalFile = "";
-            if ($file) {
-                $originalFile = $file->getClientOriginalName();
-                $file->move($destinationPath, $originalFile);
-            } else {
-                $originalFile = $request->chemin;
-            }
-            Pieces::updateOrCreate(['piece_id' => $request->piece_id], [
-                'chemin' => $originalFile,
-                'ref' => $request->ref_bon,
-                'date_piece' => $request->date_bon,
-                'idfacture' => $request->facture_id,
-                'iduser' => $iduser,
-            ]);
-        }
-        /** on modifie le statut de son devis et on met a 1. Pour que ca reste a valide
-         * au lieu de facture creee
-         **/
-        $fact = Factures::where('facture_id',$request->facture_id)->get();
-        if (count($fact)>0) {
-            if (isset($fact[0]->iddevis) && !empty($fact[0]->iddevis)) {
-                Devis::where('devis_id',$fact[0]->iddevis)->update(['statut'=>1]);
 
-            }
-        }
         if ($save) {
-            return redirect()->route('factures.all')->with('success', 'Enregistré avec succès!');
+            return redirect()->route('avoir.index')->with('success', 'Enregistré avec succès!');
         }
         return redirect()->back()->with('danger', "Désolé une erreur s'est produite. Veillez recommencer!");
     }

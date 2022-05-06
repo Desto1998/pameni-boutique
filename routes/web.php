@@ -177,6 +177,8 @@ Route::prefix('dashboard')->group(function () {
                 // Route pour bon de livraison
                 Route::get('bonLivraison/index',[BonLivraisonController::class,'index'])->name('bon.index');
                 Route::get('bonLivraison/load/{id}',[BonLivraisonController::class,'loadBon'])->name('bon.loadAll');
+                Route::get('bonLivraison/edit/{id}',[BonLivraisonController::class,'showEditForm'])->name('bonLivraison.edit');
+                Route::post('bonLivraison/edit/update',[BonLivraisonController::class,'edit'])->name('bonLivraison.edit.update');
                 Route::post('bonLivraison/store',[BonLivraisonController::class,'loadBon'])->name('bon.store');
                 Route::get('bonLivraison/print/{id}',[BonLivraisonController::class,'printBon'])->name('bon.print');
                 Route::get('bonLivraison/view/{id}',[BonLivraisonController::class,'viewDetail'])->name('bon.view');
@@ -207,6 +209,8 @@ Route::prefix('dashboard')->group(function () {
                 // Route pour facture avoir
                 Route::get('avoirs/index',[AvoirController::class,'index'])->name('avoir.index');
                 Route::get('avoir/load/{id}',[AvoirController::class,'loadAvoir'])->name('avoir.loadAll');
+                Route::get('avoir/edit/{id}',[AvoirController::class,'showEditForm'])->name('avoir.edit');
+                Route::post('avoir/edit/update',[AvoirController::class,'edit'])->name('avoir.edit.update');
                 Route::post('avoir/store',[AvoirController::class,'store'])->name('avoir.store');
                 Route::get('avoir/print/{id}',[AvoirController::class,'printFactures'])->name('avoir.print');
                 Route::get('avoir/view/{id}',[AvoirController::class,'viewDetail'])->name('avoir.view');
@@ -239,6 +243,7 @@ Route::prefix('dashboard')->group(function () {
             Route::post('devis/addcomment',[CommentsController::class,'addCommentDevis'])->name('devis.add.comment');
             Route::post('commande/addcomment',[CommentsController::class,'addCommentCommande'])->name('commande.add.comment');
             Route::post('avoir/addcomment',[CommentsController::class,'addCommentAvoir'])->name('avoir.add.comment');
+            Route::post('bonLiv/addcomment',[CommentsController::class,'addCommentBon'])->name('bonLiv.add.comment');
             Route::post('comment/update',[CommentsController::class,'updateComment'])->name('comment.update');
             Route::post('comment/delete',[CommentsController::class,'deleteComment'])->name('comment.delete');
 

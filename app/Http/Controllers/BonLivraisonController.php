@@ -8,12 +8,17 @@ use App\Models\Categories;
 use App\Models\Clients;
 use App\Models\Commentaires;
 use App\Models\Devis;
+use App\Models\Factures;
 use App\Models\Paiements;
+use App\Models\Pieces;
+use App\Models\Produit_Factures;
 use App\Models\ProduitAvoir;
 use App\Models\ProduitBon;
+use App\Models\Produits;
 use DateTime;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use PDF;
 use Yajra\DataTables\DataTables;
 
@@ -123,7 +128,99 @@ class BonLivraisonController extends Controller
         $delete = BonLivraison::where('bonlivraison_id', $request->id)->delete();
         return Response()->json($delete);
     }
+    public function showEditForm($id)
+    {
+        $data = Factures::join('clients', 'clients.client_id', 'factures.idclient')
+            ->join('users', 'users.id', 'factures.iduser')
+            ->where('facture_id', $id)
+            ->get()
+        ;
+//        $categories = Categories::all();
+        $produits = Produits::orderBy('created_at', 'desc')->get();
+        $ID = [];
+        foreach ($produits as $key => $value) {
+            if (!in_array($value->idcategorie, $ID)) {
+                $ID[$key] = $value->idcategorie;
+            }
+        }
+        $piece = Pieces::where('idfacture', $id)->get();
+        $categories = Categories::whereIn('categorie_id', $ID)->orderBy('categories.created_at', 'desc')->get();
+        $clients = Clients::orderBy('created_at', 'desc')->get();
+        $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $id)->get();
+        return view('facture.edit', compact('data', 'piece', 'categories', 'pocedes', 'clients', 'produits'));
+    }
 
+    public function edit(Request $request)
+    {
+        $request->validate([
+            'date' => ['required'],
+            'objet' => ['required', 'min:5'],
+            'quantite' => ['required'],
+            'prix' => ['required'],
+            // 'ref_bon' => ['required'],
+            'facture_id' => ['required'],
+        ]);
+
+        $iduser = Auth::user()->id;
+
+//        dd($reference); updateOrCreate
+        $save = Factures::where('facture_id', $request->facture_id)->update([
+            'objet' => $request->objet,
+            'condition_financiere' => $request->condition,
+            'date_fact' => $request->date,
+            'idclient' => $request->idclient,
+            'tva_statut' => $request->tva_statut,
+            'iduser' => $iduser,
+        ]);
+        for ($i = 0; $i < count($request->idproduit); $i++) {
+            $pocedeId = '';
+            if (isset($request->produit_f_id[$i]) && !empty($request->produit_f_id[$i])) {
+                $pocedeId = $request->produit_f_id[$i];
+            }
+            Produit_Factures::updateOrCreate(['produit_f_id' => $pocedeId], [
+                'idfacture' => $request->facture_id,
+                'quantite' => $request->quantite[$i],
+                'prix' => $request->prix[$i],
+                'tva' => 0, //$request->tva[$i],
+                'remise' => $request->remise[$i],
+                'idproduit' => $request->idproduit[$i],
+                'iduser' => $iduser,
+            ]);
+        }
+        // On enregistre les infos du bon de commande
+        if (isset($request->ref_bon)) {
+            $file = $request->file('logo');
+            $destinationPath = 'images/piece';
+            $originalFile = "";
+            if ($file) {
+                $originalFile = $file->getClientOriginalName();
+                $file->move($destinationPath, $originalFile);
+            } else {
+                $originalFile = $request->chemin;
+            }
+            Pieces::updateOrCreate(['piece_id' => $request->piece_id], [
+                'chemin' => $originalFile,
+                'ref' => $request->ref_bon,
+                'date_piece' => $request->date_bon,
+                'idfacture' => $request->facture_id,
+                'iduser' => $iduser,
+            ]);
+        }
+        /** on modifie le statut de son devis et on met a 1. Pour que ca reste a valide
+         * au lieu de facture creee
+         **/
+        $fact = Factures::where('facture_id',$request->facture_id)->get();
+        if (count($fact)>0) {
+            if (isset($fact[0]->iddevis) && !empty($fact[0]->iddevis)) {
+                Devis::where('devis_id',$fact[0]->iddevis)->update(['statut'=>1]);
+
+            }
+        }
+        if ($save) {
+            return redirect()->route('factures.all')->with('success', 'Enregistré avec succès!');
+        }
+        return redirect()->back()->with('danger', "Désolé une erreur s'est produite. Veillez recommencer!");
+    }
     public function printBon($id)
     {
         $data = BonLivraison::join('users', 'users.id', 'bon_livraisons.iduser')

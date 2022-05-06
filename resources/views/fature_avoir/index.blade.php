@@ -38,7 +38,7 @@
                         <span class="float-left h4">Liste des factures avoirs</span>
                         <button type="button" class="btn btn-primary float-right align-self-end mb-3"
                                 data-toggle="modal"
-                                data-target=".bd-example-modal-lg"><i class="fa fa-plus">&nbsp; Ajouter</i></button>
+                                data-target="#new-facture-avoir"><i class="fa fa-plus">&nbsp; Ajouter</i></button>
 
                         <div class="table-responsive">
                             <table id="example" class="display text-center w-100">
