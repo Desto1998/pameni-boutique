@@ -40,7 +40,7 @@
                         class="fa fa-close"></i></a>
             @endif
 
-            @if ($value->statut ===1 && Auth::user()->is_admin==1)
+            @if ($value->statut ===1)
                 <a href="javascript:void(0);" onclick="stockFun({{ $value->commande_id }})"
                    class="btn btn-secondary btn-sm ml-1"
                    title="Bon de commande livré? Mettre les produits en stock."><i
