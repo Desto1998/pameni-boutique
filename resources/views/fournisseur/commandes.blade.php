@@ -3,7 +3,7 @@
     <div class="col-md-12 text-center my-2">
         <span class="h4 text-center">Liste des commandes</span>
     </div>
-    <table id="commande-table" class="display text-center w-100">
+    <table id="commande-table" class="display text-center w-100 text-black">
         <thead class="bg-primary">
         <tr>
             <th>#</th>

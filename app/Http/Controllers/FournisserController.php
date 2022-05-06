@@ -161,7 +161,6 @@ class FournisserController extends Controller
                 'adresse_fr' => $request->adresse_fr,
                 'postale' => $request->postale,
                 'type_fr' => $request->type_fr,
-                'date_ajout_fr' => $date,
 
             ]);
 //        return Response()->json($save);
