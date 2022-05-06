@@ -56,7 +56,7 @@
     }
 
     td.devis-info {
-        width: 480px;
+        width: 445px;
     }
 
     .for-objet, .for-complement label {
