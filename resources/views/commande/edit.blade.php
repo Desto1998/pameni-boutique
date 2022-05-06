@@ -140,7 +140,7 @@
                                             id="product-row{{ -$item->comporte_id }}">
 
                                             <td style="width: 270px;">
-                                                <input type="hidden" name="produit_f_id[]" value="{{ $item->comporte_id }}">
+                                                <input type="hidden" name="comporte_id[]" value="{{ $item->comporte_id }}">
                                                 <select name="idproduit[]" class="dropdown-groups form-control"
                                                         id="select-pro{{ -$item->comporte_id }}"
                                                         onchange="setPrix({{ -$item->comporte_id }})"

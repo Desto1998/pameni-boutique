@@ -217,6 +217,10 @@ Route::prefix('dashboard')->group(function () {
                 Route::post('avoir/delete',[AvoirController::class,'delete'])->name('avoir.delete');
                 Route::post('avoir/valider',[AvoirController::class,'validerAvoir'])->name('avoir.valider');
                 Route::post('avoir/bloquer',[AvoirController::class,'bloquerAvoir'])->name('avoir.bloquer');
+
+                Route::post('avoir/recouvrement',[AvoirController::class,'recouvrement'])->name('avoir.recouvrement');
+
+                Route::post('avoir/removeProduct',[AvoirController::class,'removeProduit'])->name('avoir.retirerProduit');
             });
 
             Route::middleware([MenuCommande::class])->group(function () {

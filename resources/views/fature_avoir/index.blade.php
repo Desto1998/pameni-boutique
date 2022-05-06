@@ -442,7 +442,56 @@
             console.log(T_ID);
             $('#montantNet').val(Number(total).toFixed(2));
         }
+        // cette fonction permet de mettre reduire le montant la facture de la caire, "recouvrement"
+        function recoverFun(id) {
+            swal.fire({
+                title: "Recouvrir cette facture avoir?",
+                icon: 'question',
+                text: "Elle ne sera plus modifiable. Cette action est irreversible. Le montant total de cette facture sera déduit de la caisse.",
+                type: "warning",
+                showCancelButton: !0,
+                confirmButtonText: "Oui, recouvrir!",
+                cancelButtonText: "Non, annuler !",
+                reverseButtons: !0
+            }).then(function (e) {
+                if (e.value === true) {
+                    // if (confirm("Supprimer cette tâches?") == true) {
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('avoir.recouvrement') }}",
+                        data: {id: id},
+                        dataType: 'json',
+                        success: function (res) {
+                            if (res==1) {
+                                swal.fire("Effectué!", "Effectué avec succès!", "success")
+                                // toastr.success("Bloqué avec succès!");
+                                loadAvoir();
 
+                            }
+                            if (res==-1)  {
+                                sweetAlert("Désolé!", "Le solde de la caisse est insufisant pour effectuer opération. Approvisinner la caisse et reéssayer.", "error")
+                            }
+                            if (res==0)  {
+                                sweetAlert("Désolé!", "Erreur lors de l'opération!", "error")
+                            }
+                        },
+                        error: function (resp) {
+                            sweetAlert("Désolé!", "Une erreur s'est produite. Actulisez la page et reessayez", "error");
+                        }
+                    });
+                } else {
+                    e.dismiss;
+                }
+            }, function (dismiss) {
+                return false;
+            })
+            // }
+        }
     </script>
 {{--    @include('facture.comon_script')--}}
     <!-- Datatable -->

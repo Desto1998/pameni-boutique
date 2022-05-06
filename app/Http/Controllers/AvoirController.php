@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Avoirs;
 use App\Models\BonLivraison;
+use App\Models\Caisses;
 use App\Models\Categories;
 use App\Models\Clients;
 use App\Models\Commentaires;
@@ -106,8 +107,12 @@ class AvoirController extends Controller
 
                 if ($value->statut == 0) {
                     $statut = '<span class="text-danger">Non validé</span>';
-                } else {
+                }
+                if ($value->statut == 1)  {
                     $statut = '<span class="text-success">Validé</span>';
+                }
+                if ($value->statut == 2)  {
+                    $statut = '<span class="text-primary"><i class="fa fa-check"></i>Recouvert</span>';
                 }
                 return $statut;
             })
@@ -227,7 +232,7 @@ class AvoirController extends Controller
         $request->validate([
             'id' => ['required']
         ]);
-        $remove = Produit_Factures::where('produit_f_id', $request->id)->delete();
+        $remove = ProduitAvoir::where('produitavoir_id', $request->id)->delete();
         return Response()->json($remove);
     }
 
@@ -258,11 +263,12 @@ class AvoirController extends Controller
 
     public function showEditForm($id)
     {
-        $data = Factures::join('clients', 'clients.client_id', 'factures.idclient')
-            ->join('users', 'users.id', 'factures.iduser')
-            ->where('facture_id', $id)
-            ->get()
-        ;
+//        $data = Factures::join('clients', 'clients.client_id', 'factures.idclient')
+//            ->join('users', 'users.id', 'factures.iduser')
+//            ->where('facture_id', $id)
+//            ->get()
+//        ;
+        $data = Avoirs::find($id);
 //        $categories = Categories::all();
         $produits = Produits::orderBy('created_at', 'desc')->get();
         $ID = [];
@@ -271,11 +277,18 @@ class AvoirController extends Controller
                 $ID[$key] = $value->idcategorie;
             }
         }
-        $piece = Pieces::where('idfacture', $id)->get();
+        $factures = Factures::join('clients', 'clients.client_id', 'factures.idclient')
+            ->where('factures.facture_id',$data->idfacture)
+            ->get();
+        $profFact = Produit_Factures::where('idfacture',$factures[0]->facture_id)->get();
+        $TMAX = [];
+        foreach ($profFact as $pf){
+            $TMAX[$pf->idproduit] = $pf->quantite;
+        }
         $categories = Categories::whereIn('categorie_id', $ID)->orderBy('categories.created_at', 'desc')->get();
         $clients = Clients::orderBy('created_at', 'desc')->get();
-        $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $id)->get();
-        return view('facture.edit', compact('data', 'piece', 'categories', 'pocedes', 'clients', 'produits'));
+        $pocedes = ProduitAvoir::join('produits', 'produits.produit_id', 'produit_avoir.idproduit')->where('idavoir', $id)->get();
+        return view('fature_avoir.edit', compact('data', 'categories','TMAX', 'pocedes', 'clients', 'produits','factures'));
     }
 
     public function edit(Request $request)
@@ -284,16 +297,17 @@ class AvoirController extends Controller
             'date' => ['required'],
             'objet' => ['required', 'min:5'],
             'quantite' => ['required'],
-            // 'ref_bon' => ['required'],
+             'idproduit' => ['required'],
             'avoir_id' => ['required'],
         ]);
-
+//        dd($request);
         $iduser = Auth::user()->id;
 
 //        dd($reference); updateOrCreate
-        $save = Avoirs::where('facture_id', $request->facture_id)->update([
+        $save = Avoirs::where('avoir_id', $request->avoir_id)->update([
             'objet' => $request->objet,
             'date_avoir' => $request->date,
+            'statut' => 1,
             'iduser' => $iduser,
         ]);
         for ($i = 0; $i < count($request->idproduit); $i++) {
@@ -302,7 +316,7 @@ class AvoirController extends Controller
                 $pocedeId = $request->produitavoir_id[$i];
             }
             ProduitAvoir::where('produitavoir_id', $pocedeId)->update([
-                'quantite' => $request->quantite[$request->produitavoir_id[$i]],
+                'quantite' => $request->quantite[$i],
             ]);
         }
 
@@ -333,6 +347,35 @@ class AvoirController extends Controller
         foreach ($produits as $key=>$value){
             $updateP[$key] = Produits::where('produit_id',$value->idproduit)->update(['quantite_produit'=>DB::raw('quantite_produit + '.$value->quantite)]);
         }
+        return Response()->json($statut);
+    }
+    public function recouvrement(Request $request)
+    {
+        $avoir = Avoirs::find($request->id);
+        $raison = "Recouvrement fature avoir. Reference: $avoir->reference_avoir.";
+        $iduser = Auth::user()->id;
+        //$montant = (new CaisseController())->soldeCaisse();
+        Avoirs::where('avoir_id',$request->id)->update(['statut'=>2]);
+        $montant = (new Avoirs())->montantTotal($request->id);
+        $statut = 0;
+        if ($montant<=(new CaisseController())->soldeCaisse()) {
+            $save = Caisses::create(
+                [
+                    'raison' => $raison,
+                    'montant' => $montant,
+                    'description' => "",
+                    'date_depot' => date('Y-m-d'),
+                    'type_operation' => 1,
+                    'iduser' => $iduser,
+                ])
+            ;
+            if ($save) {
+                $statut = 1;
+            }
+        }else{
+            $statut = -1;
+        }
+
         return Response()->json($statut);
     }
 

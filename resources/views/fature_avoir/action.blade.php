@@ -12,7 +12,7 @@
                     class="fa fa-file-pdf-o"></i></a>
             @if (Auth::user()->is_admin==1 || $value->statut <=1)
                 @if(Auth::user()->is_admin==1 || Auth::user()->id===$value->id)
-                    <a href="{{ route('factures.edit',['id' =>$value->avoir_id]) }}" class="btn btn-warning btn-sm ml-1"
+                    <a href="{{ route('avoir.edit',['id' =>$value->avoir_id]) }}" class="btn btn-warning btn-sm ml-1"
                        title="Editer la facture"><i
                             class="fa fa-edit"></i></a>
                 @endif
@@ -29,9 +29,15 @@
 {{--                            class="fa fa-money"></i></a>--}}
 {{--                @endif--}}
 {{--            @endif--}}
-
+            @if(Auth::user()->is_admin==1 || Auth::user()->id===$value->id )
+                @if($value->statut ==1)
+                    <a href="javascript:void(0);" onclick="recoverFun({{ $value->avoir_id }})" class="btn btn-secondary btn-sm ml-1"
+                       title="Recouvrir le montant de la caisse"><i
+                            class="fa fa-dollar"></i></a>
+                @endif
+            @endif
             @if ($value->statut===0 && Auth::user()->is_admin==1)
-                <a href="javascript:void(0);" onclick="validerFun({{ $value->avoir_id}})"
+                <a href="javascript:void(0);" onclick="validerFun({{ $value->avoir_id }})"
                    class="btn btn-primary btn-sm ml-1"
                    title="Marquer comme validé"><i
                         class="fa fa-check"></i></a>
