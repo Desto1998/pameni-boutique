@@ -72,8 +72,12 @@ class CommandeController extends Controller
 
                 if ($value->statut == 0) {
                     $statut = '<span class="text-danger">Non validé</span>';
-                } else {
+                }
+                if ($value->statut == 1) {
                     $statut = '<span class="text-success">Validé</span>';
+                }
+                if ($value->statut > 1) {
+                    $statut = '<span class="text-primary"><i class="fa fa-check"></i>&nbsp; &nbsp;Livré</span>';
                 }
                 return $statut;
             })

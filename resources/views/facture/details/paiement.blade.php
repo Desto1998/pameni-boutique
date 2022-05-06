@@ -19,6 +19,7 @@
             <th>Mode</th>
             <th>Montant</th>
             <th>Description</th>
+            <th>Par</th>
             <th>Action</th>
         </tr>
         </thead>
@@ -36,6 +37,14 @@
                 <td>{{ $item->mode }}</td>
                 <td>{{ $item->montant }}</td>
                 <td>{{ $item->description }}</td>
+                <td>
+                    @foreach($users as $u)
+                        @if ($u->id===$item->iduser)
+                            {{ $u->firstname }}
+                            {{ $u->lastname }}
+                        @endif
+                    @endforeach
+                </td>
                 <td>
                     <a href="javascript:void(0)" {{ Auth::user()->id!=$item->iduser?'disabled':'' }} class="btn btn-sm btn-warning"
                        data-toggle="modal" data-target="#paiement-modal{{ $item->paiement_id }}">

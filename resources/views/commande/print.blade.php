@@ -165,7 +165,7 @@
             </td>
             <td class="for-date">
 
-                <strong>{{ (new DateTime($data[0]->commande))->format('d').' '.$mois.' '.(new DateTime($data[0]->date_commande))->format('Y') }}</strong>
+                <strong>{{ (new DateTime($data[0]->date_commande))->format('d').' '.$mois.' '.(new DateTime($data[0]->date_commande))->format('Y') }}</strong>
             </td>
         </tr>
     </table>

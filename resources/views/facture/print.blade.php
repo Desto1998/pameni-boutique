@@ -158,7 +158,7 @@
 
             </td>
             <td class="for-date">
-                <strong>{{ (new DateTime($data[0]->date_devis))->format('d').' '.$mois.' '.(new DateTime($data[0]->date_devis))->format('Y') }}</strong>
+                <strong>{{ (new DateTime($data[0]->date_fact))->format('d').' '.$mois.' '.(new DateTime($data[0]->date_fact))->format('Y') }}</strong>
             </td>
         </tr>
     </table>

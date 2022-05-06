@@ -75,7 +75,11 @@ class FactureController extends Controller
         })
         // ajout d'une colonne pour le montant de paieent deja effectueerr
         ->addColumn('paye', function ($value) {
-            return (new Factures())->Payer($value->facture_id);
+            $paye = (new Factures())->Payer($value->facture_id);
+            if ($paye == (new Factures())->montantTotal($value->facture_id)) {
+                $paye='<span class="text-primary"><i class="fa fa-check"></i>&nbsp; &nbsp;Soldé</span>';
+            }
+            return $paye;
         })
         // Ajout du statut du. colonne marque en rouge | Si le statut est 0? NValide : Valide
         ->addColumn('statut', function ($value) {
@@ -247,9 +251,10 @@ class FactureController extends Controller
             ->select('avoirs.*','users.*','avoirs.created_at as date_created')
             ->get()
         ;
+        $users = User::all();
         $piece = Pieces::where('idfacture', $id)->get();
         return view('facture.details.index', compact('data','pocedes',
-            'montantTTC','montantTVA','commentaires','paiements','piece','avoirs')) ;
+            'montantTTC','montantTVA','commentaires','paiements','piece','avoirs','users')) ;
     }
 
     public function showEditForm($id)
