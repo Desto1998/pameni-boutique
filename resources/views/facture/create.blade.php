@@ -289,6 +289,10 @@
             var productId =  $('#select-pro'+number).val();
             var defaultPrice = $('#data_p_prix'+productId).val();
             $('#prix'+number).val(defaultPrice);
+            $('#quantite'+number).val(0);
+            $('#totalHT'+number).val(0);
+            $('#remise'+number).val(0);
+            total();
         }
 
 
