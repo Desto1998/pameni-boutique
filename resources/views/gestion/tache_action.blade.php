@@ -69,11 +69,9 @@
                     <div class="form-group">
                         <label for="charge{{ $value->tache_id }}">Charges <span
                                 class="text-danger">*</span></label>
-                        <select class="form-control" required name="idcharge"
+                        <select class="dropdown-groups form-control" required name="idcharge"
                                 id="charge{{ $value->tache_id }}">
-                            <option disabled="disabled" selected>Sélectionner une
-                                charge
-                            </option>
+
                             @foreach($charges as $item)
                                 <option
                                     {{ $item->charge_id==$value->idcharge?'selected':'' }} value="{{ $item->charge_id }}">{{ $item->titre }}</option>

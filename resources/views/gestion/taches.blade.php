@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','| TACHES')
+@section('title','| DEPENSES')
 @section('css_before')
     <link href="{{asset('template/vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">
     <link href="{{asset('template/vendor/sweetalert2/dist/sweetalert2.min.css')}}" rel="stylesheet">
@@ -156,7 +156,7 @@
 
         $(document).ready(function () {
             loadTaches();
-
+            $('.dropdown-groups').select2();
         });
 
         // add new taches
@@ -326,6 +326,7 @@
                 return false;
             })
         }
+
     </script>
     <!-- Datatable -->
     <script src="{{asset('template/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
@@ -334,4 +335,5 @@
     <!-- Selet search -->
     <script src="{{asset('template/vendor/select2/js/select2.full.min.js')}}"></script>
     <script src="{{asset('template/js/plugins-init/select2-init.js')}}"></script>
+    <script></script>
 @endsection

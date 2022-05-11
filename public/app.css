@@ -138,7 +138,7 @@ select{
 .form-control:focus {
     color: #495057;
     background-color: #fff;
-    border-color: #b4a7ef;
+    border-color: #b4a7ef!important;
     outline: 0;
     box-shadow: 0 0 0 0.2rem rgb(89 59 219 / 25%);
 }
@@ -146,4 +146,8 @@ select{
     box-shadow: none;
     background: #fff;
     color: #454545;
+}
+.nav-header .brand-title{
+    max-width: 135px!important;
+    margin-left: 0!important;
 }

@@ -105,6 +105,9 @@ public function loadTaches(){
                 if ($value->statut==1) {
                     $type = '<span class="text-success"> Effectué</span>';
                 }
+                if ($value->statut==2) {
+                    $type = '<span class="text-primary"> Non en caisse</span>';
+                }
 //                    $actionBtn = '<div class="d-flex"><a href="javascript:void(0)" class="edit btn btn-warning btn-sm"><i class="fa fa-edit"></i></a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm ml-1"  onclick="deleteFun()"><i class="fa fa-trash"></i></a></div>';
                 return $type;
             })
@@ -138,6 +141,9 @@ public function loadTaches(){
         $statut = 0;
         $iduser = Auth::user()->id;
         $dataId = $request->tache_id;
+        if ($request->is_caisse==0) {
+            $request->statut = 2;
+        }
         $save = Taches::updateOrCreate(
             ['tache_id' => $dataId],
             [
@@ -153,7 +159,7 @@ public function loadTaches(){
 
             ])
         ;
-        if ($save && $request->statut==1) {
+        if ($save && $request->statut!=0) {
 
             $statut = 1;
             $factData = new Array_();
@@ -169,17 +175,20 @@ public function loadTaches(){
             }else{
                 $factData->id = $save->tache_id;
             }
-            if ((new CaisseController())->soldeCaisse()>=$factData->montant) {
-                if ((new CaisseController())->storeCaisse($factData)) {
-                    Taches::where('tache_id',$factData->id)->update(['statut'=>1]);
-                    $statut = 2;
+            if ($request->is_caisse==1) {
+                if ((new CaisseController())->soldeCaisse()>=$factData->montant) {
+                    if ((new CaisseController())->storeCaisse($factData)) {
+                        Taches::where('tache_id',$factData->id)->update(['statut'=>1]);
+                        $statut = 2;
+                    }else{
+                        Taches::where('tache_id',$factData->id)->update(['statut'=>0]);
+                    }
                 }else{
                     Taches::where('tache_id',$factData->id)->update(['statut'=>0]);
+                    $statut = -1;
                 }
-            }else{
-                Taches::where('tache_id',$factData->id)->update(['statut'=>0]);
-                $statut = -1;
             }
+
         }
         return Response()->json($statut);
 //        if ($save) {

@@ -14,16 +14,23 @@ class BonLivraison extends Model
         'reference_bl',
         'objet',
         'date_bl',
-        'date_avoir',
         'statut',
-        'tva_statut',
         'iddevis',
-        'disponibilite',
-        'condition_paiement',
-        'garentie',
-        'validite',
+        'idfacture',
         'delai_liv',
         'lieu_liv',
         'iduser',
     ];
+
+    public function getProduit($id){
+        $bon = BonLivraison::find($id);
+        $produits = [];
+        if (!empty($bon->iddevis)) {
+            $produits = Pocedes::join('produits','produits.produit_id','pocedes.idproduit')->where('iddevis',$bon->iddevis)->get();
+        }
+        if (!empty($bon->idfacture)) {
+            $produits = Produit_Factures::join('produits','produits.produit_id','produit_factures.idproduit')->where('idfacture',$bon->idfacture)->get();
+        }
+        return $produits;
+    }
 }

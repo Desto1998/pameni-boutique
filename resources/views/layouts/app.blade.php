@@ -55,10 +55,10 @@
     ***********************************-->
     <div class="nav-header">
         <a href="{{ route('home') }}" class="brand-logo">
-            <img class="logo-abbr" style="width: 60px;height: 40px" src="{{asset('images/logo/logo_gssc.png')}}"
-                 alt="Not found">
-{{--                        <img class="logo-compact" src="{{asset('images/logo/logo_gssc.png')}}" alt="">--}}
-{{--            <img class="brand-title" style="width: 500px" src="{{asset('images/logo/logo_gssc.png')}}" alt="">--}}
+{{--            <img class="logo-abbr" style="width: 60px;height: 40px" src="{{asset('images/logo/logo_gssc.png')}}"--}}
+{{--                 alt="Not found">--}}
+                        <img class="logo-compact" src="{{asset('images/logo/logo_gssc.png')}}" alt="">
+            <img class="brand-title" style="width: 500px" src="{{asset('images/logo/logo_gssc.png')}}" alt="">
         </a>
 
         <div class="nav-control">

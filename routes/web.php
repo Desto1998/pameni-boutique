@@ -179,7 +179,7 @@ Route::prefix('dashboard')->group(function () {
                 Route::get('bonLivraison/load/{id}',[BonLivraisonController::class,'loadBon'])->name('bon.loadAll');
                 Route::get('bonLivraison/edit/{id}',[BonLivraisonController::class,'showEditForm'])->name('bonLivraison.edit');
                 Route::post('bonLivraison/edit/update',[BonLivraisonController::class,'edit'])->name('bonLivraison.edit.update');
-                Route::post('bonLivraison/store',[BonLivraisonController::class,'loadBon'])->name('bon.store');
+                Route::post('bonLivraison/store',[BonLivraisonController::class,'store'])->name('bon.store');
                 Route::get('bonLivraison/print/{id}',[BonLivraisonController::class,'printBon'])->name('bon.print');
                 Route::get('bonLivraison/view/{id}',[BonLivraisonController::class,'viewDetail'])->name('bon.view');
                 Route::post('bonLivraison/delete',[BonLivraisonController::class,'delete'])->name('bon.delete');

@@ -348,7 +348,7 @@
             calulNetAPayer();
         })
         // store function on form submit
-        $('#newAvoir-form').on('submit', function (e){
+        $('#newBon-form').on('submit', function (e){
             e.preventDefault();
             swal.fire({
                 title: "Voulez-vous enregistrer cette facture avoir?",

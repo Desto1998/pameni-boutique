@@ -8,6 +8,9 @@
         table thead tr th{
             color: white!important;
         }
+        .hide{
+            display: none;
+        }
     </style>
 @stop
 @section('content')
@@ -33,8 +36,9 @@
                     <div class="card-body">
                         <!-- Button trigger modal -->
                         <span class="float-left h4">Liste des bons de livraisons</span>
-                        <a href="{{ route('factures.add') }}" class="btn btn-primary float-right mb-3"
-                        ><i class="fa fa-plus">&nbsp; Ajouter</i></a>
+                        <button type="button" class="btn btn-primary float-right align-self-end mb-3"
+                                data-toggle="modal"
+                                data-target="#new-bon-liv"><i class="fa fa-plus">&nbsp; Ajouter</i></button>
 
                         <div class="table-responsive">
                             <table id="example" class="display text-center w-100">
@@ -45,8 +49,8 @@
                                     <th>Client</th>
                                     <th>Objet</th>
                                     <th>Date</th>
-                                    <th>Ref. Devis</th>
-                                    <th>Lieu Liv</th>
+                                    <th title="Reference de la proformat ou de la facture">Ref.Dev/Fac</th>
+                                    <th title="Lieu de livraison">Lieu Liv</th>
                                     <th>Par</th>
                                     <th>Action</th>
                                 </tr>
@@ -166,7 +170,96 @@
             loadBon()
         });
 
+        // store function on form submit
+        $('#newBon-form').on('submit', function (e){
+            e.preventDefault();
+            swal.fire({
+                title: "Voulez-vous enregistrer ce bon de livraison?",
+                icon: 'question',
+                text: "Cette opération est irreversible.",
+                type: "warning",
+                showCancelButton: !0,
+                confirmButtonText: "Oui, Continuer!",
+                cancelButtonText: "Non, annuler !",
+                reverseButtons: !0
+            }).then(function (e) {
+                if (e.value === true) {
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $('#newBon-form #register-btn').attr("disabled", true).html("En cours...")
+                    var data = $('#newBon-form').serialize()
+                    console.log(data);
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('bon.store') }}",
+                        data: data,
+                        dataType: 'json',
+                        success: function (res) {
+                            console.log(res);
+                            if (res==-1){
+                                alert("Un bon de livraison existe déja pour cette opération.")
+                                $('#newBon-form #register-btn').attr("disabled", false).html("Enregistrer")
+                                return false;
+                            }
+                            if (res){
+                                // swal.fire("Effectué!", "Enregistré avec succès!", "success")
 
+
+                                $('#newBon-form #register-btn').attr("disabled", false).html("Enregistrer")
+                                $('#newBon-form')[0].reset();
+                                $('#new-bon-liv').modal('hide');
+                                // $('#single-select');
+                                $('.dropdown-groups').val(null).trigger('change').select2();
+                                loadBon();
+
+                                swal.fire({
+                                    icon: 'success',
+                                    title: 'Effectué avec succès',
+                                    text: "L'opération s'est bien terminé!",
+                                    footer: '<a href="/dashboard/bonLivraison/print/'+res.bonlivraison_id+'" target="_blank"><i class="fa fa-eye"></i> Cliquer pour voir la facture avoir.</a>'
+                                });
+
+                            }else {
+                                sweetAlert("Désolé!", "Erreur lors de l'enregistrement!", "error");
+                                $('#newBon-form #register-btn').attr("disabled", false).html("Enregistrer");
+                            }
+
+
+                        },
+                        error: function (resp) {
+                            console.log(resp);
+                            sweetAlert("Désolé!", "Une erreur s'est produite.", "error");
+                            $('#newBon-form #register-btn').attr("disabled", false).html("Enregistrer");
+                        }
+                    });
+                } else {
+
+                    $('#newBon-form #register-btn').attr("disabled", false).html("Enregistrer");
+                    $('#new-bon-liv').modal('hide');
+                    e.dismiss;
+                }
+            }, function (dismiss) {
+                $('#newBon-form #register-btn').attr("disabled", false).html("Enregistrer");
+                $('#new-bon-liv').modal('hide');
+                return false;
+            })
+        });
+        $('#choice').on('click', function (e){
+            if ($('#choice').is(":checked")){
+                $('#idfacture').attr('required',false);
+                $('#iddevis').attr('required',true);
+                $('.facture-group').hide(600)
+                $('.devis-group').show(600)
+            }else{
+                $('#idfacture').attr('required',true);
+                $('#iddevis').attr('required',false);
+                $('.facture-group').show(600)
+                $('.devis-group').hide(600)
+            }
+        })
     </script>
 
     <!-- Datatable -->

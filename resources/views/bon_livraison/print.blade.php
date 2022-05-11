@@ -186,12 +186,12 @@
             <td>
                 <div class="client-details">
                     <strong style="text-decoration: underline">COORDONNEES CLIENT</strong><br>
-                    <strong style="text-transform: uppercase">{{ $data[0]->nom_client }} {{ $data[0]->prenom_client }} {{ $data[0]->raison_s_client }}</strong><br>
-                    <strong>Tel: {{ $data[0]->phone_1_client }}  {{ isset($data[0]->phone_2_client)?'/'.$data[0]->phone_2_client:''  }}</strong><br>
-                    <strong>BP: {{ $data[0]->postale }}  </strong><br>
-                    @if ($data[0]->type_client==1)
-                        <strong>{{ $data[0]->contribuable }}  </strong><br>
-                        <strong>NC: {{ $data[0]->rcm }}  </strong><br>
+                    <strong style="text-transform: uppercase">{{ $devis[0]->nom_client }} {{ $devis[0]->prenom_client }} {{ $devis[0]->raison_s_client }}</strong><br>
+                    <strong>Tel: {{ $devis[0]->phone_1_client }}  {{ isset($devis[0]->phone_2_client)?'/'.$devis[0]->phone_2_client:''  }}</strong><br>
+                    <strong>BP: {{ $devis[0]->postale }}  </strong><br>
+                    @if ($devis[0]->type_client==1)
+                        <strong>{{ $devis[0]->contribuable }}  </strong><br>
+                        <strong>NC: {{ $devis[0]->rcm }}  </strong><br>
                     @endif
                 </div>
             </td>
@@ -200,7 +200,7 @@
 </div>
 <div class="for-objet"><strong>Objet:</strong> {{ $data[0]->objet }}</div>
 <div class="for-produit">
-    <table class="table-produit">
+    <table class="table-produit" style="margin:20px 0">
         <thead class="bg-primary text-white text-center">
         <tr class="text-white">
             <th>Réf.</th>
@@ -301,12 +301,12 @@
                 $chaineDecimalPart = (new \App\Models\ChiffreLettre())->Conversion((int)($chaine2));
 
             @endphp
-            @if ((int)$chaine2==0)
-                {{ ucfirst($chaineIntPart) }}
-            @else
-                {{ ucfirst($chaineIntPart) }} {{ "virgule" }} {{ $chaineDecimalPart }}
-            @endif
-            francs CFA
+{{--            @if ((int)$chaine2==0)--}}
+{{--                {{ ucfirst($chaineIntPart) }}--}}
+{{--            @else--}}
+{{--                {{ ucfirst($chaineIntPart) }} {{ "virgule" }} {{ $chaineDecimalPart }}--}}
+{{--            @endif--}}
+{{--            francs CFA--}}
         </strong>
     </div>
 
@@ -351,10 +351,10 @@
 <div class="for-signature" style="margin: 30px 0;">
     <table class="signature-table" style="text-align: center; width: 100%;">
         <td>
-            <label><h5>Signature de GSC</h5></label>
+            <h5 style="text-decoration: underline">Signature de GSC</h5>
         </td>
         <td>
-            <label><h5>Signature du client</h5></label>
+            <h5 style="text-decoration: underline">Signature du client</h5>
         </td>
     </table>
 </div>

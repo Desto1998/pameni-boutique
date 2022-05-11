@@ -31,7 +31,7 @@
                             @csrf
                             <div class="form-group">
                                 <label for="titre">Titre</label>
-                                <input type="text" name="titre" id="titre" class="form-control">
+                                <input type="text" name="titre" placeholder="Titre" id="titre" class="form-control">
                             </div>
                             <label class="nav-item text-uppercase">Période</label>
 
@@ -47,7 +47,7 @@
 
                             <div class="form-group">
                                 <label for="charge">Charges <span class="text-danger">*</span></label>
-                                <select required name="charge" id="charge" class="form-control">
+                                <select required name="charge" id="charge" class="form-control dropdown-groups">
                                     <option selected value="0">Toutes les charges</option>
                                     @foreach($charges as $item)
                                         <option value="{{ $item->charge_id }}">{{ $item->titre }}</option>

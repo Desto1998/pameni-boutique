@@ -10,13 +10,14 @@
             <a href="{{ route('bon.print',['id' =>$value->bonlivraison_id]) }}" target="_blank" class="btn btn-light btn-sm ml-1"
                title="Imprimer"><i
                     class="fa fa-file-pdf-o"></i></a>
-            @if (Auth::user()->is_admin==1 || $value->statut <=1)
-                @if(Auth::user()->is_admin==1 || Auth::user()->id===$value->id)
-                    <a href="{{ route('bon.print',['id' =>$value->bonlivraison_id]) }}" class="btn btn-warning btn-sm ml-1"
-                       title="Editer"><i
-                            class="fa fa-edit"></i></a>
-                @endif
-            @endif
+{{--            @if (Auth::user()->is_admin==1 || $value->statut <=1)--}}
+{{--                @if(Auth::user()->is_admin==1 || Auth::user()->id===$value->id)--}}
+{{--                    <a href="javascript:void(0);" class="btn btn-warning btn-sm ml-1"--}}
+{{--                       title="Editer" data-toggle="modal"--}}
+{{--                       data-target="#facture-view-modal{{ $value->bonlivraison_id }}"><i--}}
+{{--                            class="fa fa-edit"></i></a>--}}
+{{--                @endif--}}
+{{--            @endif--}}
 
         </li>
 
@@ -38,8 +39,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Détail du bon de commande: {{ $value->reference_bl }}</h5>
-                <a href="{{ route('bon.view',['id' =>$value->bonlivraison_id]) }}" class="mx-5 ml-1"
-                   title="Plus de details">Voir plus</a>
+{{--                <a href="{{ route('bon.view',['id' =>$value->bonlivraison_id]) }}" class="mx-5 ml-1"--}}
+{{--                   title="Plus de details">Voir plus</a>--}}
                 <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                 </button>
             </div>
@@ -119,3 +120,4 @@
         </div>
     </div>
 </div>
+

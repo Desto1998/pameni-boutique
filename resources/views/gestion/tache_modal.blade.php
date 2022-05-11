@@ -10,6 +10,11 @@
             <div class="modal-body">
                 <form action="{{ route('gestion.taches.add') }}" method="post" id="tache-form">
                     @csrf
+                    <div class="d-flex justify-content-center">
+                        <label>Utiliser la caisse?</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label class="fw-700"><input type="radio" checked name="is_caisse" class="radio" value="1"> Oui</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label class="fw-700"><input type="radio" name="is_caisse" class="radio" value="0"> Non</label>
+                    </div>
                     <div class="form-group">
                         <label for="raison">Raison<span class="text-danger">*</span></label>
                         <input type="text" name="raison" id="raison" placeholder="Raison" class="form-control"
