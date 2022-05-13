@@ -7,9 +7,13 @@
                data-target="#facture-view-modal{{ $value->commande_id }}" class="btn btn-success btn-sm ml-1"
                title="Visualiser les details"><i
                     class="fa fa-eye"></i></a>
-            <a href="{{ route('commandes.print',['id' =>$value->commande_id]) }}" target="_blank" class="btn btn-light btn-sm ml-1"
+            <a href="javascript:void(0);" data-toggle="modal"
+               data-target="#print-modal" onclick="getId({{ $value->commande_id }})" class="btn btn-light btn-sm ml-1"
                title="Imprimer le bon de commande"><i
                     class="fa fa-file-pdf-o"></i></a>
+{{--            <a href="{{ route('commandes.print',['id' =>$value->commande_id]) }}" target="_blank" class="btn btn-light btn-sm ml-1"--}}
+{{--               title="Imprimer le bon de commande"><i--}}
+{{--                    class="fa fa-file-pdf-o"></i></a>--}}
             @if (Auth::user()->is_admin==1 || $value->statut <=1)
                 @if(Auth::user()->is_admin==1 || Auth::user()->id===$value->id)
                     <a href="{{ route('commandes.edit',['id' =>$value->commande_id]) }}" class="btn btn-warning btn-sm ml-1"

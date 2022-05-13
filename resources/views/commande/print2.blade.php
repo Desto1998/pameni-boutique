@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Presentation facture</title>
+    <title>Presentation commande</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -15,11 +15,6 @@
         border-collapse: collapse;
     }
 
-    .for-date{
-        width: 200px;
-        justify-content: right;
-        text-align: center;
-    }
 
     header table .for-logo img {
         width: 100px;
@@ -37,7 +32,11 @@
         font-family: "Arial Black";
         color: #0c85d0;
     }
-
+    .for-date{
+        width: 200px;
+        justify-content: right;
+        text-align: center;
+    }
     .for-infos table {
         min-width: 100%;
         font-size: 13px;
@@ -52,7 +51,7 @@
         border: 1px solid #2A2C32;
         border-radius: 10px;
         padding: 5px;
-        width: 200px;
+        width: 230px;
     }
 
     td.devis-info {
@@ -69,6 +68,15 @@
     }
 
     .for-produit table thead tr th, .for-produit table tbody tr td {
+        border: #000000 1px solid;
+        padding: 5px;
+    }
+
+    .for-complement {
+        margin: 20px 0
+    }
+
+    .for-complement table thead tr th, .for-complement table tbody tr td {
         border: #000000 1px solid;
         padding: 5px;
     }
@@ -90,19 +98,16 @@
 
     .for-garentie {
         width: 100%;
-        margin: 40px 0;
+        margin-top: 20px;
     }
 
-    .for-garentie tr td  {
-        width: 50%;
-    }
     .for-garentie tr td div {
         font-size: 12px;
         line-height: 1.6;
         padding: 8px;
-        border: #a5a3a3 solid 1px;
-        /*height: 50px;*/
-
+        border: #727171 solid 1px;
+        height: 50px;
+        width: 155px;
     }
 
     .for-garentie tr td div .titre {
@@ -148,17 +153,19 @@
 
                 {{--                    <img src="{{ asset('images/logo/logo_gssc.png') }}" class="logo" alt="Logo not found">--}}
                 <img src="{{ $ImagePath }}" class="logo" alt="Logo not found">
+                {{--                <img src="{{ asset('images/logo/logo_gssc.png') }}" class="logo" alt="Logo not found">--}}
             </td>
             <td class="for-name">
                 <h3>{{ 'GLOBAL SOFT & COMMUNICATION Sarl' }}</h3>
                 <p>
-                    <strong>GSC:</strong> Rue Castelnau face direction commerciale MTN derrière Akwa Palace, DOUALA CAMEROUN <br>
+                    <strong>GSC:</strong> Akwa rue Castelneau face direction commerciale MTN derrière Akwa Palace, DOUALA CAMEROUN <br>
                     <strong style="padding-top: 8px; text-transform: uppercase">DSP: {{ $data[0]->firstname }} {{ $data[0]->lastname }} {{ $data[0]->phone }} </strong>
                 </p>
 
             </td>
             <td class="for-date">
-                <strong>{{ (new DateTime($data[0]->date_fact))->format('d').' '.$mois.' '.(new DateTime($data[0]->date_fact))->format('Y') }}</strong>
+
+                <strong>{{ (new DateTime($data[0]->date_commande))->format('d').' '.$mois.' '.(new DateTime($data[0]->date_commande))->format('Y') }}</strong>
             </td>
         </tr>
     </table>
@@ -169,30 +176,22 @@
         <tr>
             <td class="devis-info">
                 <div class="devis-details">
-                    <strong style="text-decoration: underline">FACTURE</strong><br>
-                    <strong>{{ $data[0]->reference_fact }}</strong><br>
-                    <strong>Contibibuable n°</strong><br>
+                    <strong style="text-decoration: underline">BON DE COMMANDE</strong><br>
+                    <strong>{{ $data[0]->reference_commande }}</strong><br>
+                    <strong>Contibibuable N°</strong><br>
                     <strong>M06191391224E</strong><br>
-                </div>
-
-                <div class="devis-details" style="margin-top: 15px">
-                    <strong style="text-decoration: underline">Coordonnée bancaire</strong><br>
-                    <strong>CCA-Bank</strong><br>
-                    <strong>N° de compte: 00258112901</strong><br>
-                    <strong>Code banque: 10039</strong><br>
-                    <strong>Code Guichet: 10039</strong><br>
-                    <strong>clé: 30</strong><br>
-                    <strong>BC N° {{$num_BC}} </strong><br>
+                    <strong>Devis/Proformat N°: @isset($piece[0]) {{ $piece[0]->ref }} du: {{ $piece[0]->date_piece }}@endisset</strong><br>
+                    <strong>Délai de livraison: {{ $data[0]->delai_liv }}</strong><br>
                 </div>
 
             </td>
             <td>
                 <div class="client-details">
-                    <strong style="text-decoration: underline">COORDONNEES CLIENT</strong><br>
-                    <strong style="text-transform: uppercase">{{ $data[0]->nom_client }} {{ $data[0]->prenom_client }} {{ $data[0]->raison_s_client }}</strong><br>
-                    <strong>Tel: {{ $data[0]->phone_1_client }}  {{ isset($data[0]->phone_2_client)?'/'.$data[0]->phone_2_client:''  }}</strong><br>
+                    <strong style="text-decoration: underline">COORDONNEES FOURNISSEUR</strong><br>
+                    <strong style="text-transform: uppercase">{{ $data[0]->nom_fr }} {{ $data[0]->prenom_fr }} {{ $data[0]->raison_s_fr }}</strong><br>
+                    <strong>Tel: {{ $data[0]->phone_1_fr }}  {{ isset($data[0]->phone_2_fr)?'/'.$data[0]->phone_2_fr:''  }}</strong><br>
                     <strong>BP: {{ $data[0]->postale }}  </strong><br>
-                    @if ($data[0]->type_client==1)
+                    @if ($data[0]->type_fr==1)
                         <strong>{{ $data[0]->contribuable }}  </strong><br>
                         <strong>NC: {{ $data[0]->rcm }}  </strong><br>
                     @endif
@@ -201,6 +200,7 @@
         </tr>
     </table>
 </div>
+{{--<br>--}}
 <div class="for-objet"><strong>Objet:</strong> {{ $data[0]->objet }}</div>
 <div class="for-produit">
     <table class="table-produit">
@@ -211,8 +211,8 @@
             <th>Qté</th>
             <th>P.U.HT.</th>
             <th>Remise</th>
-{{--            <th>TVA</th>--}}
-            <th>M. HT(FCFA)</th>
+            {{--            <th>TVA</th>--}}
+            <th>M. HT({{ $request->currency }})</th>
             <th>M. TTC</th>
             {{--                            <th><i class="fa fa-trash"></i></th>--}}
         </tr>
@@ -243,7 +243,7 @@
                 <td class="number">{{ $p->quantite }}</td>
                 <td class="number">{{ $p->prix }}</td>
                 <td class="number">{{ $p->remise }}%</td>
-{{--                <td class="number">{{ $p->tva }}%</td>--}}
+                {{--                <td class="number">{{ $p->tva }}%</td>--}}
                 <td class="number">
                     {{ number_format($HT,2, '.', '') }}
                 </td>
@@ -253,19 +253,26 @@
 
             </tr>
         @endforeach
-
+        {{--        <tr>--}}
+        {{--            <td>jhdccd</td>--}}
+        {{--            <td>jhdccd</td>--}}
+        {{--            <td>jhdccd</td>--}}
+        {{--            <td>jhdccd</td>--}}
+        {{--            <td>jhdccd</td>--}}
+        {{--            <td>jhdccd</td>--}}
+        {{--            <td>jhdccd</td>--}}
+        {{--        </tr>--}}
         <tr>
             <th colspan="5" rowspan="3"></th>
             <td class="total">Total HT</td>
             <td class="number total">{{ number_format($montantHT,2,'.','') }}</td>
-
         </tr>
 
         <tr>
             <td class="total">TVA 19.25%</td>
             <td class="number total">
                 @if ($data[0]->tva_statut == 1)
-                    {{ number_format(($montantTVA * 19.25)/100,2,'.','') }}
+                    {{ number_format((($montantTVA * 19.25)/100)/ $request->montant,2,'.','')  }}
                 @else
                     0
                 @endif
@@ -276,27 +283,26 @@
             <td class="total">Montant TTC</td>
             <td class="number total">
                 @if ($data[0]->tva_statut == 1)
-                    {{ number_format(( ($montantTVA * 19.25)/100)+$montantTVA,2,'.','') }}
+                    {{ number_format((( ($montantTVA * 19.25)/100)+$montantTVA)/ $request->montant,2,'.','') }}
                 @else
-                    {{ number_format($montantTVA ,2,'.','') }}
+                    {{ number_format($montantTVA/ $request->montant ,2,'.','') }}
                 @endif
             </td>
         </tr>
         </tbody>
     </table>
 </div>
-<div class="for-prix">
-
-
-        {{--        {{ (new \App\Models\ChiffreLettre())->Conversion(number_format(( ($montantTVA * 19.25)/100)+$montantTVA,0,'.','')) }}--}}
+<div class="for-prix" style="height: 120px; margin-top: 5px">
+    <div style="float: left; display: flex; justify-content: left; align-content: center; width: 70%">
         <strong>
-            ARRETEE LA PRESENTE FACTURE A LA SOMME DE:<br>
             {{--        {{ (new \App\Models\ChiffreLettre())->Conversion(number_format(( ($montantTVA * 19.25)/100)+$montantTVA,0,'.','')) }}--}}
             @php
 
                 if ($data[0]->tva_statut == 1){
-                     $montantTVA = (($montantTVA * 19.25)/100)+ $montantTVA;
+                     $montantTVA = ((($montantTVA * 19.25)/100)+ $montantTVA)/ $request->montant;
                      //ucfirst((new \App\Models\ChiffreLettre())->Conversion(number_format($montantTVA ,2,'.','')))
+                }else{
+                       $montantTVA = $montantTVA / $request->montant;
                 }
                 $intpart = number_format($montantTVA ,2,'.','');
                 $intpart = floor($intpart);
@@ -313,36 +319,43 @@
             @else
                 {{ ucfirst($chaineIntPart) }} {{ "virgule" }} {{ $chaineDecimalPart }}
             @endif
-            francs CFA
+            {{ $request->currency }}
         </strong>
+    </div>
 
+    <div style="justify-content: right">
+        @php
+            $ImagePath = $_SERVER["DOCUMENT_ROOT"] . '/images/logo/cachet_gsc.png';
+        @endphp
+        {{--        <img class="cachet-img" style="float: right; width: 250px;height: 200px" src="{{ $ImagePath }}" alt="Cachet introuvable.">--}}
+        {{--        <img class="cachet-img" style="float: right; width: 200px; height: 120px" src="{{ asset('images/logo/cachet_gsc2.png') }}" alt="Cachet introuvable.">--}}
+    </div>
 </div>
 
-<table class="for-garentie" style="text-align: justify">
+<table class="for-garentie">
     <tr>
         <td>
             <div>
-                <label class="titre">CONDITION DE GARANTIE:</label><br>
-                <small>
-                    La garantie est valable dans le cas de défauts d'usine et ainsi que les pannes dues aux
-                    défauts de fabrication.<br>
-                    Les équipements électroniques livrés par nos soins doivent être sous protection électrique recommandée par le constructeur.
-                </small>
+                <label class="titre">Observations</label><br>
+                <label>{{ $data[0]->observation }}</label>
             </div>
         </td>
-
         <td>
             <div>
-                <label class="titre">Note: </label><br>
-                <small>Toutes les fournitures restent la propriété exclusive
-
-                    de Global Soft and Communication Sarl jusqu'au règlement intégral de la facture par le client.
-
-                    Nos Tarifs sont confidentiels ne sont utilisables et adressés qu'à nos clients,
-
-                    la diffusion de cette facture et son contenu sont strictement interdits.
-
-                </small>
+                <label class="titre">Mode de paiement</label><br>
+                <label>{{ $data[0]->mode_paiement }} </label>
+            </div>
+        </td>
+        <td>
+            <div>
+                <label class="titre">Condition de paiement</label><br>
+                <label>{{ $data[0]->condition_paiement }}</label>
+            </div>
+        </td>
+        <td>
+            <div>
+                <label class="titre">Lieu de livraison</label><br>
+                <label>{{ $data[0]->lieu_liv }}</label>
             </div>
         </td>
     </tr>
@@ -353,6 +366,7 @@
         $ImagePath = $_SERVER["DOCUMENT_ROOT"] . '/images/logo/logo-partenaire-gsc.png';
     @endphp
     {{--        <img class="cachet-img" style="float: right; width: 250px;height: 200px" src="{{ $ImagePath }}" alt="Cachet introuvable.">--}}
+    {{--    <img class="cachet-img" style="float: right; width: 200px; height: 120px" src="{{ asset('images/logo/cachet_gsc2.png') }}" alt="Cachet introuvable.">--}}
     <img style="width: 100%;" src="{{ asset('images/logo/logo-partenaire-gsc.png') }}" alt="logo Partenaire non trouvable">
     <table class="table-footer">
         <tr>

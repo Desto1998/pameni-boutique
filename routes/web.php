@@ -237,6 +237,7 @@ Route::prefix('dashboard')->group(function () {
                 Route::get('commandes/details/{id}',[CommandeController::class,'viewDetail'])->name('commandes.view');
 
                 Route::get('commandes/print/{id}',[CommandeController::class,'printCommandes'])->name('commandes.print');
+                Route::post('commandes/print/currency',[CommandeController::class,'printCurrencyChange'])->name('commandes.print.currency');
                 Route::post('commandes/remove/produit',[CommandeController::class,'removeProduit'])->name('commandes.remove.produit');
                 Route::post('commandes/stock/produit',[CommandeController::class,'migrateToStock'])->name('commandes.stock.produit');
             });

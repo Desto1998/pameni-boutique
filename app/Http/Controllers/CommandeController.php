@@ -422,4 +422,28 @@ class CommandeController extends Controller
         }
         return "";
     }
+    public function printCurrencyChange(Request $request){
+
+        if ($request->currency == "FCFA") {
+           return $this->printCommandes($request->id);
+        }else{
+            $id = $request->id;
+            $data = Commandes::join('fournisseurs', 'fournisseurs.fournisseur_id', 'commandes.idfournisseur')
+                ->join('users', 'users.id', 'commandes.iduser')
+                ->where('commande_id', $id)
+                ->get()
+            ;
+            $date = new DateTime($data[0]->date_commande);
+            $date = $date->format('m');
+            $piece = Pieces::where('idcommande',$id)->get();
+//        dd($piece);
+            $num_BC = isset($piece[0])?$piece[0]->ref:'';
+            $mois = (new \App\Models\Month)->getFrenshMonth((int)$date);
+            $categories = Categories::all();
+            $pocedes = Comportes::join('produits', 'produits.produit_id', 'comportes.idproduit')->where('idcommande', $id)->get();
+            $pdf = PDF::loadView('commande.print2', compact('data', 'num_BC','mois','categories', 'pocedes','piece','request'))->setPaper('a4', 'portrait')->setWarnings(false);
+            // dd($pdf);
+            return $pdf->stream($data[0]->reference_commande . '_' .date("d-m-Y H:i:s") . '.pdf');
+        }
+    }
 }

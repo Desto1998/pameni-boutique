@@ -8,6 +8,9 @@
         table thead tr th{
             color: white!important;
         }
+        .hide{
+            display: none;
+        }
     </style>
 @stop
 @section('content')
@@ -52,7 +55,11 @@
                                         <a href="{{ route('commandes.edit',['id'=>$data[0]->commande_id]) }}" title="Editer cette commande" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a>
                                     @endif
                                 @endif
-                                <a href="{{ route('commandes.print',['id'=>$data[0]->commande_id]) }}" title="Imprimer cette commande" target="_blank" class="btn btn-sm btn-light ml-2"><i class="fa fa-print"></i></a>
+                                    <a href="javascript:void(0);" data-toggle="modal"
+                                       data-target="#print-modal" onclick="getId({{ $data[0]->commande_id }})" class="btn btn-light btn-sm ml-1"
+                                       title="Imprimer le bon de commande"><i
+                                            class="fa fa-file-pdf-o"></i></a>
+{{--                                <a href="{{ route('commandes.print',['id'=>$data[0]->commande_id]) }}" title="Imprimer cette commande" target="_blank" class="btn btn-sm btn-light ml-2"><i class="fa fa-print"></i></a>--}}
                             </div>
                             <div class="tab-content">
                                 <div class="tab-pane fade show active" id="detail" role="tabpanel">
@@ -77,7 +84,7 @@
             </div>
         </div>
     </div>
-    @include('facture.modal')
+    @include('commande.modal')
 @endsection
 @section('script')
     <script>
@@ -215,7 +222,9 @@
                 });
             }
         }
+
     </script>
+    @include('commande.common_script')
     <!-- Datatable -->
     <script src="{{asset('template/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
     <script src="{{asset('template/js/plugins-init/datatables.init.js')}}"></script>

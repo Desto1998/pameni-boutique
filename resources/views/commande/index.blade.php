@@ -8,6 +8,9 @@
         table thead tr th{
             color: white!important;
         }
+        .hide{
+            display: none;
+        }
     </style>
 @stop
 @section('content')
@@ -64,7 +67,7 @@
             </div>
         </div>
     </div>
-
+    @include('commande.modal')
 @endsection
 @section('script')
     <script>
@@ -305,7 +308,9 @@
             })
             // }
         }
+
     </script>
+    @include('commande.common_script')
     <!-- Datatable -->
     <script src="{{asset('template/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
     <script src="{{asset('template/js/plugins-init/datatables.init.js')}}"></script>

@@ -444,3 +444,37 @@ create table produit_bon
 ALTER TABLE commentaires add column idbonlivraison int default null ;
 ALTER TABLE commentaires add column idavoir int default null ;
 
+drop table if exists log_factures;
+create table log_factures
+(
+    log_f_id           int primary key AUTO_INCREMENT,
+    log_date_fact            date        not null,
+    log_statut               int       default 0,
+    log_tva_statut           int       default 0,
+    log_idclient             int         not null,
+    log_objet                varchar(1000) null,
+    log_disponibilite        varchar(1000) null,
+    log_garentie             varchar(1000) null,
+    log_condition_financiere varchar(1000) null,
+    log_iduser               int         not null,
+    log_idfacture            int null,
+    created_at           TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at           DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+drop table if exists log_p_factures;
+create table log_p_factures
+(
+    log_pf_id int primary key AUTO_INCREMENT,
+    log_quantite     int   not null,
+    log_prix         float not null,
+    log_remise       float null,
+    log_tva          float null,
+    log_num_serie    varchar(255) null,
+    log_idf    int   not null,
+    log_idpf    int   not null,
+    log_idproduit    int   not null,
+    log_iduser       int   not null,
+    created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at   DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
