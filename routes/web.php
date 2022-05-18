@@ -15,6 +15,7 @@ use App\Http\Controllers\FactureController;
 use App\Http\Controllers\FournisserController;
 use App\Http\Controllers\GestionController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LogController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PaiementController;
@@ -207,20 +208,26 @@ Route::prefix('dashboard')->group(function () {
                 Route::post('factures/checkAmount',[FactureController::class,'checkAmount'])->name('factures.checkAmount');
 
                 // Route pour facture avoir
-                Route::get('avoirs/index',[AvoirController::class,'index'])->name('avoir.index');
-                Route::get('avoir/load/{id}',[AvoirController::class,'loadAvoir'])->name('avoir.loadAll');
-                Route::get('avoir/edit/{id}',[AvoirController::class,'showEditForm'])->name('avoir.edit');
-                Route::post('avoir/edit/update',[AvoirController::class,'edit'])->name('avoir.edit.update');
-                Route::post('avoir/store',[AvoirController::class,'store'])->name('avoir.store');
-                Route::get('avoir/print/{id}',[AvoirController::class,'printFactures'])->name('avoir.print');
-                Route::get('avoir/view/{id}',[AvoirController::class,'viewDetail'])->name('avoir.view');
-                Route::post('avoir/delete',[AvoirController::class,'delete'])->name('avoir.delete');
-                Route::post('avoir/valider',[AvoirController::class,'validerAvoir'])->name('avoir.valider');
-                Route::post('avoir/bloquer',[AvoirController::class,'bloquerAvoir'])->name('avoir.bloquer');
+                Route::get('factures/avoirs/index',[AvoirController::class,'index'])->name('avoir.index');
+                Route::get('factures/avoir/load/{id}',[AvoirController::class,'loadAvoir'])->name('avoir.loadAll');
+                Route::get('factures/avoir/edit/{id}',[AvoirController::class,'showEditForm'])->name('avoir.edit');
+                Route::post('factures/avoir/edit/update',[AvoirController::class,'edit'])->name('avoir.edit.update');
+                Route::post('factures/avoir/store',[AvoirController::class,'store'])->name('avoir.store');
+                Route::get('factures/avoir/print/{id}',[AvoirController::class,'printFactures'])->name('avoir.print');
+                Route::get('factures/avoir/view/{id}',[AvoirController::class,'viewDetail'])->name('avoir.view');
+                Route::post('factures/avoir/delete',[AvoirController::class,'delete'])->name('avoir.delete');
+                Route::post('factures/avoir/valider',[AvoirController::class,'validerAvoir'])->name('avoir.valider');
+                Route::post('factures/avoir/bloquer',[AvoirController::class,'bloquerAvoir'])->name('avoir.bloquer');
 
-                Route::post('avoir/recouvrement',[AvoirController::class,'recouvrement'])->name('avoir.recouvrement');
+                Route::post('factures/avoir/recouvrement',[AvoirController::class,'recouvrement'])->name('avoir.recouvrement');
 
-                Route::post('avoir/removeProduct',[AvoirController::class,'removeProduit'])->name('avoir.retirerProduit');
+                Route::post('factures/avoir/removeProduct',[AvoirController::class,'removeProduit'])->name('avoir.retirerProduit');
+
+                // Routes pour historique des factures
+                Route::post('factures/history/archivate',[LogController::class,'archivate'])->name('history.archive');
+                Route::post('factures/history/delete',[LogController::class,'delete'])->name('history.delete');
+                Route::get('factures/history/index',[LogController::class,'index'])->name('history.index');
+
             });
 
             Route::middleware([MenuCommande::class])->group(function () {
@@ -254,6 +261,7 @@ Route::prefix('dashboard')->group(function () {
 
             //load notification
             Route::get('notification/notify',[NotificationController::class,'notify'])->name('notify.load');
+            Route::view('/notification', 'notify')->name('notify.all');
 
             //Route for admin prefix with admin depend on  middleware to allow only admin
             Route::prefix('admin')->group(function () {

@@ -99,6 +99,7 @@
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">
                                 <ul class="list-unstyled">
+                                    <a href="{{ route('notify.all') }}" class="all-notification" id="all-notification">Voir plus</a>
 {{--                                    <li class="media dropdown-item">--}}
 {{--                                        <span class="success"><i class="ti-user"></i></span>--}}
 {{--                                        <div class="media-body">--}}
@@ -217,6 +218,7 @@
                         <li><a href="{{ route('factures.add') }}">Créer une facture</a></li>
                         <li><a href="{{ route('factures.all') }}">Gestion des factures</a></li>
                         <li><a href="{{ route('avoir.index') }}">Factures avoirs</a></li>
+                        <li><a href="{{ route('history.index') }}">Historiques</a></li>
                     </ul>
                 </li>
                 @endif

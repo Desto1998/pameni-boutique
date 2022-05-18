@@ -39,8 +39,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Détail du bon de commande: {{ $value->reference_bl }}</h5>
-{{--                <a href="{{ route('bon.view',['id' =>$value->bonlivraison_id]) }}" class="mx-5 ml-1"--}}
-{{--                   title="Plus de details">Voir plus</a>--}}
+                <a href="{{ route('bon.view',['id' =>$value->bonlivraison_id]) }}" class="mx-5 ml-1"
+                   title="Plus de details">Voir plus</a>
                 <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                 </button>
             </div>

@@ -458,6 +458,7 @@ create table log_factures
     log_condition_financiere varchar(1000) null,
     log_iduser               int         not null,
     log_idfacture            int null,
+    iduser            int not null,
     created_at           TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at           DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;

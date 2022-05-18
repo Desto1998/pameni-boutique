@@ -9,6 +9,8 @@ use App\Models\Commandes;
 use App\Models\Commentaires;
 use App\Models\Devis;
 use App\Models\Factures;
+use App\Models\Log_factures;
+use App\Models\Log_P_Factures;
 use App\Models\Paiements;
 use App\Models\Pays;
 use App\Models\Pieces;
@@ -42,78 +44,78 @@ class FactureController extends Controller
     }
 
     public function loadFactures($id)
-{
-    if ($id<=0) {
-        $data = Factures::join('clients', 'clients.client_id', 'factures.idclient')
-            ->join('users', 'users.id', 'factures.iduser')
-            ->orderBy('factures.created_at', 'desc')
-            ->get();
-    }else {
-        $data = Factures::join('clients', 'clients.client_id', 'factures.idclient')
-            ->join('users', 'users.id', 'factures.iduser')
-            ->where('factures.idclient',$id)
-            ->orderBy('factures.created_at', 'desc')
-            ->get();
-    }
+    {
+        if ($id <= 0) {
+            $data = Factures::join('clients', 'clients.client_id', 'factures.idclient')
+                ->join('users', 'users.id', 'factures.iduser')
+                ->orderBy('factures.created_at', 'desc')
+                ->get();
+        } else {
+            $data = Factures::join('clients', 'clients.client_id', 'factures.idclient')
+                ->join('users', 'users.id', 'factures.iduser')
+                ->where('factures.idclient', $id)
+                ->orderBy('factures.created_at', 'desc')
+                ->get();
+        }
 
 //        $product  = new Array_();
-    return Datatables::of($data)
-        ->addIndexColumn()
-        //Ajoute de la colonne action
-        ->addColumn('action', function ($value) {
-            $categories = Categories::all();
-            $paiements = Paiements::where('idfacture', $value->facture_id)->get();
-            $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $value->facture_id)->get();
-            $action = view('facture.action', compact('value', 'categories', 'pocedes', 'paiements'));
+        return Datatables::of($data)
+            ->addIndexColumn()
+            //Ajoute de la colonne action
+            ->addColumn('action', function ($value) {
+                $categories = Categories::all();
+                $paiements = Paiements::where('idfacture', $value->facture_id)->get();
+                $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $value->facture_id)->get();
+                $action = view('facture.action', compact('value', 'categories', 'pocedes', 'paiements'));
 //                    $actionBtn = '<div class="d-flex"><a href="javascript:void(0)" class="edit btn btn-warning btn-sm"><i class="fa fa-edit"></i></a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm ml-1"  onclick="deleteFun()"><i class="fa fa-trash"></i></a></div>';
-            return (string)$action;
-        })
-        // Le nom client Ajout de la colonne
-        ->addColumn('client', function ($value) {
-            $client = $value->nom_client . ' ' . $value->prenom_client . ' ' . $value->raison_s_client;
-            return $client;
-        })
-        // ajout d'une colonne pour le montant de paieent deja effectueerr
-        ->addColumn('paye', function ($value) {
-            $paye = (new Factures())->Payer($value->facture_id);
-            if ($paye == (new Factures())->montantTotal($value->facture_id)) {
-                $paye='<span class="text-primary"><i class="fa fa-check"></i>&nbsp; &nbsp;Soldé</span>';
-            }
-            return $paye;
-        })
-        // Ajout du statut du. colonne marque en rouge | Si le statut est 0? NValide : Valide
-        ->addColumn('statut', function ($value) {
+                return (string)$action;
+            })
+            // Le nom client Ajout de la colonne
+            ->addColumn('client', function ($value) {
+                $client = $value->nom_client . ' ' . $value->prenom_client . ' ' . $value->raison_s_client;
+                return $client;
+            })
+            // ajout d'une colonne pour le montant de paieent deja effectueerr
+            ->addColumn('paye', function ($value) {
+                $paye = (new Factures())->Payer($value->facture_id);
+                if ($paye == (new Factures())->montantTotal($value->facture_id)) {
+                    $paye = '<span class="text-primary"><i class="fa fa-check"></i>&nbsp; &nbsp;Soldé</span>';
+                }
+                return $paye;
+            })
+            // Ajout du statut du. colonne marque en rouge | Si le statut est 0? NValide : Valide
+            ->addColumn('statut', function ($value) {
 
-            if ($value->statut == 0) {
-                $statut = '<span class="text-danger">Non validé</span>';
-            } else {
-                $statut = '<span class="text-success">Validé</span>';
-            }
-            return $statut;
-        })
-        // calcule du montant hors taxe
-        ->addColumn('montantHT', function ($value) {
-            $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $value->facture_id)->get();
-            $montantHT = 0;
+                if ($value->statut == 0) {
+                    $statut = '<span class="text-danger">Non validé</span>';
+                } else {
+                    $statut = '<span class="text-success">Validé</span>';
+                }
+                return $statut;
+            })
+            // calcule du montant hors taxe
+            ->addColumn('montantHT', function ($value) {
+                $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $value->facture_id)->get();
+                $montantHT = 0;
 
-            foreach ($pocedes as $p) {
+                foreach ($pocedes as $p) {
 
-                $remise = ($p->prix * $p->quantite * $p->remise) / 100;
-                $montant = ($p->quantite * $p->prix) - $remise;
-                $montantHT += $montant;
+                    $remise = ($p->prix * $p->quantite * $p->remise) / 100;
+                    $montant = ($p->quantite * $p->prix) - $remise;
+                    $montantHT += $montant;
 
-            }
-            return number_format($montantHT, 2, '.', '');
-        })
-        // calcule du montant TTC tout taxe comprie
-        ->addColumn('montantTTC', function ($value) {
+                }
+                return number_format($montantHT, 2, '.', '');
+            })
+            // calcule du montant TTC tout taxe comprie
+            ->addColumn('montantTTC', function ($value) {
 
-            return (new Factures())->montantTotal($value->facture_id);
+                return (new Factures())->montantTotal($value->facture_id);
 
-        })
-        ->rawColumns(['action', 'montantHT', 'montantTTC', 'statut', 'paye'])
-        ->make(true);
-}
+            })
+            ->rawColumns(['action', 'montantHT', 'montantTTC', 'statut', 'paye'])
+            ->make(true);
+    }
 
 
     public function showAddForm()
@@ -126,7 +128,7 @@ class FactureController extends Controller
             }
         }
         $categories = Categories::whereIn('categorie_id', $ID)->orderBy('categories.created_at', 'desc')->get();
-        $pays = Pays::orderBy('nom_pays','asc')->get();
+        $pays = Pays::orderBy('nom_pays', 'asc')->get();
         $clients = Clients::orderBy('created_at', 'desc')->get();
         return view('facture.create', compact('categories', 'produits', 'clients', 'pays'));
     }
@@ -236,25 +238,23 @@ class FactureController extends Controller
         $data = Factures::join('clients', 'clients.client_id', 'factures.idclient')
             ->join('users', 'users.id', 'factures.iduser')
             ->where('facture_id', $id)
-            ->get()
-        ;
+            ->get();
         if ($data[0]->tva_statut == 1) {
             $montantTTC = (($montantTVA * 19.25) / 100) + $montantTVA;
         } else {
             $montantTTC = $montantTVA;
         }
-        $paiements = Paiements::where('idfacture',$id)->get();
-        $commentaires = Commentaires::join('users','users.id','commentaires.iduser')->where('idfacture',$id)->get();
+        $paiements = Paiements::where('idfacture', $id)->get();
+        $commentaires = Commentaires::join('users', 'users.id', 'commentaires.iduser')->where('idfacture', $id)->get();
         $avoirs = Avoirs::join('users', 'users.id', 'avoirs.iduser')
-            ->where('idfacture',$id)
+            ->where('idfacture', $id)
             ->orderBy('avoirs.created_at', 'desc')
-            ->select('avoirs.*','users.*','avoirs.created_at as date_created')
-            ->get()
-        ;
+            ->select('avoirs.*', 'users.*', 'avoirs.created_at as date_created')
+            ->get();
         $users = User::all();
         $piece = Pieces::where('idfacture', $id)->get();
-        return view('facture.details.index', compact('data','pocedes',
-            'montantTTC','montantTVA','commentaires','paiements','piece','avoirs','users')) ;
+        return view('facture.details.index', compact('data', 'pocedes',
+            'montantTTC', 'montantTVA', 'commentaires', 'paiements', 'piece', 'avoirs', 'users'));
     }
 
     public function showEditForm($id)
@@ -262,8 +262,7 @@ class FactureController extends Controller
         $data = Factures::join('clients', 'clients.client_id', 'factures.idclient')
             ->join('users', 'users.id', 'factures.iduser')
             ->where('facture_id', $id)
-            ->get()
-        ;
+            ->get();
 //        $categories = Categories::all();
         $produits = Produits::orderBy('created_at', 'desc')->get();
         $ID = [];
@@ -281,6 +280,7 @@ class FactureController extends Controller
 
     public function edit(Request $request)
     {
+       // dd($request);
         $request->validate([
             'date' => ['required'],
             'objet' => ['required', 'min:5'],
@@ -289,8 +289,42 @@ class FactureController extends Controller
             // 'ref_bon' => ['required'],
             'facture_id' => ['required'],
         ]);
+        $id = $request->facture_id;
+        $olddata = Factures::join('clients', 'clients.client_id', 'factures.idclient')
+            ->join('users', 'users.id', 'factures.iduser')
+            ->where('facture_id', $id)
+            ->get();
+        $oldproduct = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $id)->get();
 
         $iduser = Auth::user()->id;
+        foreach ($olddata as $dt){
+            $log = Log_factures::create([
+                'log_date_fact' => $dt->date_fact,
+                'log_statut' => $dt->statut,
+                'log_tva_statut' => $dt->tva_statut,
+                'log_idclient' => $dt->idclient,
+                'log_objet' => $dt->objet,
+                'log_disponibilite' => $dt->disponibilite,
+                'log_garentie' => $dt->garentie,
+                'log_condition_financiere' => $dt->condition_financiere,
+                'log_iduser' => $dt->iduser,
+                'iduser' => $iduser,
+                'log_idfacture' => $dt->facture_id,
+            ]);
+        }
+        foreach ($oldproduct as $dt){
+            $logp = Log_P_Factures::create([
+                'log_quantite' => $dt->quantite,
+                'log_prix' => $dt->prix,
+                'log_remise' => $dt->remise,
+                'log_tva' => $dt->tva,
+                'log_num_serie' => $dt->num_serie,
+                'log_idf' => $log->log_f_id,
+                'log_idpf' => $dt->produit_f_id,
+                'log_iduser' => $iduser,
+                'log_idproduit' => $dt->idproduit,
+            ]);
+        }
 
 //        dd($reference); updateOrCreate
         $save = Factures::where('facture_id', $request->facture_id)->update([
@@ -338,10 +372,10 @@ class FactureController extends Controller
         /** on modifie le statut de son devis et on met a 1. Pour que ca reste a valide
          * au lieu de facture creee
          **/
-        $fact = Factures::where('facture_id',$request->facture_id)->get();
-        if (count($fact)>0) {
+        $fact = Factures::where('facture_id', $request->facture_id)->get();
+        if (count($fact) > 0) {
             if (isset($fact[0]->iddevis) && !empty($fact[0]->iddevis)) {
-                Devis::where('devis_id',$fact[0]->iddevis)->update(['statut'=>1]);
+                Devis::where('devis_id', $fact[0]->iddevis)->update(['statut' => 1]);
 
             }
         }
@@ -438,8 +472,9 @@ class FactureController extends Controller
         return Response()->json($delete);
     }
 
-    public function checkAmount(Request $request){
+    public function checkAmount(Request $request)
+    {
 
-        return (new Factures())->montantTotal($request->id)- (new Factures())->Payer($request->id);
+        return (new Factures())->montantTotal($request->id) - (new Factures())->Payer($request->id);
     }
 }

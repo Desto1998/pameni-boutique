@@ -22,5 +22,6 @@ class Log_factures extends Model
         'log_condition_financiere',
         'log_iduser',
         'log_idfacture',
+        'iduser',
     ];
 }

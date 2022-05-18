@@ -209,19 +209,29 @@ class BonLivraisonController extends Controller
     public function viewDetail($id)
     {
         $data = BonLivraison::join('users', 'users.id', 'bon_livraisons.iduser')
+            ->where('bonlivraison_id',$id)
             ->orderBy('bon_livraisons.created_at', 'desc')
             ->get()
         ;
         $date = new DateTime($data[0]->date_bl);
         $date = $date->format('m');
-        $devis = Devis::join('clients', 'clients.client_id', 'devis.idclient')
-            ->where('devis.devis_id',$data[0]->iddevis)
-            ->get();
-        $pocedes = (new ProduitBon)->produitBon($data[0]->bonlivrison_id);
+        if (!empty($data[0]->iddevis)) {
+            $devis = Devis::join('clients', 'clients.client_id', 'devis.idclient')
+                ->where('devis.devis_id',$data[0]->iddevis)
+                ->get();
+        }else{
+            $devis = Factures::join('clients', 'clients.client_id', 'factures.idclient')
+                ->where('factures.facture_id',$data[0]->idfacture)
+                ->get();
+        }
+//        $devis = Devis::join('clients', 'clients.client_id', 'devis.idclient')
+//            ->where('devis.devis_id',$data[0]->iddevis)
+//            ->get();
+        $pocedes = (new BonLivraison())->getProduit($id);
 
         $commentaires = Commentaires::join('users','users.id','commentaires.iduser')->where('idbonlivraison',$id)->get();
 
-        return view('facture.details.index', compact('data','pocedes','devis',
+        return view('bon_livraison.detail.index', compact('data','pocedes','devis',
            'commentaires')) ;
     }
 

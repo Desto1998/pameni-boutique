@@ -35,6 +35,8 @@
                         <form action="{{ route('factures.edit.store') }}" method="post" id="devis-form" enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" value="{{ $data[0]->facture_id }}" name="facture_id">
+{{--                            <input type="hidden" value="{{ $data }}" name="olddata[]">--}}
+{{--                            <input type="hidden" value="{{ $pocedes }}" name="oldproduct[]">--}}
                             <div class="row">
                                 <div class="col-md-5 float-left d-flex">
                                     <div class="form-group col-md-6">

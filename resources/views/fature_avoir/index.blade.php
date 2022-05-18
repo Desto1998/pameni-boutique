@@ -391,7 +391,7 @@
                                     icon: 'success',
                                     title: 'Effectué avec succès',
                                     text: "L'opération s'est bien terminé!",
-                                    footer: '<a href="/dashboard/avoir/print/'+res.avoir_id+'" target="_blank"><i class="fa fa-eye"></i> Cliquer pour voir la facture avoir.</a>'
+                                    footer: '<a href="/dashboard/factures/avoir/print/'+res.avoir_id+'" target="_blank"><i class="fa fa-eye"></i> Cliquer pour voir la facture avoir.</a>'
                                 });
 
                             }else {

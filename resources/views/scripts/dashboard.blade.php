@@ -22,7 +22,8 @@
                         // toastr.warning("Vous pourrez avoir des nofications non lues!",'Alerte');
 
                         $('#no-notification').hide();
-                    } 
+                        $('#all-notification').show(400);
+                    }
                     // else {
                     //     toastr.success("Aucune notification!",'Alerte');
                     // }
