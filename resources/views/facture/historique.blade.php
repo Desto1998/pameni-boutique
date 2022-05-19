@@ -124,6 +124,7 @@
                                                 <div>
                                                     @foreach($logs as $k=>$item)
                                                         <label>{{ $k+1 }}</label>
+                                                        @if(Auth::user()->is_admin==1)
                                                         <div class="w-100 d-flex justify-content-end">
                                                             <a href="javascript:void(0);" class="btn btn-sm btn-secondary" title="Achiver" onclick="archivateFun({{ $item->log_f_id }})">
                                                                 <i class="fa fa-archive"></i>
@@ -132,6 +133,8 @@
                                                                 <i class="fa fa-trash"></i>
                                                             </a>
                                                         </div>
+                                                        @endif
+                                                      
                                                         <table
                                                         class="table w-100 mt-2 table-bordered table-hover text-black">
                                                         <thead>
