@@ -50,6 +50,7 @@
                                     <th>Qté</th>
                                     <th>P.U</th>
                                     <th>Stock</th>
+                                    <th>Description</th>
                                     <th style="width: 120px">Crée Par</th>
                                     <th>Action</th>
                                 </tr>
@@ -364,8 +365,8 @@
                     {data: 'categorie',name:'categorie'},
                     {data: 'quantite',name:'quantite'},
                     {data: 'prix',name:'prix'},
-                    // {data: 'description',name:'description'},
                     {data: 'stock',name:'stock'},
+                    {data: 'description',name:'description'},
                     {data: 'username',name:'username'},
                     {data: 'action', name: 'action', orderable: false, searchable: false},
 

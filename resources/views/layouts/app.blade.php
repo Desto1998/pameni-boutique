@@ -204,8 +204,8 @@
                     <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false"><i
                                 class="fa fa-database"></i><span class="nav-text">Dévis</span></a>
                         <ul aria-expanded="false">
-                            <li><a href="{{ route('devis.add') }}">Créer un dévis</a></li>
                             <li><a href="{{ route('devis.all') }}">Gestion des dévis</a></li>
+                            <li><a href="{{ route('devis.add') }}">Créer un dévis</a></li>
                             <li><a href="{{ route('bon.index') }}">Bons de livraisons</a></li>
                         </ul>
                     </li>
@@ -215,8 +215,8 @@
                 <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false"><i
                             class="fa fa-file"></i><span class="nav-text">Factures</span></a>
                     <ul aria-expanded="false">
-                        <li><a href="{{ route('factures.add') }}">Créer une facture</a></li>
                         <li><a href="{{ route('factures.all') }}">Gestion des factures</a></li>
+                        <li><a href="{{ route('factures.add') }}">Créer une facture</a></li>
                         <li><a href="{{ route('avoir.index') }}">Factures avoirs</a></li>
                         <li><a href="{{ route('history.index') }}">Historiques</a></li>
                     </ul>
@@ -226,8 +226,8 @@
                 <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false"><i
                             class="fa fa-cart-plus"></i><span class="nav-text">Commandes</span></a>
                     <ul aria-expanded="false">
-                        <li><a href="{{ route('commandes.add') }}">Créer une commande</a></li>
                         <li><a href="{{ route('commandes.all') }}">Gestion des commandes</a></li>
+                        <li><a href="{{ route('commandes.add') }}">Créer une commande</a></li>
                     </ul>
                 </li>
                 @endif

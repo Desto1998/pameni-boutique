@@ -178,6 +178,7 @@
                                 </div>
                                 <div class="col-md-3 form-group">
                                     <label for="disponibilite">Disponibilité<span class="text-danger"> *</span></label>
+
                                     <select class="form-control" name="disponibilite" id="disponibilite">
                                         <option>En stock</option>
                                         <option>Non disponible en stock</option>

@@ -110,7 +110,7 @@
                                                     @foreach($factproduct as $pf)
                                                         @if ($pf->idfacture == $value->facture_id)
                                                             <tr>
-                                                                <td>{{ $pf->titre_produit }}</td>
+                                                                <td>{{ $pf->titre_produit }} &nbsp;&nbsp; <small>{{ $pf->description_produit }}</small></td>
                                                                 <td>{{ $pf->quantite }}</td>
                                                                 <td>{{ $pf->prix }}</td>
                                                                 <td>{{ $pf->remise }}</td>
@@ -134,7 +134,7 @@
                                                             </a>
                                                         </div>
                                                         @endif
-                                                      
+
                                                         <table
                                                         class="table w-100 mt-2 table-bordered table-hover text-black">
                                                         <thead>
@@ -190,7 +190,7 @@
                                                         @foreach($logproducts as $lpf)
                                                             @if ($lpf->log_idf== $item->log_f_id)
                                                                 <tr>
-                                                                    <td>{{ $lpf->titre_produit }}</td>
+                                                                    <td>{{ $lpf->titre_produit }} &nbsp;&nbsp; <small>{{ $lpf->description_produit }}</small></td>
                                                                     <td>{{ $lpf->log_quantite }}</td>
                                                                     <td>{{ $lpf->log_prix }}</td>
                                                                     <td>{{ $lpf->log_remise }}</td>
