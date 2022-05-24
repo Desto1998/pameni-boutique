@@ -355,72 +355,75 @@
         </td>
     </tr>
 </table>
-<div class="for-complement">
-    <div style="margin-bottom: 10px">
-        <strong style="text-decoration: underline;">OFFRE COMPLEMENTAIRE</strong><br>
-    </div>
-    <table class="table-complement">
-        <thead class="bg-primary text-white text-center">
-        <tr>
-            <th>Réf.</th>
-            <th>Désignation</th>
-            <th>Qté</th>
-            <th>P.U.HT.</th>
-            <th>Remise</th>
-{{--            <th>TVA</th>--}}
-            <th>M. HT(FCFA)</th>
-            <th>M. TTC</th>
-        </tr>
-        </thead>
-        <tbody style="color: #000000!important;">
-
-        @php
-            $montantTTC = 0;
-           $montantHT=0;
-           $montantTVA = 0;
-        @endphp
-        @foreach($complements as $p)
-            @php
-                $remise = ($p->prix * $p->quantite *$p->remise)/100;
-                $montant = ($p->quantite * $p->prix) - $remise;
-                $HT = $montant;
-
-                $montantHT += $montant;
-                $tva = ($montant * $p->tva)/100;
-                $montant = $tva + $montant;
-                $TTC = $montant;
-                $montantTVA += $montant;
-            @endphp
-            <tr class="text-black  produit-input">
-
-                <td>{{ $p->reference }}</td>
-                <td>{{ $p->titre_produit }} &nbsp;&nbsp;<small>{{ $p->description_produit }}</small></td>
-                <td class="number">{{ $p->quantite }}</td>
-                <td class="number">{{ $p->prix }}</td>
-                <td class="number">{{ $p->remise }}%</td>
-{{--                <td class="number">{{ $p->tva }}%</td>--}}
-                <td class="number">
-                    {{ number_format($HT,2, '.', '') }}
-                </td>
-                <td class="number">
-                    {{  number_format($TTC, 2, '.', '')  }}
-                </td>
-
+@if (count($complements)>0)
+    <div class="for-complement">
+        <div style="margin-bottom: 10px">
+            <strong style="text-decoration: underline;">OFFRE COMPLEMENTAIRE</strong><br>
+        </div>
+        <table class="table-complement">
+            <thead class="bg-primary text-white text-center">
+            <tr>
+                <th>Réf.</th>
+                <th>Désignation</th>
+                <th>Qté</th>
+                <th>P.U.HT.</th>
+                <th>Remise</th>
+                {{--            <th>TVA</th>--}}
+                <th>M. HT(FCFA)</th>
+                <th>M. TTC</th>
             </tr>
-        @endforeach
-        @if (count($complements)===0)
-            <td colspan="3"></td>
-            <td colspan="3"></td>
-            <td colspan="3"></td>
-            <td colspan="3"></td>
-            <td colspan="3"></td>
-            <td colspan="3"></td>
-            <td colspan="3"></td>
-            <td colspan="3"></td>
-        @endif
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody style="color: #000000!important;">
+
+            @php
+                $montantTTC = 0;
+               $montantHT=0;
+               $montantTVA = 0;
+            @endphp
+            @foreach($complements as $p)
+                @php
+                    $remise = ($p->prix * $p->quantite *$p->remise)/100;
+                    $montant = ($p->quantite * $p->prix) - $remise;
+                    $HT = $montant;
+
+                    $montantHT += $montant;
+                    $tva = ($montant * $p->tva)/100;
+                    $montant = $tva + $montant;
+                    $TTC = $montant;
+                    $montantTVA += $montant;
+                @endphp
+                <tr class="text-black  produit-input">
+
+                    <td>{{ $p->reference }}</td>
+                    <td>{{ $p->titre_produit }} &nbsp;&nbsp;<small>{{ $p->description_produit }}</small></td>
+                    <td class="number">{{ $p->quantite }}</td>
+                    <td class="number">{{ $p->prix }}</td>
+                    <td class="number">{{ $p->remise }}%</td>
+                    {{--                <td class="number">{{ $p->tva }}%</td>--}}
+                    <td class="number">
+                        {{ number_format($HT,2, '.', '') }}
+                    </td>
+                    <td class="number">
+                        {{  number_format($TTC, 2, '.', '')  }}
+                    </td>
+
+                </tr>
+            @endforeach
+            @if (count($complements)===0)
+                <td colspan="3"></td>
+                <td colspan="3"></td>
+                <td colspan="3"></td>
+                <td colspan="3"></td>
+                <td colspan="3"></td>
+                <td colspan="3"></td>
+                <td colspan="3"></td>
+                <td colspan="3"></td>
+            @endif
+            </tbody>
+        </table>
+    </div>
+@endif
+
 <footer class="for-footer">
     @php
         $ImagePath = $_SERVER["DOCUMENT_ROOT"] . '/images/logo/logo-partenaire-gsc.png';
