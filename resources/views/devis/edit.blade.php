@@ -241,12 +241,12 @@
                                 </div>
                                 <div class="col-md-3 form-group">
                                     <label for="disponibilite">Disponibilité<span class="text-danger"> *</span></label>
-                                    <select class="form-control" name="disponibilite" id="disponibilite">
-                                        <option {{ $data[0]->disponibilite=="En stock"?'selected':'' }}>En stock</option>
-                                        <option {{ $data[0]->disponibilite=="Non disponible en stock"?'selected':'' }}>Non disponible en stock</option>
-                                    </select>
-{{--                                    <input type="text" id="disponibilite" required min="0" name="disponibilite"--}}
-{{--                                           value="{{ $data[0]->disponibilite }}" class="form-control">--}}
+{{--                                    <select class="form-control" name="disponibilite" id="disponibilite">--}}
+{{--                                        <option {{ $data[0]->disponibilite=="En stock"?'selected':'' }}>En stock</option>--}}
+{{--                                        <option {{ $data[0]->disponibilite=="Non disponible en stock"?'selected':'' }}>Non disponible en stock</option>--}}
+{{--                                    </select>--}}
+                                    <input type="text" id="disponibilite" required minlength="5" name="disponibilite"
+                                           value="{{ $data[0]->disponibilite }}" class="form-control">
                                 </div>
                                 <div class="col-md-3 form-group">
                                     <label>Garantie(en mois)<span class="text-danger"> *</span></label>

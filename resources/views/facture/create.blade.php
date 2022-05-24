@@ -118,7 +118,7 @@
                                                         @foreach($produits as $p)
                                                             @if ($p->idcategorie===$cat->categorie_id)
                                                                 <option
-                                                                    value="{{ $p->produit_id }}">{{ $p->titre_produit }}</option>
+                                                                    value="{{ $p->produit_id }}">{{ $p->titre_produit }} => {{ $p->description_produit}}</option>
                                                             @endif
                                                         @endforeach
                                                     </optgroup>
@@ -250,7 +250,7 @@
                     '<optgroup class="" label="{{ $cat->titre_cat }}">' +
                     '@foreach($produits as $p)' +
                     ' @if ($p->idcategorie===$cat->categorie_id)' +
-                    '<option value="{{ $p->produit_id }}">{{ $p->titre_produit }}</option>' +
+                    '<option value="{{ $p->produit_id }}">{{ $p->titre_produit }} => {{ $p->description_produit}}</option>' +
                     '@endif' +
                     ' @endforeach' +
                     '</optgroup>' +

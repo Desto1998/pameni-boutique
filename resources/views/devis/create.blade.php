@@ -2,6 +2,7 @@
 @section('title','| DEVIS-CREER')
 @section('css_before')
     <link rel="stylesheet" href="{{asset('template/vendor/select2/css/select2.min.css')}}">
+    <link href="//rawgithub.com/indrimuska/jquery-editable-select/master/dist/jquery-editable-select.min.css" rel="stylesheet">
     <style>
         .hidden {
             display: none;
@@ -178,13 +179,12 @@
                                 </div>
                                 <div class="col-md-3 form-group">
                                     <label for="disponibilite">Disponibilité<span class="text-danger"> *</span></label>
-
-                                    <select class="form-control" name="disponibilite" id="disponibilite">
-                                        <option>En stock</option>
-                                        <option>Non disponible en stock</option>
-                                    </select>
-{{--                                    <input type="text" id="disponibilite" required min="0" name="disponibilite"--}}
-{{--                                           class="form-control">--}}
+{{--                                    <select class="form-control" name="disponibilite" id="editable-select">--}}
+{{--                                        <option>En stock</option>--}}
+{{--                                        <option>Non disponible en stock</option>--}}
+{{--                                    </select>--}}
+                                    <input type="text" id="disponibilite" placeholder="Exemple: En stock" required minlength="5" name="disponibilite"
+                                           class="form-control">
                                 </div>
                                 <div class="col-md-3 form-group">
                                     <label>Garantie(en mois)<span class="text-danger"> *</span></label>
@@ -622,10 +622,20 @@
                 }
             });
         });
+        $('#editable-select').editableSelect({
+            effects: 'slide',
+            duration: 200,
+            appendTo: 'body'
+        });
+        // Must add event handlers before initializing jQuery Editable Select.
+        $('#editable-select').on('shown.editable-select', function (e) {
+            // do something...
+        }).editableSelect();
+
     </script>
 
     <!-- Selet search -->
     <script src="{{asset('template/vendor/select2/js/select2.full.min.js')}}"></script>
     <script src="{{asset('template/js/plugins-init/select2-init.js')}}"></script>
-
+    <script src="//rawgithub.com/indrimuska/jquery-editable-select/master/dist/jquery-editable-select.min.js"></script>
 @endsection
