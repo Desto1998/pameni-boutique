@@ -179,10 +179,24 @@
                                 </div>
                                 <div class="col-md-3 form-group">
                                     <label for="disponibilite">Disponibilité<span class="text-danger"> *</span></label>
-{{--                                    <select class="form-control" name="disponibilite" id="editable-select">--}}
-{{--                                        <option>En stock</option>--}}
-{{--                                        <option>Non disponible en stock</option>--}}
-{{--                                    </select>--}}
+                                    <select class="form-control" name="disponibilite" id="editable-select">
+                                        <option>En stock</option>
+                                        <option>Non disponible en stock</option>
+                                        <option>Disponible dans 10 jours</option>
+                                        <option>Disponible dans 15 jours</option>
+                                        <option>Disponible dans 20 jours</option>
+                                        <option>Disponible dans 25 jours</option>
+                                        <option>Disponible dans 30 jours</option>
+                                        <option>Disponible dans 40 jours</option>
+                                        <option>Disponible dans 50 jours</option>
+                                        <option>Disponible dans 60 jours</option>
+                                        <option>Disponible dans 70 jours</option>
+                                        <option>Disponible dans 80 jours</option>
+                                        <option>Disponible dans 90 jours</option>
+                                        <option>Disponible dans 100 jours</option>
+                                        <option>Disponible dans 120 jours</option>
+                                        <option>Disponible dans 150 jours</option>
+                                    </select>
                                     <input type="text" id="disponibilite" placeholder="Exemple: En stock" required minlength="5" name="disponibilite"
                                            class="form-control">
                                 </div>
@@ -196,6 +210,13 @@
                                     <select class="form-control" name="condition">
                                         <option>100% à la commande</option>
                                         <option>50% à la commande</option>
+                                        <option>15 jours après la commande</option>
+                                        <option>30 jours après la commande</option>
+                                        <option>60 jours après la commande</option>
+                                        <option>90 jours après la commande</option>
+                                        <option>120 jours après la commande</option>
+                                        <option>150 jours après la commande</option>
+                                        <option>180 jours après la commande</option>
                                     </select>
 {{--                                    <input type="text" id="condition" required min="0" name="condition"--}}
 {{--                                           class="form-control">--}}

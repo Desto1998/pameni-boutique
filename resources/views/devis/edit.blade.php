@@ -241,10 +241,24 @@
                                 </div>
                                 <div class="col-md-3 form-group">
                                     <label for="disponibilite">Disponibilité<span class="text-danger"> *</span></label>
-{{--                                    <select class="form-control" name="disponibilite" id="disponibilite">--}}
-{{--                                        <option {{ $data[0]->disponibilite=="En stock"?'selected':'' }}>En stock</option>--}}
-{{--                                        <option {{ $data[0]->disponibilite=="Non disponible en stock"?'selected':'' }}>Non disponible en stock</option>--}}
-{{--                                    </select>--}}
+                                    <select class="form-control" name="disponibilite" id="disponibilite">
+                                        <option {{ $data[0]->disponibilite=="En stock"?'selected':'' }}>En stock</option>
+                                        <option {{ $data[0]->disponibilite=="Non disponible en stock"?'selected':'' }}>Non disponible en stock</option>
+                                        <option {{ $data[0]->disponibilite=="Disponible dans 10 jours"?'selected':'' }}>Disponible dans 10 jours</option>
+                                        <option {{ $data[0]->disponibilite=="Disponible dans 15 jours"?'selected':'' }}>Disponible dans 15 jours</option>
+                                        <option {{ $data[0]->disponibilite=="Disponible dans 20 jours"?'selected':'' }}>Disponible dans 20 jours</option>
+                                        <option {{ $data[0]->disponibilite=="Disponible dans 25 jours"?'selected':'' }}>Disponible dans 25 jours</option>
+                                        <option {{ $data[0]->disponibilite=="Disponible dans 30 jours"?'selected':'' }}>Disponible dans 30 jours</option>
+                                        <option {{ $data[0]->disponibilite=="Disponible dans 40 jours"?'selected':'' }}>Disponible dans 40 jours</option>
+                                        <option {{ $data[0]->disponibilite=="Disponible dans 50 jours"?'selected':'' }}>Disponible dans 50 jours</option>
+                                        <option {{ $data[0]->disponibilite=="Disponible dans 60 jours"?'selected':'' }}>Disponible dans 60 jours</option>
+                                        <option {{ $data[0]->disponibilite=="Disponible dans 70 jours"?'selected':'' }}>Disponible dans 70 jours</option>
+                                        <option {{ $data[0]->disponibilite=="Disponible dans 80 jours"?'selected':'' }}>Disponible dans 80 jours</option>
+                                        <option {{ $data[0]->disponibilite=="Disponible dans 90 jours"?'selected':'' }}>Disponible dans 90 jours</option>
+                                        <option {{ $data[0]->disponibilite=="Disponible dans 100 jours"?'selected':'' }}>Disponible dans 100 jours</option>
+                                        <option {{ $data[0]->disponibilite=="Disponible dans 120 jours"?'selected':'' }}>Disponible dans 120 jours</option>
+                                        <option {{ $data[0]->disponibilite=="Disponible dans 150 jours"?'selected':'' }}>Disponible dans 150 jours</option>
+                                    </select>
                                     <input type="text" id="disponibilite" required minlength="5" name="disponibilite"
                                            value="{{ $data[0]->disponibilite }}" class="form-control">
                                 </div>
@@ -259,6 +273,13 @@
                                     <select class="form-control" name="condition">
                                         <option {{ $data[0]->condition=="100% à la commande"?'selected':'' }}>100% à la commande</option>
                                         <option {{ $data[0]->condition=="50% à la commande"?'selected':'' }}>50% à la commande</option>
+                                        <option {{ $data[0]->condition=="15 jours après la commande"?'selected':'' }}>15 jours après la commande</option>
+                                        <option {{ $data[0]->condition=="30 jours après la commande"?'selected':'' }}>30 jours après la commande</option>
+                                        <option {{ $data[0]->condition=="60 jours après la commande"?'selected':'' }}>60 jours après la commande</option>
+                                        <option {{ $data[0]->condition=="90 jours après la commande"?'selected':'' }}>90 jours après la commande</option>
+                                        <option {{ $data[0]->condition=="120 jours après la commande"?'selected':'' }}>120 jours après la commande</option>
+                                        <option {{ $data[0]->condition=="150 jours après la commande"?'selected':'' }}>150 jours après la commande</option>
+                                        <option {{ $data[0]->condition=="180 jours après la commande"?'selected':'' }}>180 jours après la commande</option>
                                     </select>
 {{--                                    <input type="text" id="condition" required min="0" name="condition"--}}
 {{--                                           value="{{ $data[0]->condition }}" class="form-control">--}}
