@@ -189,7 +189,7 @@ class ProduitController extends Controller
 
     public function viewProduct($id)
     {
-        $data = Produits::join('users','users.id','produits.iduser')->join('categories', 'categories.categorie_id', 'produits.produit_id')->where('produit_id', $id)->get();
+        $data = Produits::join('users','users.id','produits.iduser')->join('categories', 'categories.categorie_id', 'produits.idcategorie')->where('produit_id', $id)->get();
         $devis = Pocedes::join('devis', 'devis.devis_id', 'pocedes.iddevis')->where('idproduit', $id)->orderBy('pocedes.created_at')->get();
         $factures = Produit_Factures::join('factures', 'factures.facture_id', 'produit_factures.idfacture')->where('idproduit', $id)->orderBy('produit_factures.created_at')->get();
         $commandes = Comportes::join('commandes', 'commandes.commande_id', 'comportes.idcommande')->where('idproduit', $id)->orderBy('comportes.created_at')->get();
