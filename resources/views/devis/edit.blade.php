@@ -259,8 +259,8 @@
                                         <option {{ $data[0]->disponibilite=="Disponible dans 120 jours"?'selected':'' }}>Disponible dans 120 jours</option>
                                         <option {{ $data[0]->disponibilite=="Disponible dans 150 jours"?'selected':'' }}>Disponible dans 150 jours</option>
                                     </select>
-                                    <input type="text" id="disponibilite" required minlength="5" name="disponibilite"
-                                           value="{{ $data[0]->disponibilite }}" class="form-control">
+{{--                                    <input type="text" id="disponibilite" required minlength="5" name="disponibilite"--}}
+{{--                                           value="{{ $data[0]->disponibilite }}" class="form-control">--}}
                                 </div>
                                 <div class="col-md-3 form-group">
                                     <label>Garantie(en mois)<span class="text-danger"> *</span></label>

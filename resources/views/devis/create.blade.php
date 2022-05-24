@@ -197,8 +197,8 @@
                                         <option>Disponible dans 120 jours</option>
                                         <option>Disponible dans 150 jours</option>
                                     </select>
-                                    <input type="text" id="disponibilite" placeholder="Exemple: En stock" required minlength="5" name="disponibilite"
-                                           class="form-control">
+{{--                                    <input type="text" id="disponibilite" placeholder="Exemple: En stock" required minlength="5" name="disponibilite"--}}
+{{--                                           class="form-control">--}}
                                 </div>
                                 <div class="col-md-3 form-group">
                                     <label>Garantie(en mois)<span class="text-danger"> *</span></label>
