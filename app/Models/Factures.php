@@ -48,7 +48,6 @@ class Factures extends Model
         ;
         $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $id)->get();
         $montantTVA = 0;
-        $montantTTC = 0;
         foreach ($pocedes as $p) {
 
             $remise = ($p->prix * $p->quantite * $p->remise) / 100;
@@ -60,12 +59,14 @@ class Factures extends Model
 
         }
         if ($data[0]->tva_statut == 1) {
-            $montantTTC = (($montantTVA * 19.25) / 100) + $montantTVA;
-        } else {
-            $montantTTC = $montantTVA;
+            $montantTTC = (float)(new Taxe())->ApplyTVA($montantTVA) + number_format($montantTVA, 2, '.', '');
+        } elseif ($data[0]->tva_statut == 2) {
+            $montantTTC = (float)(new Taxe())->ApplyIS($montantTVA) + number_format($montantTVA, 2, '.', '');
+        }else {
+            $montantTTC =  number_format($montantTVA, 2, '.', '');
         }
 
-        return number_format($montantTTC, 2, '.', '');
+        return $montantTTC;
     }
 
     public function Payer($id){

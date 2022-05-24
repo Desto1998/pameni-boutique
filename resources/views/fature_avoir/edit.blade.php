@@ -42,10 +42,13 @@
                                         <input type="date" value="{{ $data->date_avoir }}" name="date" id="date" class="form-control" required>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="statut_tva">Inclure la TVA?  <span class="text-danger">*</span>  </label>
+                                        <label for="statut_tva">Inclure la TVA/IS?  <span class="text-danger">*</span>  </label>
                                         <select class="form-control" name="tva_statut" disabled>
-                                            <option {{ $data->tva_statut==0?"selected":"" }} value="0">Non</option>
-                                            <option {{ $data->tva_statut==1?"selected":"" }} value="1">Oui</option>
+                                            <option {{ $data->tva_statut==0?"selected":"" }} value="0">Aucun</option>
+                                            <option {{ $data->tva_statut==1?"selected":"" }} value="1">TVA</option>
+                                            <option {{ $data->tva_statut==2?"selected":"" }} value="2">IS</option>
+{{--                                            <option {{ $data->tva_statut==0?"selected":"" }} value="0">Non</option>--}}
+{{--                                            <option {{ $data->tva_statut==1?"selected":"" }} value="1">Oui</option>--}}
                                         </select>
                                     </div>
                                 </div>

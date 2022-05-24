@@ -219,8 +219,8 @@
         </thead>
         <tbody style="color: #000000!important;">
         @php
-            $montantTTC = 0;
-            $montantHT=0;
+            $montantTTC = (new \App\Models\Factures())->montantTotal($data[0]->facture_id);
+            $montantHT=(new \App\Models\Factures())->montantHT($data[0]->facture_id);
             $montantTVA=0;
         @endphp
 
@@ -230,11 +230,9 @@
                 $montant = ($p->quantite * $p->prix) - $remise;
                 $HT = $montant;
 
-                $montantHT += $montant;
                 $tva = ($montant * $p->tva)/100;
                 $montant = $tva + $montant;
                 $TTC = $montant;
-                $montantTVA += $montant;
             @endphp
             <tr class="text-black  produit-input">
 
@@ -255,17 +253,25 @@
         @endforeach
 
         <tr>
+
             <th colspan="5" rowspan="3"></th>
             <td class="total">Total HT</td>
-            <td class="number total">{{ number_format($montantHT,2,'.','') }}</td>
+            <td class="number total">{{  $montantHT }}</td>
 
         </tr>
 
         <tr>
-            <td class="total">TVA 19.25%</td>
+            @if ($data[0]->tva_statut == 2)
+                <td class="total">IS 5.5%</td>
+            @else
+                <td class="total">TVA 19.25%</td>
+            @endif
+
             <td class="number total">
                 @if ($data[0]->tva_statut == 1)
-                    {{ number_format(($montantTVA * 19.25)/100,2,'.','') }}
+                    {{  (new \App\Models\Taxe())->ApplyTVA($montantHT) }}
+                @elseif($data[0]->tva_statut == 2)
+                    {{  (new \App\Models\Taxe())->ApplyIS($montantHT) }}
                 @else
                     0
                 @endif
@@ -275,10 +281,10 @@
         <tr>
             <td class="total">Montant TTC</td>
             <td class="number total">
-                @if ($data[0]->tva_statut == 1)
-                    {{ number_format(( ($montantTVA * 19.25)/100)+$montantTVA,2,'.','') }}
+                @if ($data[0]->tva_statut == 1 || $data[0]->tva_statut == 2)
+                    {{ $montantTTC }}
                 @else
-                    {{ number_format($montantTVA ,2,'.','') }}
+                    {{ $montantHT }}
                 @endif
             </td>
         </tr>
@@ -294,10 +300,8 @@
             {{--        {{ (new \App\Models\ChiffreLettre())->Conversion(number_format(( ($montantTVA * 19.25)/100)+$montantTVA,0,'.','')) }}--}}
             @php
 
-                if ($data[0]->tva_statut == 1){
-                     $montantTVA = (($montantTVA * 19.25)/100)+ $montantTVA;
-                     //ucfirst((new \App\Models\ChiffreLettre())->Conversion(number_format($montantTVA ,2,'.','')))
-                }
+                $montantTVA = (new \App\Models\Factures())->montantTotal($data[0]->facture_id);
+
                 $intpart = number_format($montantTVA ,2,'.','');
                 $intpart = floor($intpart);
                 $fraction = number_format($montantTVA ,2,'.','') - $intpart;

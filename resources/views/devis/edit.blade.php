@@ -43,10 +43,11 @@
                                         <input type="date" value="{{ $data[0]->date_devis }}" name="date" id="date" class="form-control" required>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="statut_tva">Inclure la TVA? <span class="text-danger"> *</span></label>
+                                        <label for="statut_tva">Inclure la TVA/IS? <span class="text-danger"> *</span></label>
                                         <select class="form-control" name="tva_statut">
-                                            <option {{ $data[0]->tva_statut==0?"selected":"" }} value="0">Non</option>
-                                            <option {{ $data[0]->tva_statut==1?"selected":"" }} value="1">Oui</option>
+                                            <option {{ $data[0]->tva_statut==0?"selected":"" }} value="0">Aucun</option>
+                                            <option {{ $data[0]->tva_statut==1?"selected":"" }} value="1">TVA</option>
+                                            <option {{ $data[0]->tva_statut==2?"selected":"" }} value="2">IS</option>
                                         </select>
                                     </div>
                                 </div>
@@ -222,7 +223,7 @@
                                         <input type="number" readonly name="ht" value="0" id="ht" class="form-control">
                                     </div>
                                     <div class="d-flex form-group col-md-4">
-                                        <label class="text-center">Montant TVA &nbsp;&nbsp;</label>
+                                        <label class="text-center">Montant TVA/IS &nbsp;&nbsp;</label>
                                         <input type="number" readonly name="mtva" id="mtva" value="0" class="form-control">
                                     </div>
                                     <div class="d-flex form-group col-md-4">
@@ -258,6 +259,7 @@
                                         <option {{ $data[0]->disponibilite=="Disponible dans 100 jours"?'selected':'' }}>Disponible dans 100 jours</option>
                                         <option {{ $data[0]->disponibilite=="Disponible dans 120 jours"?'selected':'' }}>Disponible dans 120 jours</option>
                                         <option {{ $data[0]->disponibilite=="Disponible dans 150 jours"?'selected':'' }}>Disponible dans 150 jours</option>
+                                        <option {{ $data[0]->disponibilite=="Dès réception accompte"?'selected':'' }}>Dès réception accompte</option>
                                     </select>
 {{--                                    <input type="text" id="disponibilite" required minlength="5" name="disponibilite"--}}
 {{--                                           value="{{ $data[0]->disponibilite }}" class="form-control">--}}
@@ -532,6 +534,9 @@
                 if ($('select[name="tva_statut"]').val()==1){
                     tva = 19.25;
                 }
+                if ($('select[name="tva_statut"]').val()==2){
+                    tva = 5.5;
+                }
                 // if ($('#tva' + number).val() != '') {
                 //     tva = $('#tva' + number).val()
                 // }
@@ -567,6 +572,9 @@
             // });
             if ($('select[name="tva_statut"]').val()==1){
                 tva = 19.25;
+            }
+            if ($('select[name="tva_statut"]').val()==2){
+                tva = 5.5;
             }
             var mtva = (totalht * tva )/100;
             mtva = Number(mtva).toFixed(2)

@@ -34,8 +34,8 @@
         </thead>
         <tbody style="color: #000000!important;">
         @php
-            $montantTTC = 0;
-            $montantHT=0;
+            $montantTTC = (new \App\Models\Factures())->montantTotal($data[0]->facture_id);
+            $montantHT=(new \App\Models\Factures())->montantHT($data[0]->facture_id);
             $montantTVA=0;
         @endphp
 
@@ -46,11 +46,9 @@
                 $montant = ($p->quantite * $p->prix) - $remise;
                 $HT = $montant;
 
-                $montantHT += $montant;
                 $tva = ($montant * $p->tva)/100;
                 $montant = $tva + $montant;
                 $TTC = $montant;
-                $montantTVA += $montant;
             @endphp
             <tr class="text-black  produit-input">
 
@@ -74,29 +72,34 @@
         <tr>
             <th colspan="5" rowspan="3"></th>
             <td>Total HT</td>
-            <td>{{ number_format($montantHT,2,'.','') }}</td>
+            <td>{{ $montantHT }}</td>
 
         </tr>
 
         <tr>
-            <td>TVA 19.25%</td>
-            <td>
+            @if ($data[0]->tva_statut == 2)
+                <td class="total">IS 5.5%</td>
+            @else
+                <td class="total">TVA 19.25%</td>
+            @endif
+
+            <td class="number total">
                 @if ($data[0]->tva_statut == 1)
-                    {{ number_format(($montantTVA * 19.25)/100,2,'.','') }}
+                    {{  (new \App\Models\Taxe())->ApplyTVA($montantHT) }}
+                @elseif($data[0]->tva_statut == 2)
+                    {{  (new \App\Models\Taxe())->ApplyIS($montantHT) }}
                 @else
                     0
                 @endif
-
             </td>
-
         </tr>
         <tr>
             <td>Montant TTC</td>
             <td>
-                @if ($data[0]->tva_statut == 1)
-                    {{ number_format(( ($montantTVA * 19.25)/100)+$montantTVA,2,'.','') }}
+                @if ($data[0]->tva_statut == 1 || $data[0]->tva_statut == 2)
+                    {{ $montantTTC }}
                 @else
-                    {{ number_format($montantTVA ,2,'.','') }}
+                    {{ $montantHT }}
                 @endif
             </td>
         </tr>

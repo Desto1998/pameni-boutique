@@ -44,10 +44,11 @@
                                         <input type="date" value="{{ $data[0]->date_fact }}" name="date" id="date" class="form-control" required>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="statut_tva">Inclure la TVA?  <span class="text-danger">*</span>  </label>
+                                        <label for="statut_tva">Inclure la TVA/IS?  <span class="text-danger">*</span>  </label>
                                         <select class="form-control" name="tva_statut">
-                                            <option {{ $data[0]->tva_statut==0?"selected":"" }} value="0">Non</option>
-                                            <option {{ $data[0]->tva_statut==1?"selected":"" }} value="1">Oui</option>
+                                            <option {{ $data[0]->tva_statut==0?"selected":"" }} value="0">Aucun</option>
+                                            <option {{ $data[0]->tva_statut==1?"selected":"" }} value="1">TVA</option>
+                                            <option {{ $data[0]->tva_statut==2?"selected":"" }} value="2">IS</option>
                                         </select>
                                     </div>
                                 </div>
@@ -395,6 +396,9 @@
                 if ($('select[name="tva_statut"]').val()==1){
                     tva = 19.25;
                 }
+                if ($('select[name="tva_statut"]').val()==2){
+                    tva = 5.5;
+                }
                 // if ($('#tva'+number).val()!=''){
                 //     tva = $('#tva'+number).val()
                 // }
@@ -430,6 +434,9 @@
             // });
             if ($('select[name="tva_statut"]').val()==1){
                 tva = 19.25;
+            }
+            if ($('select[name="tva_statut"]').val()==2){
+                tva = 5.5;
             }
             var mtva = (totalht * tva )/100;
             mtva = Number(mtva).toFixed(2)

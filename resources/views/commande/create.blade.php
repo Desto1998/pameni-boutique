@@ -42,10 +42,11 @@
                                         <input type="date" name="date" id="date" class="form-control" required>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="statut_tva">Inclure la TVA?  <span class="text-danger">*</span></label>
+                                        <label for="statut_tva">Inclure la TVA/IS?  <span class="text-danger">*</span></label>
                                         <select class="form-control" name="tva_statut">
-                                            <option value="0">Non</option>
-                                            <option value="1">Oui</option>
+                                            <option value="0">Aucun</option>
+                                            <option value="1">TVA</option>
+                                            <option value="2">IS</option>
                                         </select>
                                     </div>
                                 </div>
@@ -355,6 +356,9 @@
                 if ($('select[name="tva_statut"]').val()==1){
                     tva = 19.25;
                 }
+                if ($('select[name="tva_statut"]').val()==2){
+                    tva = 5.5;
+                }
                 var montant = (qte*prix) - (qte*prix*remise)/100 ;
 
                 var ttc = (montant * tva )/100 + montant;
@@ -385,6 +389,9 @@
             // });
             if ($('select[name="tva_statut"]').val()==1){
                 tva = 19.25;
+            }
+            if ($('select[name="tva_statut"]').val()==2){
+                tva = 5.5;
             }
             var mtva = (totalht * tva )/100;
             mtva = Number(mtva).toFixed(2)

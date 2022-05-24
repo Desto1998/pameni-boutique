@@ -105,7 +105,7 @@ class FactureController extends Controller
                     $montantHT += $montant;
 
                 }
-                return number_format($montantHT, 2, '.', '');
+                return (new Factures())->montantHT($value->facture_id);
             })
             // calcule du montant TTC tout taxe comprie
             ->addColumn('montantTTC', function ($value) {
@@ -239,8 +239,8 @@ class FactureController extends Controller
             ->join('users', 'users.id', 'factures.iduser')
             ->where('facture_id', $id)
             ->get();
-        if ($data[0]->tva_statut == 1) {
-            $montantTTC = (($montantTVA * 19.25) / 100) + $montantTVA;
+        if ($data[0]->tva_statut == 1 || $data[0]->tva_statut==2) {
+            $montantTTC = (new Factures())->montantTotal($id);
         } else {
             $montantTTC = $montantTVA;
         }
