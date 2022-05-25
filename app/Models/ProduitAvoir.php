@@ -21,8 +21,8 @@ class ProduitAvoir extends Model
         'idavoir',
     ];
 
-    public function produitAvoir($id)
+    public function produitFAvoir($id)
     {
-        return $this::join('produits','produits.produit_id','produit_avoir.idproduit')->where('idavoir',$id)->get();
+        return ProduitAvoir::join('produits','produits.produit_id','produit_avoir.idproduit')->where('idavoir',$id)->get();
     }
 }

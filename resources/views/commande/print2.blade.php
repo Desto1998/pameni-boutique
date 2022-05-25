@@ -301,7 +301,9 @@
                 if ($data[0]->tva_statut == 1){
                      $montantTVA = ((($montantTVA * 19.25)/100)+ $montantTVA)/ $request->montant;
                      //ucfirst((new \App\Models\ChiffreLettre())->Conversion(number_format($montantTVA ,2,'.','')))
-                }else{
+                }elseif ($data[0]->tva_statut == 2){
+                   $montantTVA = (($montantTVA * 5.5)/100)+ $montantTVA / $request->montant;
+               }else{
                        $montantTVA = $montantTVA / $request->montant;
                 }
                 $intpart = number_format($montantTVA ,2,'.','');

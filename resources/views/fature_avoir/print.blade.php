@@ -219,18 +219,17 @@
         </thead>
         <tbody style="color: #000000!important;">
         @php
-            $montantTTC = 0;
-            $montantHT=0;
+            $montantTTC = (new \App\Models\Avoirs())->montantTotal($data[0]->avoir_id);
+            $montantHT = (new \App\Models\Avoirs())->montantHT($data[0]->avoir_id);
             $montantTVA=0;
         @endphp
-
         @foreach($pocedes as $p)
             @php
                 $remise = ($p->prix * $p->quantite *$p->remise)/100;
                 $montant = ($p->quantite * $p->prix) - $remise;
                 $HT = $montant;
 
-                $montantHT += $montant;
+                #$montantHT += $montant;
                 $tva = ($montant * $p->tva)/100;
                 $montant = $tva + $montant;
                 $TTC = $montant;
@@ -262,10 +261,16 @@
         </tr>
 
         <tr>
-            <td class="total">TVA 19.25%</td>
+            @if ($data[0]->tva_statut == 2)
+                <td class="total">IS 5.5%</td>
+            @else
+                <td class="total">TVA 19.25%</td>
+            @endif
             <td class="number total">
                 @if ($data[0]->tva_statut == 1)
-                    {{ number_format(($montantTVA * 19.25)/100,2,'.','') }}
+                    {{  (new \App\Models\Taxe())->ApplyTVA($montantHT) }}
+                @elseif($data[0]->tva_statut == 2)
+                    {{  (new \App\Models\Taxe())->ApplyIS($montantHT) }}
                 @else
                     0
                 @endif
@@ -275,11 +280,7 @@
         <tr>
             <td class="total">Net à déduire</td>
             <td class="number total">
-                @if ($data[0]->tva_statut == 1)
-                    {{ number_format(( ($montantTVA * 19.25)/100)+$montantTVA,2,'.','') }}
-                @else
-                    {{ number_format($montantTVA ,2,'.','') }}
-                @endif
+                {{ (new \App\Models\Avoirs())->montantTotal($data[0]->avoir_id) }}
             </td>
         </tr>
         </tbody>
@@ -295,17 +296,19 @@
         @php
 
             if ($data[0]->tva_statut == 1){
-                 $montantTVA = (($montantTVA * 19.25)/100)+ $montantTVA;
-                 //ucfirst((new \App\Models\ChiffreLettre())->Conversion(number_format($montantTVA ,2,'.','')))
+                     $montantTVA = (($montantTVA * 19.25)/100)+ $montantTVA;
+                     //ucfirst((new \App\Models\ChiffreLettre())->Conversion(number_format($montantTVA ,2,'.','')))
+                }elseif ($data[0]->tva_statut == 2){
+                    $montantTVA = (($montantTVA * 5.5)/100)+ $montantTVA;
             }
-            $intpart = number_format($montantTVA ,2,'.','');
-            $intpart = floor($intpart);
-            $fraction = number_format($montantTVA ,2,'.','') - $intpart;
-            $chaine = "$fraction"."000";
-            $chaine2 = $chaine[2];
-            $chaine2 .= $chaine[3];
-            $chaineIntPart = (new \App\Models\ChiffreLettre())->Conversion($intpart);
-            $chaineDecimalPart = (new \App\Models\ChiffreLettre())->Conversion((int)($chaine2));
+             $intpart = number_format($montantTVA ,2,'.','');
+             $intpart = floor($intpart);
+             $fraction = number_format($montantTVA ,2,'.','') - $intpart;
+             $chaine = "$fraction"."000";
+             $chaine2 = $chaine[2];
+             $chaine2 .= $chaine[3];
+             $chaineIntPart = (new \App\Models\ChiffreLettre())->Conversion($intpart);
+             $chaineDecimalPart = (new \App\Models\ChiffreLettre())->Conversion((int)($chaine2));
 
         @endphp
         @if ((int)$chaine2==0)

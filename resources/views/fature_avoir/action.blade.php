@@ -106,8 +106,8 @@
                         </thead>
                         <tbody style="color: #000000!important;">
                         @php
-                            $montantTTC = 0;
-                            $montantHT=0;
+                            $montantTTC = (new \App\Models\Avoirs())->montantTotal($value->avoir_id);
+                            $montantHT = (new \App\Models\Avoirs())->montantHT($value->avoir_id);
                             $montantTVA=0;
                         @endphp
 
@@ -118,11 +118,11 @@
                                 $montant = ($p->quantite * $p->prix) - $remise;
                                 $HT = $montant;
 
-                                $montantHT += $montant;
+                                #$montantHT += $montant;
                                 $tva = ($montant * $p->tva)/100;
                                 $montant = $tva + $montant;
                                 $TTC = $montant;
-                                $montantTVA += $montant;
+                                //$montantTVA += $montant;
                             @endphp
                             <tr class="text-black  produit-input">
 
@@ -151,10 +151,16 @@
                         </tr>
 
                         <tr>
-                            <td>TVA 19.25%</td>
+                            @if ($value->tva_statut == 2)
+                                <td class="total">IS 5.5%</td>
+                            @else
+                                <td class="total">TVA 19.25%</td>
+                            @endif
                             <td>
                                 @if ($value->tva_statut == 1)
-                                    {{ number_format(($montantTVA * 19.25)/100,2,'.','') }}
+                                    {{  (new \App\Models\Taxe())->ApplyTVA($montantHT) }}
+                                @elseif($value->tva_statut == 2)
+                                    {{  (new \App\Models\Taxe())->ApplyIS($montantHT) }}
                                 @else
                                     0
                                 @endif
@@ -165,10 +171,10 @@
                         <tr>
                             <td>Montant TTC</td>
                             <td>
-                                @if ($value->tva_statut == 1)
-                                    {{ number_format(( ($montantTVA * 19.25)/100)+$montantTVA,2,'.','') }}
+                                @if ($value->tva_statut == 1 || $value->tva_statut == 2)
+                                    {{ $montantTTC }}
                                 @else
-                                    {{ number_format($montantTVA ,2,'.','') }}
+                                    {{ $montantHT }}
                                 @endif
                             </td>
                         </tr>

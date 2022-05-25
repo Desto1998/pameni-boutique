@@ -121,6 +121,8 @@ class DevisController extends Controller
                 }
                 if ($value->tva_statut == 1) {
                     $montantTTC = (($montantTVA * 19.25) / 100) + $montantTVA;
+                }elseif ($value->tva_statut == 2){
+                    $montantTTC = (($montantTVA * 5.5) / 100) + $montantTVA;
                 }else{
                     $montantTTC = $montantTVA;
                 }
@@ -260,9 +262,14 @@ class DevisController extends Controller
         ;
         if ($data[0]->tva_statut == 1) {
             $montantTTC = (($montantTVA * 19.25) / 100) + $montantTVA;
-        } else {
+        }elseif ($data[0]->tva_statut == 2){
+            $montantTTC = (($montantTVA * 5.5) / 100) + $montantTVA;
+        }else{
             $montantTTC = $montantTVA;
         }
+        $montantTTC= number_format($montantTTC, 2, '.', '');
+        $montantTVA= number_format($montantTVA, 2, '.', '');
+        $montant= number_format($montant, 2, '.', '');
         $commentaires = Commentaires::join('users','users.id','commentaires.iduser')->where('iddevis',$id)->get();
 
 //        $piece = Pieces::where('i', $id)->get();

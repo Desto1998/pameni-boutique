@@ -269,21 +269,29 @@
         </tr>
 
         <tr>
-            <td class="total">TVA 19.25%</td>
+            @if ($data[0]->tva_statut == 2)
+                <td class="total">IS 5.5%</td>
+            @else
+                <td class="total">TVA 19.25%</td>
+            @endif
             <td class="number total">
                 @if ($data[0]->tva_statut == 1)
-                    {{ number_format(($montantTVA * 19.25)/100,2,'.','') }}
+                    {{  (new \App\Models\Taxe())->ApplyTVA($montantTVA) }}
+                @elseif($data[0]->tva_statut == 2)
+                    {{  (new \App\Models\Taxe())->ApplyIS($montantTVA) }}
                 @else
                     0
                 @endif
-            </td>
 
+            </td>
         </tr>
         <tr>
             <td class="total">Montant TTC</td>
             <td class="number total">
                 @if ($data[0]->tva_statut == 1)
                     {{ number_format(( ($montantTVA * 19.25)/100)+$montantTVA,2,'.','') }}
+                @elseif($data[0]->tva_statut == 2)
+                    {{ number_format(( ($montantTVA * 5.5)/100)+$montantTVA,2,'.','') }}
                 @else
                     {{ number_format($montantTVA ,2,'.','') }}
                 @endif
@@ -301,6 +309,8 @@
                 if ($data[0]->tva_statut == 1){
                      $montantTVA = (($montantTVA * 19.25)/100)+ $montantTVA;
                      //ucfirst((new \App\Models\ChiffreLettre())->Conversion(number_format($montantTVA ,2,'.','')))
+                }elseif ($data[0]->tva_statut == 2){
+                    $montantTVA = (($montantTVA * 5.5)/100)+ $montantTVA;
                 }
                 $intpart = number_format($montantTVA ,2,'.','');
                 $intpart = floor($intpart);

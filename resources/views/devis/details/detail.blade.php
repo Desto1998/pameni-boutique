@@ -78,10 +78,16 @@
         </tr>
 
         <tr>
-            <td>TVA 19.25%</td>
+            @if ($data[0]->tva_statut == 2)
+                <td class="total">IS 5.5%</td>
+            @else
+                <td class="total">TVA 19.25%</td>
+            @endif
             <td>
                 @if ($data[0]->tva_statut == 1)
-                    {{ number_format(($montantTVA * 19.25)/100,2,'.','') }}
+                    {{  (new \App\Models\Taxe())->ApplyTVA($montantTVA) }}
+                @elseif($data[0]->tva_statut == 2)
+                    {{  (new \App\Models\Taxe())->ApplyIS($montantTVA) }}
                 @else
                     0
                 @endif
@@ -94,6 +100,8 @@
             <td>
                 @if ($data[0]->tva_statut == 1)
                     {{ number_format(( ($montantTVA * 19.25)/100)+$montantTVA,2,'.','') }}
+                @elseif($data[0]->tva_statut == 2)
+                    {{ number_format(( ($montantTVA * 5.5)/100)+$montantTVA,2,'.','') }}
                 @else
                     {{ number_format($montantTVA ,2,'.','') }}
                 @endif

@@ -71,7 +71,7 @@ class AvoirController extends Controller
             ->addColumn('action', function ($value) {
                 $categories = Categories::all();
 //                $paiements = Paiements::where('idfacture', $value->facture_id)->get();
-                $pocedes = (new ProduitAvoir)->produitAvoir($value->avoir_id);
+                $pocedes = (new ProduitAvoir)->produitFAvoir($value->avoir_id);
                 $factures = Factures::join('clients', 'clients.client_id', 'factures.idclient')
                     ->where('factures.facture_id',$value->idfacture)
                     ->get();
@@ -118,7 +118,7 @@ class AvoirController extends Controller
             })
             // calcule du montant hors taxe
             ->addColumn('montantHT', function ($value) {
-                $pocedes = (new ProduitAvoir)->produitAvoir($value->avoir_id);
+                $pocedes = (new ProduitAvoir)->produitFAvoir($value->avoir_id);
                 $montantHT = 0;
 
                 foreach ($pocedes as $p) {
@@ -238,7 +238,7 @@ class AvoirController extends Controller
 
     public function viewDetail($id)
     {
-        $pocedes = (new ProduitAvoir())->produitAvoir($id);
+        $pocedes = (new ProduitAvoir())->produitFAvoir($id);
         $montantTVA = 0;
 
         $montantTVA = (new Avoirs())->montantHT($id);
@@ -250,8 +250,8 @@ class AvoirController extends Controller
         $factures = Factures::join('clients', 'clients.client_id', 'factures.idclient')
             ->where('factures.facture_id',$data[0]->idfacture)
             ->get();
-        if ($data[0]->tva_statut == 1) {
-            $montantTTC = (($montantTVA * 19.25) / 100) + $montantTVA;
+        if ($data[0]->tva_statut == 1 || $data[0]->tva_statut == 1) {
+            $montantTTC = (new Avoirs())->montantTotal($id);
         } else {
             $montantTTC = $montantTVA;
         }
@@ -396,7 +396,8 @@ class AvoirController extends Controller
         $factures = Factures::join('clients', 'clients.client_id', 'factures.idclient')
             ->where('factures.facture_id',$data[0]->idfacture)
             ->get();
-        $pocedes = (new ProduitAvoir())->produitAvoir($id);
+        $pocedes = (new ProduitAvoir())->produitFAvoir($id);
+        //dd($pocedes);
         $mois = (new Month)->getFrenshMonth((int)$date);
         $categories = Categories::all();
 //        $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $id)->get();

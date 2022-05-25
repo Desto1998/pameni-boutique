@@ -262,17 +262,24 @@
         <tr>
             <th colspan="5" rowspan="3"></th>
             <td class="total">Total HT</td>
-            <td class="number total">{{ number_format($montantHT,2,'.','') }}</td>
+            <td class="number total">{{ number_format($montantTVA,2,'.','') }}</td>
         </tr>
 
         <tr>
-            <td class="total">TVA 19.25%</td>
+            @if ($data[0]->tva_statut == 2)
+                <td class="total">IS 5.5%</td>
+            @else
+                <td class="total">TVA 19.25%</td>
+            @endif
             <td class="number total">
                 @if ($data[0]->tva_statut == 1)
-                    {{ number_format(($montantTVA * 19.25)/100,2,'.','') }}
+                    {{  (new \App\Models\Taxe())->ApplyTVA($montantTVA) }}
+                @elseif($data[0]->tva_statut == 2)
+                    {{  (new \App\Models\Taxe())->ApplyIS($montantTVA) }}
                 @else
                     0
                 @endif
+
             </td>
 
         </tr>
@@ -281,6 +288,8 @@
             <td class="number total">
                 @if ($data[0]->tva_statut == 1)
                     {{ number_format(( ($montantTVA * 19.25)/100)+$montantTVA,2,'.','') }}
+                @elseif($data[0]->tva_statut == 2)
+                    {{ number_format(( ($montantTVA * 5.5)/100)+$montantTVA,2,'.','') }}
                 @else
                     {{ number_format($montantTVA ,2,'.','') }}
                 @endif
@@ -296,17 +305,19 @@
             @php
 
                 if ($data[0]->tva_statut == 1){
-                     $montantTVA = (($montantTVA * 19.25)/100)+ $montantTVA;
-                     //ucfirst((new \App\Models\ChiffreLettre())->Conversion(number_format($montantTVA ,2,'.','')))
-                }
-                $intpart = number_format($montantTVA ,2,'.','');
-                $intpart = floor($intpart);
-                $fraction = number_format($montantTVA ,2,'.','') - $intpart;
-                $chaine = "$fraction"."000";
-                $chaine2 = $chaine[2];
-                $chaine2 .= $chaine[3];
-                $chaineIntPart = (new \App\Models\ChiffreLettre())->Conversion($intpart);
-                $chaineDecimalPart = (new \App\Models\ChiffreLettre())->Conversion((int)($chaine2));
+                    $montantTVA = (($montantTVA * 19.25)/100)+ $montantTVA;
+                    //ucfirst((new \App\Models\ChiffreLettre())->Conversion(number_format($montantTVA ,2,'.','')))
+               }elseif ($data[0]->tva_statut == 2){
+                   $montantTVA = (($montantTVA * 5.5)/100)+ $montantTVA;
+               }
+               $intpart = number_format($montantTVA ,2,'.','');
+               $intpart = floor($intpart);
+               $fraction = number_format($montantTVA ,2,'.','') - $intpart;
+               $chaine = "$fraction"."000";
+               $chaine2 = $chaine[2];
+               $chaine2 .= $chaine[3];
+               $chaineIntPart = (new \App\Models\ChiffreLettre())->Conversion($intpart);
+               $chaineDecimalPart = (new \App\Models\ChiffreLettre())->Conversion((int)($chaine2));
 
             @endphp
             @if ((int)$chaine2==0)

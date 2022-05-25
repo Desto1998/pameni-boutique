@@ -109,6 +109,8 @@ class CommandeController extends Controller
                 }
                 if ($value->tva_statut == 1) {
                     $montantTTC = (($montantTVA * 19.25) / 100) + $montantTVA;
+                }elseif ($value->tva_statut == 2){
+                    $montantTTC = (($montantTVA * 5.5) / 100) + $montantTVA;
                 }else{
                     $montantTTC = $montantTVA;
                 }
@@ -259,7 +261,9 @@ class CommandeController extends Controller
         ;
         if ($data[0]->tva_statut == 1) {
             $montantTTC = (($montantTVA * 19.25) / 100) + $montantTVA;
-        } else {
+        }elseif ($data[0]->tva_statut == 2){
+            $montantTTC = (($montantTVA * 5.5) / 100) + $montantTVA;
+        }else{
             $montantTTC = $montantTVA;
         }
 
