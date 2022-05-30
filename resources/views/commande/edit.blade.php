@@ -50,7 +50,7 @@
                                                class="form-control" required>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="statut_tva">Inclure la TVA?  <span class="text-danger">*</span></label>
+                                        <label for="statut_tva">Inclure la TVA/IS?  <span class="text-danger">*</span></label>
                                         <select class="form-control" name="tva_statut">
                                             <option {{ $data[0]->tva_statut==0?"selected":"" }} value="0">Aucun</option>
                                             <option {{ $data[0]->tva_statut==1?"selected":"" }} value="1">TVA</option>
