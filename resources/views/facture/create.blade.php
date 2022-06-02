@@ -42,7 +42,7 @@
                                         <input type="date" name="date" id="date" class="form-control" required>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="statut_tva">Inclure la TVA? <span class="text-danger">*</span></label>
+                                        <label for="statut_tva">Inclure la TVA/IS? <span class="text-danger">*</span></label>
                                         <select class="form-control" name="tva_statut">
                                             <option value="0">Aucun</option>
                                             <option value="1">TVA</option>
@@ -119,7 +119,7 @@
                                                         @foreach($produits as $p)
                                                             @if ($p->idcategorie===$cat->categorie_id)
                                                                 <option
-                                                                    value="{{ $p->produit_id }}">{{ $p->titre_produit }} => {{ $p->description_produit}}</option>
+                                                                    value="{{ $p->produit_id }}">{{ $p->titre_produit }} </option>
                                                             @endif
                                                         @endforeach
                                                     </optgroup>
@@ -251,7 +251,7 @@
                     '<optgroup class="" label="{{ $cat->titre_cat }}">' +
                     '@foreach($produits as $p)' +
                     ' @if ($p->idcategorie===$cat->categorie_id)' +
-                    '<option value="{{ $p->produit_id }}">{{ $p->titre_produit }} => {{ $p->description_produit}}</option>' +
+                    '<option value="{{ $p->produit_id }}">{{ $p->titre_produit }}</option>' +
                     '@endif' +
                     ' @endforeach' +
                     '</optgroup>' +
