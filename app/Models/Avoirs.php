@@ -18,6 +18,7 @@ class Avoirs extends Model
         'tva_statut',
         'idfacture',
         'iduser',
+        'type_bon',
     ];
     public function montantHT($id){
         $pocedes = ProduitAvoir::where('idavoir', $id)->get();

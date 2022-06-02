@@ -215,7 +215,7 @@
                                                             <li class="col-md-5">{{ $value->objet }}</li>
                                                             <li class="col-md-2">{{ $value->reference_commande }}</li>
                                                             <li class="col-md-2">{{ $value->date_commande }}</li>
-                                                            <li class="col-md-3">{{ $value->lastname }}  {{ $value->lastname }}</li>
+                                                            <li class="col-md-3">{{ $value->lastname }}  {{ $value->firstname }}</li>
                                                         </ul>
                                                     </a>
                                                 @endforeach

@@ -20,6 +20,7 @@ class BonLivraison extends Model
         'delai_liv',
         'lieu_liv',
         'iduser',
+        'type_avoir',
     ];
 
     public function getProduit($id){

@@ -65,7 +65,13 @@ class FactureController extends Controller
             ->addColumn('action', function ($value) {
                 $categories = Categories::all();
                 $paiements = Paiements::where('idfacture', $value->facture_id)->get();
-                $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $value->facture_id)->get();
+                if ($value->type_fact===2) {
+                    $pocedes = Produit_Factures::where('idfacture', $value->facture_id)->get();
+
+                }else{
+                    $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $value->facture_id)->get();
+
+                }
                 $action = view('facture.action', compact('value', 'categories', 'pocedes', 'paiements'));
 //                    $actionBtn = '<div class="d-flex"><a href="javascript:void(0)" class="edit btn btn-warning btn-sm"><i class="fa fa-edit"></i></a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm ml-1"  onclick="deleteFun()"><i class="fa fa-trash"></i></a></div>';
                 return (string)$action;
@@ -95,7 +101,12 @@ class FactureController extends Controller
             })
             // calcule du montant hors taxe
             ->addColumn('montantHT', function ($value) {
-                $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $value->facture_id)->get();
+                if ($value->type_fact===2) {
+                    $pocedes = Produit_Factures::where('idfacture', $value->facture_id)->get();
+                }else{
+                    $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $value->facture_id)->get();
+                }
+//                $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $value->facture_id)->get();
                 $montantHT = 0;
 
                 foreach ($pocedes as $p) {
@@ -231,14 +242,20 @@ class FactureController extends Controller
 
     public function viewDetail($id)
     {
-        $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $id)->get();
+        $data = Factures::join('clients', 'clients.client_id', 'factures.idclient')
+        ->join('users', 'users.id', 'factures.iduser')
+        ->where('facture_id', $id)
+        ->get();
+       // $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $id)->get();
+        if ($data[0]->type_fact===2) {
+            $pocedes = Produit_Factures::where('idfacture', $id)->get();
+        }else{
+            $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $id)->get();
+        }
         $montantTVA = 0;
 
         $montantTVA = (new Factures())->montantHT($id);
-        $data = Factures::join('clients', 'clients.client_id', 'factures.idclient')
-            ->join('users', 'users.id', 'factures.iduser')
-            ->where('facture_id', $id)
-            ->get();
+
         if ($data[0]->tva_statut == 1 || $data[0]->tva_statut==2) {
             $montantTTC = (new Factures())->montantTotal($id);
         } else {
@@ -274,8 +291,15 @@ class FactureController extends Controller
         $piece = Pieces::where('idfacture', $id)->get();
         $categories = Categories::whereIn('categorie_id', $ID)->orderBy('categories.created_at', 'desc')->get();
         $clients = Clients::orderBy('created_at', 'desc')->get();
-        $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $id)->get();
-        return view('facture.edit', compact('data', 'piece', 'categories', 'pocedes', 'clients', 'produits'));
+        if ($data[0]->type_fact===2) {
+            $pocedes = Produit_Factures::where('idfacture', $id)->get();
+            return view('divers.fact.edit', compact('data', 'piece', 'categories', 'pocedes', 'clients', 'produits'));
+
+        }else{
+            $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $id)->get();
+            return view('facture.edit', compact('data', 'piece', 'categories', 'pocedes', 'clients', 'produits'));
+
+        }
     }
 
     public function edit(Request $request)
@@ -424,7 +448,12 @@ class FactureController extends Controller
         $num_BC = isset($piece[0]) ? $piece[0]->ref : '';
         $mois = (new \App\Models\Month)->getFrenshMonth((int)$date);
         $categories = Categories::all();
-        $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $id)->get();
+        if ($data[0]->type_fact===2) {
+            $pocedes = Produit_Factures::where('idfacture', $id)->get();
+        }else{
+            $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $id)->get();
+        }
+//        $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $id)->get();
         $pdf = PDF::loadView('facture.print', compact('data', 'num_BC', 'mois', 'categories', 'pocedes'))->setPaper('a4', 'portrait')->setWarnings(false);
         return $pdf->stream($data[0]->reference_fact . '_' . date("d-m-Y H:i:s") . '.pdf');
     }

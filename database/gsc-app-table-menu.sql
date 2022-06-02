@@ -43,6 +43,7 @@ REPLACE INTO `menus` (`menu_id`, `position`, `code`, `label`, `description`) VAL
 	(9, 8, 'GER', 'Rapports', 'Impression des différents rapports'),
 	(10, -1, 'NT', 'Notifications', 'Voir les notifications');
 INSERT INTO `gsc-app`.`menus` (`position`, `code`, `label`, `description`) VALUES ('9', 'GCA', 'Caisses', 'Pour le gestion de la caisse');
+INSERT INTO `gsc-app`.`menus` (`position`, `code`, `label`, `description`) VALUES (11, 'DIV', 'Divers', 'Menu divers pour les factures, devis avec produits entree manuellement');
 /*!40000 ALTER TABLE `menus` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

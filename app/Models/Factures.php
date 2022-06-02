@@ -23,11 +23,12 @@ class Factures extends Model
         'condition_financiere',
         'tva_statut',
         'iduser',
-        'iddevis'
+        'iddevis',
+        'type_fact'
     ];
 
     public function montantHT($id){
-        $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $id)->get();
+        $pocedes = Produit_Factures::leftJoin('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $id)->get();
         $montantHT = 0;
 
         foreach ($pocedes as $p) {
@@ -46,7 +47,12 @@ class Factures extends Model
             ->where('facture_id', $id)
             ->get()
         ;
-        $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $id)->get();
+        if ($data[0]->type_fact===2) {
+            $pocedes = Produit_Factures::where('idfacture', $id)->get();
+        }else{
+            $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $id)->get();
+        }
+//        $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $id)->get();
         $montantTVA = 0;
         foreach ($pocedes as $p) {
 
@@ -75,7 +81,7 @@ class Factures extends Model
     }
 
     public function produitFacture($id){
-        return Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $id)->get();
+        return Produit_Factures::leftJoin('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $id)->get();
     }
 
 }

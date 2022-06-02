@@ -52,7 +52,7 @@
                                     <div id="bordered_no-gutter_collapse{{ $value->facture_id }}"
                                          class="collapse accordion__body show" data-parent="#accordion-four">
                                         <div class="accordion__body--text">
-                                            <label class="nav-label">Statut actuel, derniere modification
+                                            <label class="nav-label text-primary">Statut actuel, derniere modification
                                                 le: {{ $value->updated_at }}</label>
                                             <div class="table-responsive">
                                                 <table
@@ -94,7 +94,7 @@
                                                     </tr>
                                                     </tbody>
                                                 </table>
-                                                <label>Produits</label>
+                                                <label class="text-primary">Produits</label>
                                                 <table
                                                     class="table w-100 mt-5  table-bordered table-hover text-black">
                                                     <thead>
@@ -120,10 +120,10 @@
 
                                                     </tbody>
                                                 </table>
-                                                <label>Historique des modifications</label>
+                                                <label class="text-success fw-700">Historique des modifications</label>
                                                 <div>
                                                     @foreach($logs as $k=>$item)
-                                                        <label>{{ $k+1 }}</label>
+                                                        <label class="text-danger">{{ $k+1 }}</label>
                                                         @if(Auth::user()->is_admin==1)
                                                         <div class="w-100 d-flex justify-content-end">
                                                             <a href="javascript:void(0);" class="btn btn-sm btn-secondary" title="Achiver" onclick="archivateFun({{ $item->log_f_id }})">
@@ -174,7 +174,7 @@
                                                         </tr>
                                                         </tbody>
                                                     </table>
-                                                        <label>Produits</label>
+                                                        <label class="text-primary">Produits</label>
                                                         <table
                                                         class="table w-100 mt-5  table-bordered table-hover text-black">
                                                         <thead>

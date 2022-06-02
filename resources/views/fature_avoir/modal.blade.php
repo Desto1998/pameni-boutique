@@ -67,7 +67,7 @@
                                        <div class="col-md-6 form-group">
                                            <label>
                                                <input type="checkbox" class="checkbox produit_f_id" value="{{ $p->produit_f_id }}" name="produit_f_id[]">
-                                               &nbsp;&nbsp;{{ $p->titre_produit }}({{ $p->reference }})
+                                               &nbsp;&nbsp;{{ $p->titre_produit }}{{ $p->titre_pf }}({{ $p->reference }}{{ $p->reference_pf }})
                                            </label>
                                        </div>
                                        <input type="hidden" class="" value="{{ $p->remise }}" name="remise[{{ $p->produit_f_id }}]" id="remise{{ $p->produit_f_id }}">

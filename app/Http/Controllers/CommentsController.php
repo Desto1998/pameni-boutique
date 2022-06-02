@@ -137,6 +137,56 @@ class CommentsController extends Controller
         return redirect()->back()->with('danger', "Désolé une erreur s'est produite. Veillez recommencer!");
 
     }
+    //Ajouter un commentaire pour les proformat du menu divers
+    public function addCommentProformat(Request $request)
+    {
+        $request->validate([
+            'idproformat' => ['required'],
+            'message' => ['required'],
+        ]);
+        $iduser = Auth::user()->id;
+        $dataID = $request->commentaire_id;
+        $save = Commentaires::updateOrCreate(['commentaire_id'=>$dataID],
+            [
+                'idproformat' => $request->idproformat,
+                'message' => $request->message,
+                'statut_commentaire' => 1,
+                'date_commentaire' => date('Y-m-d'),
+                'iduser' => $iduser,
+            ])
+        ;
+        if ($save) {
+            return redirect()->back()->with('success', 'enregistrés avec succès!');
+        }
+
+        return redirect()->back()->with('danger', "Désolé une erreur s'est produite. Veillez recommencer!");
+
+    }
+    //Ajouter un commentaire pour les autres factures du menu divers
+    public function addCommentFactureDivers(Request $request)
+    {
+        $request->validate([
+            'idfactured' => ['required'],
+            'message' => ['required'],
+        ]);
+        $iduser = Auth::user()->id;
+        $dataID = $request->commentaire_id;
+        $save = Commentaires::updateOrCreate(['commentaire_id'=>$dataID],
+            [
+                'idfactured' => $request->idfactured,
+                'message' => $request->message,
+                'statut_commentaire' => 1,
+                'date_commentaire' => date('Y-m-d'),
+                'iduser' => $iduser,
+            ])
+        ;
+        if ($save) {
+            return redirect()->back()->with('success', 'enregistrés avec succès!');
+        }
+
+        return redirect()->back()->with('danger', "Désolé une erreur s'est produite. Veillez recommencer!");
+
+    }
 
     //Ajouter un commentaire pour une commande
     public function updateComment(Request $request)

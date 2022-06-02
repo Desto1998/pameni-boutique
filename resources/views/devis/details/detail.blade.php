@@ -14,7 +14,7 @@
     </div>
 </div>
 <label class="nav-label"><span class="font-weight-bold">Objet: </span>{{ $data[0]->objet }}</label>
-<div class="for-produit table-responsive" style="max-height: 300px; overflow: auto">
+<div class="for-produit table-responsive" style="max-height: 400px;">
     <label class="nav-label h3 text-uppercase">Produits</label>
     <table class="w-100 table table-bordered">
         <thead class="bg-primary text-white text-center">
@@ -127,11 +127,11 @@
     </div>
     <div class="col-md-3 p-3 border">
         <label class="titre font-weight-bold">Conditions financières</label><br>
-        <label>{{ $data[0]->condition }}</label>
+        <label>{{ $data[0]->condition_financiere }}</label>
     </div>
 </div>
 <hr class="mt-2">
-<div class="for-produit table-responsive" style="max-height: 300px; overflow: auto">
+<div class="for-produit table-responsive" style="max-height: 400px;">
     <label class="nav-label h3">OFFRE COMPLEMENTAIRE</label>
     <table class="w-100 table  table-bordered">
         <thead class="bg-primary text-white text-center">

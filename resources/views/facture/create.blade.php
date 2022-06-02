@@ -93,7 +93,7 @@
                                 <label for="objet">Objet <span class="text-danger"> *</span> </label>
                                 <input type="text" name="objet" id="objet" class="form-control" required>
                             </div>
-                            <div class="for-produit table-responsive" style="max-height: 300px; overflow: auto">
+                            <div class="for-produit table-responsive" style="max-height: 400px;">
                                 <label class="nav-label">Produits</label>
                                 <table class="w-100 table table-striped table-bordered table-active" id="table-produit">
                                     <thead class="bg-primary text-white text-center">

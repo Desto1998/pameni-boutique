@@ -32,7 +32,7 @@ class AvoirController extends Controller
     //
     public function index()
     {
-        $factures = Factures::where('statut',1)->get();
+        $factures = Factures::where('type_fact','!=',2)->where('statut','=',1)->get();
         $data = Avoirs::join('users', 'users.id', 'avoirs.iduser')
             ->orderBy('avoirs.created_at', 'desc')
             ->get()

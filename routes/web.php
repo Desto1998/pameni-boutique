@@ -10,6 +10,7 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CommandeController;
 use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\DevisController;
+use App\Http\Controllers\DiversController;
 use App\Http\Controllers\EntreController;
 use App\Http\Controllers\FactureController;
 use App\Http\Controllers\FournisserController;
@@ -20,6 +21,7 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PaiementController;
 use App\Http\Controllers\ProduitController;
+use App\Http\Controllers\ProformatsController;
 use App\Http\Controllers\RapportController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\AccountValidation;
@@ -29,6 +31,7 @@ use App\Http\Middleware\MenuCaisse;
 use App\Http\Middleware\MenuClient;
 use App\Http\Middleware\MenuCommande;
 use App\Http\Middleware\MenuDevis;
+use App\Http\Middleware\MenuDivers;
 use App\Http\Middleware\MenuFactures;
 use App\Http\Middleware\MenuFournisseur;
 use App\Http\Middleware\MenuGestion;
@@ -256,8 +259,26 @@ Route::prefix('dashboard')->group(function () {
             Route::post('commande/addcomment',[CommentsController::class,'addCommentCommande'])->name('commande.add.comment');
             Route::post('avoir/addcomment',[CommentsController::class,'addCommentAvoir'])->name('avoir.add.comment');
             Route::post('bonLiv/addcomment',[CommentsController::class,'addCommentBon'])->name('bonLiv.add.comment');
+            Route::post('facture/addcomment',[CommentsController::class,'addCommentFactureDivers'])->name('divers.facture.comment');
+            Route::post('proformat/addcomment',[CommentsController::class,'addCommentProformat'])->name('divers.proformat.comment');
             Route::post('comment/update',[CommentsController::class,'updateComment'])->name('comment.update');
             Route::post('comment/delete',[CommentsController::class,'deleteComment'])->name('comment.delete');
+
+            // Route pour le menu divers
+            Route::prefix('divers')->group(function () {
+                Route::middleware([MenuDivers::class])->group(function () {
+                    // routes pour les proformats
+                    Route::get('proformat/add/form',[DiversController::class,'showAddFormProformat'])->name('divers.proformat.add.form');
+                    Route::post('proformat/add/store',[DiversController::class,'storeProformat'])->name('divers.proformat.add.store');
+                    Route::post('proformat/edit/update',[DiversController::class,'updateProformat'])->name('divers.proformat.edit.update');
+
+                    // Route pour les autre facture du menu divers
+                    Route::get('fact/add',[DiversController::class,'showAddFormFacture'])->name('divers.factures.add');
+                    Route::post('fact/store',[DiversController::class,'storeFacture'])->name('divers.factures.store');
+                    Route::post('fact/edit/store',[DiversController::class,'updateFacture'])->name('divers.factures.edit.store');
+
+                });
+            });
 
             //load notification
             Route::get('notification/notify',[NotificationController::class,'notify'])->name('notify.load');

@@ -18,6 +18,9 @@ class ProduitBon extends Model
         'idbonlivraison',
         'idproduit',
         'iduser',
+        'reference_bon',
+        'titre_bon',
+        'description_bon',
     ];
 
     public function produitBon($id)

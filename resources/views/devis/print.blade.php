@@ -235,8 +235,8 @@
             @endphp
             <tr class="text-black  produit-input">
 
-                <td>{{ $p->reference }}</td>
-                <td>{{ $p->titre_produit }} &nbsp;&nbsp; <small>{{ $p->description_produit }}</small></td>
+                <td>{{ $p->reference }}{{ $p->reference_pocede }}</td>
+                <td>{{ $p->titre_produit }}{{ $p->titre_pocede }} &nbsp;&nbsp; <small>{{ $p->description_produit }}{{ $p->description_pocede }}</small></td>
                 <td class="number">{{ $p->quantite }}</td>
                 <td class="number">{{ $p->prix }}</td>
                 <td class="number">{{ $p->remise }}%</td>
@@ -405,8 +405,8 @@
                 @endphp
                 <tr class="text-black  produit-input">
 
-                    <td>{{ $p->reference }}</td>
-                    <td>{{ $p->titre_produit }} &nbsp;&nbsp;<small>{{ $p->description_produit }}</small></td>
+                    <td>{{ $p->reference }}{{ $p->reference_com }}</td>
+                    <td>{{ $p->titre_produit }}{{ $p->titre_com }} &nbsp;&nbsp;<small>{{ $p->description_com }}</small></td>
                     <td class="number">{{ $p->quantite }}</td>
                     <td class="number">{{ $p->prix }}</td>
                     <td class="number">{{ $p->remise }}%</td>

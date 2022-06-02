@@ -19,10 +19,13 @@ class ProduitAvoir extends Model
         'idproduit',
         'iduser',
         'idavoir',
+        'reference_avoir',
+        'titre_avoir',
+        'description_avoir',
     ];
 
     public function produitFAvoir($id)
     {
-        return ProduitAvoir::join('produits','produits.produit_id','produit_avoir.idproduit')->where('idavoir',$id)->get();
+        return ProduitAvoir::leftJoin('produits','produits.produit_id','produit_avoir.idproduit')->where('idavoir',$id)->get();
     }
 }

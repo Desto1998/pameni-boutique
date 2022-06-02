@@ -74,7 +74,7 @@
 {{--                    formulaire contenant les produits validées --}}
                     <form method="post" action="{{ route('produit.store') }}" id="product-form-value">
 
-                        <div class="created-element  table-responsive" style="overflow: auto; max-height: 300px;">
+                        <div class="created-element  table-responsive" style="max-height: 400px;">
                             <table id="validated-element" style="width: 100%; border-collapse: collapse"
                                    class="table col-md-12 table-striped table-responsive">
                                 <thead class="bg-primary">

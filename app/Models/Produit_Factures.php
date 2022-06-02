@@ -20,5 +20,8 @@ class Produit_Factures extends Model
         'idfacture',
         'idproduit',
         'iduser',
+        'reference_pf',
+        'titre_pf',
+        'description_pf',
     ];
 }

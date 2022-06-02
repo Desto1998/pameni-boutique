@@ -17,5 +17,8 @@ class Complements extends Model
         'iduser',
         'iddevis',
         'idproduit',
+//        'reference_com',
+        'titre_com',
+        'description_com',
     ];
 }

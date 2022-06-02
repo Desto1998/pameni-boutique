@@ -19,6 +19,8 @@ class Commentaires extends Model
         'idfacture',
         'iduser',
         'idbonlivraison',
-        'idavoir'
+        'idfactured',
+        'idavoir',
+        'idproformat',
     ];
 }

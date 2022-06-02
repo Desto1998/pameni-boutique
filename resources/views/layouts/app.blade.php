@@ -254,7 +254,15 @@
                     </ul>
                 </li>
                 @endif
-
+                @if (in_array('DIV',\App\Models\User_menus::getUserMenu()))
+                    <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false"><i
+                                class="fa fa-xing"></i><span class="nav-text">Divers</span></a>
+                        <ul aria-expanded="false">
+                            <li><a href="{{ route('divers.proformat.add.form') }}">Créer une proformat</a></li>
+                            <li><a href="{{ route('divers.factures.add') }}">Créer une facture</a></li>
+                        </ul>
+                    </li>
+                @endif
                 <li class="nav-label">GESTION DE L'ENTREPRISE</li>
                 @if (in_array('GEC',\App\Models\User_menus::getUserMenu()))
                     <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false"><i

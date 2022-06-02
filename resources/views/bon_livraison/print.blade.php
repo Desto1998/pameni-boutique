@@ -235,8 +235,8 @@
             @endphp
             <tr class="text-black  produit-input">
 
-                <td>{{ $p->reference }}</td>
-                <td>{{ $p->titre_produit }} &nbsp;&nbsp; <small>{{ $p->description_produit }}</small></td>
+                <td>{{ $p->reference }}{{ $p->reference_pocede }}{{ $p->reference_pf }}</td>
+                <td>{{ $p->titre_produit }}{{ $p->titre_pocede }}{{ $p->titre_pf }} &nbsp;&nbsp; <small>{{ $p->description_produit }}{{ $p->description_pocede }}{{ $p->description_pf }}</small></td>
                 <td class="number">{{ $p->quantite }}</td>
                 {{--                <td class="number">{{ $p->prix }}</td>--}}
                 {{--                <td class="number">{{ $p->remise }}%</td>--}}

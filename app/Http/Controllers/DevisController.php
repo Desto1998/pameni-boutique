@@ -66,8 +66,15 @@ class DevisController extends Controller
             //Ajoute de la colonne action
             ->addColumn('action', function ($value) {
                 $categories = Categories::all();
-                $complements = Complements::join('produits', 'produits.produit_id', 'complements.idproduit')->where('iddevis', $value->devis_id)->get();
-                $pocedes = Pocedes::join('produits', 'produits.produit_id', 'pocedes.idproduit')->where('iddevis', $value->devis_id)->get();
+                if ($value->type_devis==2) {
+                    $pocedes = Pocedes::where('iddevis', $value->devis_id)->get();
+                    $complements = Complements::where('iddevis', $value->devis_id)->get();
+
+                }else {
+                    $pocedes = Pocedes::join('produits', 'produits.produit_id', 'pocedes.idproduit')->where('iddevis', $value->devis_id)->get();
+                    $complements = Complements::join('produits', 'produits.produit_id', 'complements.idproduit')->where('iddevis', $value->devis_id)->get();
+
+                }
                 $action = view('devis.action', compact('value', 'categories', 'pocedes', 'complements'));
 
 //                    $actionBtn = '<div class="d-flex"><a href="javascript:void(0)" class="edit btn btn-warning btn-sm"><i class="fa fa-edit"></i></a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm ml-1"  onclick="deleteFun()"><i class="fa fa-trash"></i></a></div>';
@@ -240,8 +247,22 @@ class DevisController extends Controller
 
     public function viewDetail($id)
     {
-        $pocedes = Pocedes::join('produits', 'produits.produit_id', 'pocedes.idproduit')->where('iddevis', $id)->get();
-        $complements = Complements::join('produits', 'produits.produit_id', 'complements.idproduit')->where('iddevis', $id)->get();
+        $data = Devis::join('clients', 'clients.client_id', 'devis.idclient')
+        ->join('users', 'users.id', 'devis.iduser')
+        ->where('devis_id', $id)
+        ->get()
+    ;
+        if ($data[0]->type_devis==2) {
+            $pocedes = Pocedes::where('iddevis', $data[0]->devis_id)->get();
+            $complements = Complements::where('iddevis', $data[0]->devis_id)->get();
+
+        }else {
+            $pocedes = Pocedes::join('produits', 'produits.produit_id', 'pocedes.idproduit')->where('iddevis', $data[0]->devis_id)->get();
+            $complements = Complements::join('produits', 'produits.produit_id', 'complements.idproduit')->where('iddevis', $data[0]->devis_id)->get();
+
+        }
+//        $pocedes = Pocedes::join('produits', 'produits.produit_id', 'pocedes.idproduit')->where('iddevis', $id)->get();
+//        $complements = Complements::join('produits', 'produits.produit_id', 'complements.idproduit')->where('iddevis', $id)->get();
         $montantTVA = 0;
         $montantTTC = 0;
 
@@ -255,11 +276,7 @@ class DevisController extends Controller
             $montantTVA += $montant;
 
         }
-        $data = Devis::join('clients', 'clients.client_id', 'devis.idclient')
-            ->join('users', 'users.id', 'devis.iduser')
-            ->where('devis_id', $id)
-            ->get()
-        ;
+
         if ($data[0]->tva_statut == 1) {
             $montantTTC = (($montantTVA * 19.25) / 100) + $montantTVA;
         }elseif ($data[0]->tva_statut == 2){
@@ -294,9 +311,19 @@ class DevisController extends Controller
         }
         $categories = Categories::whereIn('categorie_id',$ID )->orderBy('categories.created_at', 'desc')->get();
         $clients = Clients::orderBy('created_at', 'desc')->get();
-        $complements = Complements::join('produits', 'produits.produit_id', 'complements.idproduit')->where('iddevis', $id)->get();
-        $pocedes = Pocedes::join('produits', 'produits.produit_id', 'pocedes.idproduit')->where('iddevis', $id)->get();
-        return view('devis.edit',compact('data','categories','complements','pocedes','clients','produits'));
+        if ($data[0]->type_devis==2) {
+            $pocedes = Pocedes::where('iddevis', $data[0]->devis_id)->get();
+            $complements = Complements::where('iddevis', $data[0]->devis_id)->get();
+            return view('divers.proformat.edit',compact('data','categories','complements','pocedes','clients','produits'));
+
+        }else {
+            $pocedes = Pocedes::join('produits', 'produits.produit_id', 'pocedes.idproduit')->where('iddevis', $data[0]->devis_id)->get();
+            $complements = Complements::join('produits', 'produits.produit_id', 'complements.idproduit')->where('iddevis', $data[0]->devis_id)->get();
+            return view('devis.edit',compact('data','categories','complements','pocedes','clients','produits'));
+
+        }
+//        $complements = Complements::join('produits', 'produits.produit_id', 'complements.idproduit')->where('iddevis', $id)->get();
+//        $pocedes = Pocedes::join('produits', 'produits.produit_id', 'pocedes.idproduit')->where('iddevis', $id)->get();
     }
 
     public function edit(Request $request)
@@ -354,7 +381,7 @@ class DevisController extends Controller
                 if (isset($request->complement_id[$i]) && !empty($request->complement_id[$i])) {
                     $complement_id = $request->complement_id[$i];
                 }
-                Complements::updateOrCreate(['complement_id'=>$pocedeId],[
+                Complements::updateOrCreate(['complement_id'=>$complement_id],[
                     'iddevis' => $request->devis_id,
                     'quantite' => $request->quantite_com[$i],
                     'prix' => $request->prix_com[$i],
@@ -429,7 +456,14 @@ class DevisController extends Controller
             ->whereRaw('facture_id = (select max(`facture_id`) from factures)')
             ->get()
         ;
-        $pocedes = Pocedes::join('produits', 'produits.produit_id', 'pocedes.idproduit')->where('iddevis', $request->iddevis)->get();
+
+        if ($devis[0]->type_devis==2) {
+            $pocedes = Pocedes::where('iddevis', $devis->devis_id)->get();
+        }else {
+            $pocedes = Pocedes::join('produits', 'produits.produit_id', 'pocedes.idproduit')->where('iddevis', $request->iddevis)->get();
+
+        }
+//        $pocedes = Pocedes::join('produits', 'produits.produit_id', 'pocedes.idproduit')->where('iddevis', $request->iddevis)->get();
         $reference = 'F' . date('Y');
         if (count($lastNum) > 0) {
             $lastNum = $lastNum[0]->reference_fact;
@@ -461,6 +495,7 @@ class DevisController extends Controller
                 'tva_statut' => $devis[0]->tva_statut,
                 'iduser' => $iduser,
                 'iddevis' => $request->iddevis,
+                'type_fact' => $devis[0]->type_devis,
             ]);
             if ($save) {
                 foreach ($pocedes as $key=>$p) {
@@ -472,6 +507,9 @@ class DevisController extends Controller
                         'remise' => $p->remise,
                         'idproduit' => $p->idproduit,
                         'iduser' => $iduser,
+                        'reference_pf' => $p->reference_pocede,
+                        'titre_pf' => $p->titre_pocede,
+                        'description_pf' => $p->description_pocede,
                     ]);
                 }
             }
@@ -510,8 +548,15 @@ class DevisController extends Controller
 
         $mois = (new \App\Models\Month)->getFrenshMonth((int)$date);
         $categories = Categories::all();
-        $complements = Complements::join('produits', 'produits.produit_id', 'complements.idproduit')->where('iddevis', $id)->get();
-        $pocedes = Pocedes::join('produits', 'produits.produit_id', 'pocedes.idproduit')->where('iddevis', $id)->get();
+        if ($data[0]->type_devis==2) {
+            $pocedes = Pocedes::where('iddevis', $data[0]->devis_id)->get();
+            $complements = Complements::where('iddevis', $data[0]->devis_id)->get();
+
+        }else {
+            $complements = Complements::join('produits', 'produits.produit_id', 'complements.idproduit')->where('iddevis', $id)->get();
+            $pocedes = Pocedes::join('produits', 'produits.produit_id', 'pocedes.idproduit')->where('iddevis', $id)->get();
+        }
+
         $pdf = PDF::loadView('devis.print', compact('data', 'mois','categories', 'pocedes', 'complements'))->setPaper('a4', 'portrait')->setWarnings(false);
         return $pdf->stream($data[0]->reference_devis . '_' .date("d-m-Y H:i:s") . '.pdf');
     }

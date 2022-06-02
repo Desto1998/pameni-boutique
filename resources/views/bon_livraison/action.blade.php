@@ -59,7 +59,7 @@
                     </div>
                 </div>
                 <label class="nav-label"><span class="font-weight-bold">Objet: </span>{{ $value->objet }}</label>
-                <div class="for-produit table-responsive" style="max-height: 300px; overflow: auto">
+                <div class="for-produit table-responsive" style="max-height: 400px;">
                     <label class="nav-label h3 text-uppercase">Produits</label>
                     <table class="w-100 table table-bordered">
                         <thead class="bg-primary text-white text-center">
@@ -92,8 +92,8 @@
                             @endphp
                             <tr class="text-black  produit-input">
 
-                                <td>{{ $p->reference }}</td>
-                                <td>{{ $p->titre_produit }}&nbsp;&nbsp;&nbsp; <small>{{ $p->description_produit }}</small></td>
+                                <td>{{ $p->reference }}{{ $p->reference_pocede }}{{ $p->reference_pf }}</td>
+                                <td>{{ $p->titre_produit }}{{ $p->titre_pocede }}{{ $p->titre_pf }}&nbsp;&nbsp;&nbsp; <small>{{ $p->description_produit }}{{ $p->description_pocede }}{{ $p->description_pf }}</small></td>
                                 <td>{{ $p->quantite }}</td>
 {{--                                <td>{{ $p->prix }}</td>--}}
 {{--                                <td>{{ $p->remise }}%</td>--}}

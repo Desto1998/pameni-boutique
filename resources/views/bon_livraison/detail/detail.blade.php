@@ -12,7 +12,7 @@
     </div>
 </div>
 <label class="nav-label"><span class="font-weight-bold">Objet: </span>{{ $data[0]->objet }}</label>
-<div class="for-produit table-responsive" style="max-height: 300px; overflow: auto">
+<div class="for-produit table-responsive" style="max-height: 400px;">
     <label class="nav-label h3 text-uppercase">Produits</label>
     <table class="w-100 table table-bordered">
         <thead class="bg-primary text-white text-center">

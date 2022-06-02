@@ -76,7 +76,7 @@
                     </div>
                 </div>
                 <label class="nav-label"><span class="font-weight-bold">Objet: </span>{{ $value->objet }}</label>
-                <div class="for-produit table-responsive" style="max-height: 300px; overflow: auto">
+                <div class="for-produit table-responsive" style="max-height: 400px;">
                     <label class="nav-label h3 text-uppercase">Produits</label>
                     <table class="w-100 table table-bordered">
                         <thead class="bg-primary text-white text-center">
@@ -115,8 +115,8 @@
                                 @endphp
                                 <tr class="text-black  produit-input">
 
-                                <td>{{ $p->reference }}</td>
-                                <td>{{ $p->titre_produit }} &nbsp;&nbsp; <small>{{ $p->description_produit }}</small></td>
+                                <td>{{ $p->reference }}{{ $p->reference_pocede }}</td>
+                                <td>{{ $p->titre_produit }}{{ $p->titre_pocede }} &nbsp;&nbsp; <small>{{ $p->description_produit }}{{ $p->description_pocede }}</small></td>
                                 <td>{{ $p->quantite }}</td>
                                 <td>{{ $p->prix }}</td>
                                 <td>{{ $p->remise }}%</td>
@@ -174,7 +174,7 @@
                     </table>
                 </div>
                 <hr class="mt-2">
-                <div class="for-produit table-responsive" style="max-height: 300px; overflow: auto">
+                <div class="for-produit table-responsive" style="max-height: 400px;">
                     <label class="nav-label h3">OFFRE COMPLEMENTAIRE</label>
                     <table class="w-100 table  table-bordered">
                         <thead class="bg-primary text-white text-center">
@@ -210,8 +210,8 @@
                             @foreach($complements as $p)
                                 <tr class="text-black  produit-input">
 
-                                <td>{{ $p->reference }}</td>
-                                <td>{{ $p->titre_produit }}</td>
+                                <td>{{ $p->reference }}{{ $p->reference_com }}</td>
+                                <td>{{ $p->titre_produit }}{{ $p->titre_com }} &nbsp;&nbsp; <small>{{ $p->description_produit }}{{ $p->description_com }}</td>
                                 <td>{{ $p->quantite }}</td>
                                 <td>{{ $p->prix }}</td>
                                 <td>{{ $p->remise }}%</td>
