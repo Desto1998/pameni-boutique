@@ -54,7 +54,10 @@
             <tr class="text-black  produit-input">
 
                 <td>{{ $p->reference }}</td>
-                <td>{{ $p->titre_produit }} &nbsp;&nbsp; <small>{{ $p->description_produit }}</small></td>
+                <td>
+                    <strong>{{ $p->titre_produit }}{{ $p->titre_pocede }}</strong> <br> 
+                    <small>{{ $p->description_produit }}{{ $p->description_pocede }}</small>
+                </td>
                 <td>{{ $p->quantite }}</td>
                 <td>{{ $p->prix }}</td>
                 <td>{{ $p->remise }}%</td>
@@ -168,7 +171,10 @@
             <tr class="text-black  produit-input">
 
                 <td>{{ $p->reference }}</td>
-                <td>{{ $p->titre_produit }}</td>
+                <td>
+                    <strong>{{ $p->titre_produit }}{{ $p->titre_com }}</strong> <br> 
+                    <small>{{ $p->description_produit }}{{ $p->description_com }}</small>
+                </td>
                 <td>{{ $p->quantite }}</td>
                 <td>{{ $p->prix }}</td>
                 <td>{{ $p->remise }}%</td>

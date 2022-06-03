@@ -140,7 +140,7 @@
                                                        onchange="calculeHT({{ -$item->produit_f_id }})"
                                                        id="prix{{ -$item->produit_f_id }}" class="form-control prix"
                                                        required></td>
-                                            <td><input type="number" min="0" value="{{ $item->remise }}" name="remise[]"
+                                            <td><input type="number" min="0" max="100" value="{{ $item->remise }}" name="remise[]"
                                                        onchange="calculeHT({{ -$item->produit_f_id }})" step="any"
                                                        id="remise{{ -$item->produit_f_id }}"
                                                        class="form-control remise" required></td>
