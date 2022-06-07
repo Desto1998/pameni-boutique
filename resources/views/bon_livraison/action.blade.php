@@ -93,7 +93,11 @@
                             <tr class="text-black  produit-input">
 
                                 <td>{{ $p->reference }}{{ $p->reference_pocede }}{{ $p->reference_pf }}</td>
-                                <td>{{ $p->titre_produit }}{{ $p->titre_pocede }}{{ $p->titre_pf }}&nbsp;&nbsp;&nbsp; <small>{{ $p->description_produit }}{{ $p->description_pocede }}{{ $p->description_pf }}</small></td>
+                                <td>
+                                    <strong>{{ $p->titre_produit }}{{ $p->titre_pocede }}{{ $p->titre_pf }}</strong>
+                                    <br>
+                                    <small>{{ $p->description_produit }}{{ $p->description_pocede }}{{ $p->description_pf }}</small>
+                                </td>
                                 <td>{{ $p->quantite }}</td>
 {{--                                <td>{{ $p->prix }}</td>--}}
 {{--                                <td>{{ $p->remise }}%</td>--}}

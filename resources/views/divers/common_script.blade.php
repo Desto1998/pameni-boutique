@@ -303,9 +303,9 @@
                 var table = '<tr style="color: black" class="text-center" id="' + id + '">';
 
                 table += '<td style="border:1px solid #eaeaea; width: 200px"><input type="text" required name="titre[]" class="form-control" value="' + titre + '"></td>'
-                table += '<td style="border:1px solid #eaeaea; width: 60px"><input type="number" required name="quantite[]" class="form-control quantite " value="' + qte + '" onchange="calculeHT(' + totalInputs + ')" id="quantite' + totalInputs + '"></td>'
+                table += '<td style="border:1px solid #eaeaea; width: 60px"><input type="number" min="0" required name="quantite[]" class="form-control quantite " value="' + qte + '" onchange="calculeHT(' + totalInputs + ')" id="quantite' + totalInputs + '"></td>'
                 table += '<td style="border:1px solid #eaeaea;"><input type="number" name="prix[]" required class="form-control prix" value="' + prix + '" onchange="calculeHT(' + totalInputs + ')" id="prix' + totalInputs + '"></td>'
-                table += '<td style="border:1px solid #eaeaea; width: 100px"><input type="number" step="any" name="remise[]" class="form-control remise" value="' + remp + '" onchange="calculeHT(' + totalInputs + ')" id="remise' + totalInputs + '"></td>'
+                table += '<td style="border:1px solid #eaeaea; width: 100px"><input type="number" max="100" step="any" name="remise[]" class="form-control remise" value="' + remp + '" onchange="calculeHT(' + totalInputs + ')" id="remise' + totalInputs + '"></td>'
                 table += '<td style="border:1px solid #eaeaea; width: 200px"><textarea name="description[]" class="form-control">' + desc + '</textarea></td>'
                 table += '<td style="border:1px solid #eaeaea;"><input type="number" disabled name="totalHT[]" class="form-control totalHT" value="' + prix * qte + '" id="totalHT' + totalInputs + '"></td>'
                 table += '<td style="border:1px solid #eaeaea; width: 50px"><button type="button" class="btn btn-sm btn-danger" onclick="removeElelement(' + totalInputs + ')"><i class="fa fa-trash-o"></i></button></td>'
@@ -320,9 +320,9 @@
                 var table = '<tr style="color: black" class="text-center" id="' + id + '">';
 
                 table += '<td style="border:1px solid #eaeaea; width: 200px"><input type="text" required name="titre_com[]" class="form-control" value="' + titre + '"></td>'
-                table += '<td style="border:1px solid #eaeaea; width: 60px"><input type="number" required name="quantite_com[]" class="form-control quantite " value="' + qte + '" onchange="calculeComHT(' + totalInputs + ')" id="quantite_com' + totalInputs + '"></td>'
+                table += '<td style="border:1px solid #eaeaea; width: 60px"><input type="number" min="0" required name="quantite_com[]" class="form-control quantite " value="' + qte + '" onchange="calculeComHT(' + totalInputs + ')" id="quantite_com' + totalInputs + '"></td>'
                 table += '<td style="border:1px solid #eaeaea;"><input type="number" name="prix_com[]" required class="form-control prix_com" value="' + prix + '" onchange="calculeComHT(' + totalInputs + ')" id="prix_com' + totalInputs + '"></td>'
-                table += '<td style="border:1px solid #eaeaea; width: 100px"><input type="number" step="any" name="remise_com[]" class="form-control remise_com" value="' + remp + '" onchange="calculeComHT(' + totalInputs + ')" id="remise_com' + totalInputs + '"></td>'
+                table += '<td style="border:1px solid #eaeaea; width: 100px"><input type="number" min="0" max="100" step="any" name="remise_com[]" class="form-control remise_com" value="' + remp + '" onchange="calculeComHT(' + totalInputs + ')" id="remise_com' + totalInputs + '"></td>'
                 table += '<td style="border:1px solid #eaeaea; width: 200px"><textarea name="description_com[]" class="form-control">' + desc + '</textarea></td>'
                 table += '<td style="border:1px solid #eaeaea;"><input type="number" disabled name="total_comHT[]" class="form-control total_comHT" value="' + prix * qte + '" id="total_comHT' + totalInputs + '"></td>'
                 table += '<td style="border:1px solid #eaeaea; width: 50px"><button type="button" class="btn btn-sm btn-danger" onclick="removeElelementCom(' + totalInputs + ')"><i class="fa fa-trash-o"></i></button></td>'

@@ -236,7 +236,11 @@
             <tr class="text-black  produit-input">
 
                 <td>{{ $p->reference }}{{ $p->reference_pocede }}{{ $p->reference_pf }}</td>
-                <td><strong>{{ $p->titre_produit }}{{ $p->titre_pocede }}{{ $p->titre_pf }}</strong> <br><small>{{ $p->description_produit }}{{ $p->description_pocede }}{{ $p->description_pf }}</small></td>
+                <td>
+                    <strong>{{ $p->titre_produit }}{{ $p->titre_pocede }}{{ $p->titre_pf }} </strong><br>
+                     <small>{{ $p->description_produit }}{{ $p->description_pocede }}{{ $p->description_pf }}</small>
+
+                </td>
                 <td class="number">{{ $p->quantite }}</td>
                 {{--                <td class="number">{{ $p->prix }}</td>--}}
                 {{--                <td class="number">{{ $p->remise }}%</td>--}}
@@ -315,7 +319,7 @@
             $ImagePath = $_SERVER["DOCUMENT_ROOT"] . '/images/logo/cachet_gsc.png';
         @endphp
         {{--        <img class="cachet-img" style="float: right; width: 250px;height: 200px" src="{{ $ImagePath }}" alt="Cachet introuvable.">--}}
-        <img class="cachet-img" style="float: right; width: 200px; " src="{{ asset('images/logo/gsc_cachet.jpg') }}" alt="Cachet introuvable.">
+        <img class="cachet-img" style="float: right; width: 200px; height: 120px" src="{{ asset('images/logo/cachet_gsc2.png') }}" alt="Cachet introuvable.">
     </div>
 </div>
 

@@ -239,7 +239,11 @@
             <tr class="text-black  produit-input">
 
                 <td>{{ $p->reference }}</td>
-                <td>{{ $p->titre_produit }} &nbsp;&nbsp; <small>{{ $p->description_produit }}</small></td>
+                <td>
+                    <strong>{{ $p->titre_produit }}</strong>
+                     <br>
+                    <small>{{ $p->description_produit }}</small>
+                </td>
                 <td class="number">{{ $p->quantite }}</td>
                 <td class="number">{{ $p->prix }}</td>
                 <td class="number">{{ $p->remise }}%</td>

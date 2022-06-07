@@ -39,7 +39,7 @@
                                     <label for="quantite_produit">Quantité<span
                                             class="text-danger">*</span></label>
                                     <input type="number" name="quantite_produit"
-                                           value="" required min="1" id="quantite_produit"
+                                           value="" required min="0" id="quantite_produit"
                                            class="form-control">
                                 </div>
                                 <div class="form-group col-md-3">
