@@ -113,7 +113,9 @@
     .for-garentie tr td div .titre {
         font-weight: 700;
     }
-
+    .space-for-footer{
+        height: 205px;
+    }
     footer {
         position: fixed;
         bottom: -70px;
@@ -245,14 +247,14 @@
                     <small>{{ $p->description_produit }}</small>
                 </td>
                 <td class="number">{{ $p->quantite }}</td>
-                <td class="number">{{ $p->prix }}</td>
+                <td class="number">{{ number_format($p->prix/ $request->montant,2, '.', '')  }}</td>
                 <td class="number">{{ $p->remise }}%</td>
                 {{--                <td class="number">{{ $p->tva }}%</td>--}}
                 <td class="number">
-                    {{ number_format($HT,2, '.', '') }}
+                    {{ number_format($HT/ $request->montant,2, '.', '') }}
                 </td>
                 <td class="number">
-                    {{  number_format( $TTC, 2, '.', '')  }}
+                    {{  number_format( $TTC/ $request->montant, 2, '.', '')  }}
                 </td>
 
             </tr>
@@ -269,17 +271,24 @@
         <tr>
             <th colspan="5" rowspan="3"></th>
             <td class="total">Total HT</td>
-            <td class="number total">{{ number_format($montantHT,2,'.','') }}</td>
+            <td class="number total">{{ number_format($montantHT/ $request->montant,2,'.','') }}</td>
         </tr>
 
         <tr>
             <td class="total">TVA 19.25%</td>
             <td class="number total">
-                @if ($data[0]->tva_statut == 1)
-                    {{ number_format((($montantTVA * 19.25)/100)/ $request->montant,2,'.','')  }}
-                @else
-                    0
-                @endif
+{{--                @if ($data[0]->tva_statut == 1)--}}
+{{--                    {{ number_format((($montantTVA * 19.25)/100)/ $request->montant,2,'.','')  }}--}}
+{{--                @else--}}
+{{--                    0--}}
+{{--                @endif--}}
+                    @if ($data[0]->tva_statut == 1)
+                        {{  (new \App\Models\Taxe())->ApplyTVA($montantTVA/$request->montant) }}
+                    @elseif($data[0]->tva_statut == 2)
+                        {{  (new \App\Models\Taxe())->ApplyIS($montantTVA/$request->montant) }}
+                    @else
+                        0
+                    @endif
             </td>
 
         </tr>
@@ -366,7 +375,7 @@
         </td>
     </tr>
 </table>
-
+<div class="space-for-footer"></div>
 <footer class="for-footer">
     @php
         $ImagePath = $_SERVER["DOCUMENT_ROOT"] . '/images/logo/logo-partenaire-gsc.png';

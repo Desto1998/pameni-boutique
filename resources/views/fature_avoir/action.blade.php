@@ -1,57 +1,46 @@
 <div class="btn-group text-center">
-    <a type="button" title="Cliquez pour effectuer une action" class="dropdown" data-toggle="dropdown">
-        <strong>... </strong></a>
-    <ul class="dropdown-menu justify-content-center text-center" role="menu">
-        <li class="text-center">
+    <ul>
+        <li class="d-flex">
             <a href="javascript:void(0);" data-toggle="modal"
-               data-target="#facture-view-modal{{ $value->avoir_id }}" class="btn btn-success btn-sm ml-1"
+               data-target="#facture-view-modal{{ $value->avoir_id }}" class="btn btn-success btn-xs"
                title="Visualiser les details"><i
                     class="fa fa-eye"></i></a>
-            <a href="{{ route('avoir.print',['id' =>$value->avoir_id]) }}" target="_blank" class="btn btn-light btn-sm ml-1"
+            <a href="{{ route('avoir.print',['id' =>$value->avoir_id]) }}" target="_blank" class="btn btn-light btn-xs ml-1"
                title="Imprimer la facture"><i
                     class="fa fa-file-pdf-o"></i></a>
             @if (Auth::user()->is_admin==1 || $value->statut <=1)
                 @if(Auth::user()->is_admin==1 || Auth::user()->id===$value->id)
-                    <a href="{{ route('avoir.edit',['id' =>$value->avoir_id]) }}" class="btn btn-warning btn-sm ml-1"
+                    <a href="{{ route('avoir.edit',['id' =>$value->avoir_id]) }}" class="btn btn-warning btn-xs ml-1"
                        title="Editer la facture"><i
                             class="fa fa-edit"></i></a>
                 @endif
             @endif
 
         </li>
-
-        <li class="text-center mt-2">
-{{--            @if ($value->statut ==1)--}}
-{{--                @if ((new \App\Models\Factures())->montantTotal($value->avoir_id) - (new \App\Models\Factures())->Payer($value->facture_id)>0)--}}
-{{--                    <a href="javascript:void(0);" data-toggle="modal"--}}
-{{--                       data-target="#paiement-modal" onclick="getId({{ $value->avoir_id }})" class="btn btn-secondary btn-sm ml-1"--}}
-{{--                       title="Ajouter un paiement."><i--}}
-{{--                            class="fa fa-money"></i></a>--}}
-{{--                @endif--}}
-{{--            @endif--}}
+        <li class="d-flex mt-1">
             @if(Auth::user()->is_admin==1 || Auth::user()->id===$value->id )
                 @if($value->statut ==1)
-                    <a href="javascript:void(0);" onclick="recoverFun({{ $value->avoir_id }})" class="btn btn-secondary btn-sm ml-1"
+                    <a href="javascript:void(0);" onclick="recoverFun({{ $value->avoir_id }})" class="btn btn-secondary btn-xs"
                        title="Recouvrir le montant de la caisse"><i
                             class="fa fa-dollar"></i></a>
                 @endif
             @endif
             @if ($value->statut===0 && Auth::user()->is_admin==1)
                 <a href="javascript:void(0);" onclick="validerFun({{ $value->avoir_id }})"
-                   class="btn btn-primary btn-sm ml-1"
+                   class="btn btn-primary btn-xs"
                    title="Marquer comme validé"><i
                         class="fa fa-check"></i></a>
             @endif
 
             @if ($value->statut ===1 && Auth::user()->is_admin==1)
                 <a href="javascript:void(0);" onclick="bloquerFun({{ $value->avoir_id }})"
-                   class="btn btn-dark btn-sm ml-1"
+                   class="btn btn-dark btn-xs"
                    title="Marquer comme non validé."><i
                         class="fa fa-close"></i></a>
             @endif
 
             @if (Auth::user()->is_admin==1)
-                <button class="btn btn-danger btn-sm ml-1 "
+                <button class="btn btn-danger btn-xs ml-1 "
                         title="Supprimer cette facture" id="deletebtn{{ $value->avoir_id }}"
                         onclick="deleteFun({{ $value->avoir_id }})"><i
                         class="fa fa-trash"></i></button>

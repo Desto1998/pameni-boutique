@@ -108,7 +108,9 @@
     .for-garentie tr td div .titre {
         font-weight: 700;
     }
-
+    .space-for-footer{
+        height: 205px;
+    }
     footer {
         position: fixed;
         bottom: -70px;
@@ -239,7 +241,7 @@
 
                 <td>{{ $p->reference }}{{ $p->reference_avoir }}</td>
                 <td>
-                    <strong>{{ $p->titre_produit }}{{ $p->titre_avoir }}</strong> <br> 
+                    <strong>{{ $p->titre_produit }}{{ $p->titre_avoir }}</strong> <br>
                     <small>{{ $p->description_produit }}{{ $p->description_avoir }}</small>
                 </td>
                 <td class="number">{{ $p->quantite }}</td>
@@ -332,7 +334,7 @@
                 <small>
                     La garantie est valable dans le cas de défauts d'usine et ainsi que les pannes dues aux
                     défauts de fabrication.<br>
-                    Les équipements électroniques livrés par nos soins doivent etre sous protection électrique recommandé par le constructeur.
+                    Les équipements électroniques livrés par nos soins doivent être sous protection électrique recommandée par le constructeur.
                 </small>
             </div>
         </td>
@@ -340,17 +342,20 @@
         <td>
             <div>
                 <label class="titre">Note: </label><br>
-                <small>Toutes les fournitures restent la priopriété exclusive
+                <small>Toutes les fournitures restent la propriété exclusive
+
                     de Global Soft and Communication Sarl jusqu'au règlement intégral de la facture par le client.
-                    Nos Tarifs sont confidentiels. ne sont utilisable et adressés qu'a nos clients,
-                    lq diffusion de cette facture et contenu sont strictemment interdits.
+
+                    Nos Tarifs sont confidentiels ne sont utilisables et adressés qu'à nos clients,
+
+                    la diffusion de cette facture et son contenu sont strictement interdits.
 
                 </small>
             </div>
         </td>
     </tr>
 </table>
-
+<div class="space-for-footer"></div>
 <footer class="for-footer">
     @php
         $ImagePath = $_SERVER["DOCUMENT_ROOT"] . '/images/logo/logo-partenaire-gsc.png';

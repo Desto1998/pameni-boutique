@@ -113,7 +113,9 @@
     .for-garentie tr td div .titre {
         font-weight: 700;
     }
-
+    .space-for-footer{
+        height: 200px;
+    }
     footer {
         position: fixed;
         bottom: -70px;
@@ -439,7 +441,7 @@
         </table>
     </div>
 @endif
-
+<div class="space-for-footer"></div>
 <footer class="for-footer">
     @php
         $ImagePath = $_SERVER["DOCUMENT_ROOT"] . '/images/logo/logo-partenaire-gsc.png';

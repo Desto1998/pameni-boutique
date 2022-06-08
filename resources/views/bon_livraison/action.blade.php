@@ -1,36 +1,31 @@
-<div class="btn-group text-center">
-    <a type="button" title="Cliquez pour effectuer une action" class="dropdown" data-toggle="dropdown">
-        <strong>... </strong></a>
-    <ul class="dropdown-menu justify-content-center text-center" role="menu">
-        <li class="text-center">
-            <a href="javascript:void(0);" data-toggle="modal"
-               data-target="#facture-view-modal{{ $value->bonlivraison_id }}" class="btn btn-success btn-sm ml-1"
-               title="Visualiser les details"><i
-                    class="fa fa-eye"></i></a>
-            <a href="{{ route('bon.print',['id' =>$value->bonlivraison_id]) }}" target="_blank" class="btn btn-light btn-sm ml-1"
-               title="Imprimer"><i
-                    class="fa fa-file-pdf-o"></i></a>
-{{--            @if (Auth::user()->is_admin==1 || $value->statut <=1)--}}
-{{--                @if(Auth::user()->is_admin==1 || Auth::user()->id===$value->id)--}}
-{{--                    <a href="javascript:void(0);" class="btn btn-warning btn-sm ml-1"--}}
-{{--                       title="Editer" data-toggle="modal"--}}
-{{--                       data-target="#facture-view-modal{{ $value->bonlivraison_id }}"><i--}}
-{{--                            class="fa fa-edit"></i></a>--}}
-{{--                @endif--}}
-{{--            @endif--}}
+<div class="btn-group text-center d-flex">
+    <a href="javascript:void(0);" data-toggle="modal"
+       data-target="#facture-view-modal{{ $value->bonlivraison_id }}" class="btn btn-success btn-xs ml-1"
+       title="Visualiser les details"><i
+            class="fa fa-eye"></i></a>
+    <a href="{{ route('bon.print',['id' =>$value->bonlivraison_id]) }}" target="_blank" class="btn btn-light btn-xs ml-1"
+       title="Imprimer"><i
+            class="fa fa-file-pdf-o"></i></a>
+    @if (Auth::user()->is_admin==1)
+        <button class="btn btn-danger btn-xs ml-1 "
+                title="Supprimer ce bon de livraison" id="deletebtn{{ $value->bonlivraison_id }}"
+                onclick="deleteFun({{ $value->bonlivraison_id }})"><i
+                class="fa fa-trash"></i></button>
+    @endif
+{{--    <a type="button" title="Cliquez pour effectuer une action" class="dropdown" data-toggle="dropdown">--}}
 
-        </li>
+{{--        <strong>... </strong></a>--}}
+{{--    <ul class="dropdown-menu justify-content-center text-center" role="menu">--}}
+{{--        <li class="text-center">--}}
+{{--           --}}
 
-        <li class="text-center mt-2">
+{{--        </li>--}}
 
-            @if (Auth::user()->is_admin==1)
-                <button class="btn btn-danger btn-sm ml-1 "
-                        title="Supprimer ce bon de livraison" id="deletebtn{{ $value->bonlivraison_id }}"
-                        onclick="deleteFun({{ $value->bonlivraison_id }})"><i
-                        class="fa fa-trash"></i></button>
-            @endif
-        </li>
-    </ul>
+{{--        <li class="text-center mt-2">--}}
+
+{{--           --}}
+{{--        </li>--}}
+{{--    </ul>--}}
 </div>
 
 <div class="modal fade bd-example-modal-lg" data-backdrop="static" id="facture-view-modal{{ $value->bonlivraison_id }}" tabindex="-1" role="dialog"
