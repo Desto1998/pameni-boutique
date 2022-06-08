@@ -9,7 +9,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p>{{ Auth::user()->lastname.' '.Auth::user()->firstname }} &nbsp;&nbsp; Êtes-vous sûr de vouloir vous déconnecter ?</p>
+                <p class="text-black">{{ Auth::user()->lastname.' '.Auth::user()->firstname }} &nbsp;&nbsp; Êtes-vous sûr de vouloir vous déconnecter ?</p>
 
             </div>
             <div class="modal-footer">

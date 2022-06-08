@@ -171,7 +171,7 @@
                                     @csrf
                                     <a type="submit" class="dropdown-item" data-toggle="modal"
                                        data-target="#logoutModal">
-                                        <i class="icon-key"></i>
+                                        <i class="fa fa-lock"></i>
                                         <span class="ml-2">Se déconnecter </span>
                                     </a>
                                 </form>
