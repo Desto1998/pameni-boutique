@@ -373,7 +373,7 @@
         </td>
     </tr>
 </table>
-<div class="space-for-footer"></div>
+{{-- <div class="space-for-footer"></div> --}}
 <footer class="for-footer">
     @php
         $ImagePath = $_SERVER["DOCUMENT_ROOT"] . '/images/logo/logo-partenaire-gsc.png';
