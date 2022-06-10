@@ -446,6 +446,7 @@ class FactureController extends Controller
         $date = $date->format('m');
         $piece = Pieces::where('idfacture', $id)->get();
         $num_BC = isset($piece[0]) ? $piece[0]->ref : '';
+        $date_bc= $piece[0]->date_piece ??'';
         $mois = (new \App\Models\Month)->getFrenshMonth((int)$date);
         $categories = Categories::all();
         if ($data[0]->type_fact===2) {
@@ -454,7 +455,7 @@ class FactureController extends Controller
             $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $id)->get();
         }
 //        $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $id)->get();
-        $pdf = PDF::loadView('facture.print', compact('data', 'num_BC', 'mois', 'categories', 'pocedes'))->setPaper('a4', 'portrait')->setWarnings(false);
+        $pdf = PDF::loadView('facture.print', compact('data', 'date_bc','num_BC', 'mois', 'categories', 'pocedes'))->setPaper('a4', 'portrait')->setWarnings(false);
         return $pdf->stream($data[0]->reference_fact . '_' . date("d-m-Y H:i:s") . '.pdf');
     }
 

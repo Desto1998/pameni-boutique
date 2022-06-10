@@ -177,14 +177,14 @@
                     <strong>M06191391224E</strong><br>
                 </div>
 
-                <div class="devis-details" style="margin-top: 15px">
+                <div class="devis-details" style="margin-top: 0px">
                     <strong style="text-decoration: underline">Coordonnée bancaire</strong><br>
                     <strong>CCA-Bank</strong><br>
                     <strong>N° de compte: 00258112901</strong><br>
                     <strong>Code banque: 10039</strong><br>
                     <strong>Code Guichet: 10039</strong><br>
                     <strong>clé: 30</strong><br>
-                    <strong>BC N° {{$num_BC}} </strong><br>
+                    <strong>BC N°: {{$num_BC}} du: {{$date_bc}}</strong> 
                 </div>
 
             </td>
