@@ -109,7 +109,7 @@
         font-weight: 700;
     }
     .space-for-footer{
-        height: 205px;
+        height: 50px;
     }
     footer {
         position: fixed;
@@ -356,7 +356,7 @@
         </td>
     </tr>
 </table>
-{{-- <div class="space-for-footer"></div> --}}
+<div class="space-for-footer"></div>
 <footer class="for-footer">
     @php
         $ImagePath = $_SERVER["DOCUMENT_ROOT"] . '/images/logo/logo-partenaire-gsc.png';
