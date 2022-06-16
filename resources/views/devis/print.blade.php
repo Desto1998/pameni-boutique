@@ -114,7 +114,7 @@
         font-weight: 700;
     }
     .space-for-footer{
-        height: 200px;
+        height: 50px;
     }
     footer {
         position: fixed;
