@@ -458,7 +458,7 @@ class DevisController extends Controller
         ;
 
         if ($devis[0]->type_devis==2) {
-            $pocedes = Pocedes::where('iddevis', $devis->devis_id)->get();
+            $pocedes = Pocedes::where('iddevis', $request->iddevis)->get();
         }else {
             $pocedes = Pocedes::join('produits', 'produits.produit_id', 'pocedes.idproduit')->where('iddevis', $request->iddevis)->get();
 
