@@ -6,7 +6,7 @@ namespace App\Models;
 
 class Month
 {
- public function getFrenshMonth($mois){
+ public static function getFrenshMonth($mois){
 
      switch ($mois){
 

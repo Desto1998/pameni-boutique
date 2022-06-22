@@ -150,7 +150,7 @@
             <tr>
                 <td class="for-logo">
                     @php
-                        $ImagePath = $_SERVER["DOCUMENT_ROOT"] . '/images/logo/logo_gssc.png';
+                        $ImagePath = $_SERVER["DOCUMENT_ROOT"] . '/public/images/logo/logo_gssc.png';
                     @endphp
 
                     {{--                    <img src="{{ asset('images/logo/logo_gssc.png') }}" class="logo" alt="Logo not found">--}}
@@ -203,14 +203,14 @@
                     <td class="">{{ $value->raison }}</td>
                     <td class="center bold">{{ $value->nombre }}</td>
                     <td class="end bold">{{ $value->prix }} FCFA</td>
-                    <td class="end bold">{{ $value->prix * $value->nombre }} FCFA</td>
+                    <td class="end bold">{{ number_format($value->prix * $value->nombre, 2, '.', ' ') }} FCFA</td>
                 </tr>
             @endforeach
 
             </tbody>
         </table>
     </div>
-    <h2>Total: {{ $total }} FCFA</h2>
+    <h2>Total: {{ number_format($total, 2, '.', ' ') }} FCFA</h2>
 </div>
 
 <footer class="for-footer">

@@ -180,23 +180,39 @@
             <table>
                 <thead>
                 <tr>
-                    <th>Date</th>
+                    <th>Date </th>
                     <th>Client</th>
                     <th>Reference</th>
-                    <th>NB.Pro</th>
-                    <th>M.HT</th>
+{{--                    <th>NB.Pro</th>--}}
                     <th>M.TVA</th>
-                    <th>M.TTC</th>
+                    <th>M.TTC Doit</th>
+                    <th>M.TTC Avoir</th>
+                    <th>M.TTC Net</th>
                     <th>Par</th>
                 </tr>
 
                 </thead>
                 <tbody>
                 @php
-                    $total=0;
+                    $total = 0;
+                    $TMTVA = 0;
+                    $TMTTCD = 0;
+                    $TMTTCA = 0;
+                    $TTCNET = 0;
                 @endphp
                 @foreach($data as $key=>$value)
                     @if ((new \App\Models\Factures())->montantTotal($value->facture_id)-(new \App\Models\Factures())->Payer($value->facture_id)==0)
+                        @php
+                            $MTVA =(new \App\Models\Factures())->montantTotal($value->facture_id) - (new \App\Models\Factures())->montantHT($value->facture_id);
+                            $MTTCD = (new \App\Models\Factures())->montantTotal($value->facture_id);
+                            $MTTCA = (new \App\Models\Factures())->totalAvoir($value->facture_id);
+                            $TCNET = (new \App\Models\Factures())->montantTotal($value->facture_id) - (new \App\Models\Factures())->totalAvoir($value->facture_id);
+
+                            $TMTVA += $MTVA;
+                            $TMTTCD += $MTTCD;
+                            $TMTTCA += $MTTCA;
+                            $TTCNET += $TCNET;
+                        @endphp
                         <tr>
                             <td class="bold">{{ $value->date_fact}}</td>
                             <td class="" style="text-transform: uppercase">
@@ -207,22 +223,35 @@
                                 @endforeach
                             </td>
                             <td class="enter bold">{{ $value->reference_fact }}</td>
-                            <td class="center bold">{{ count((new \App\Models\Factures())->produitFacture($value->facture_id)) }}</td>
-                            <td class="end bold">{{ (new \App\Models\Factures())->montantHT($value->facture_id) }}</td>
-                            <td class="end bold">{{ (new \App\Models\Factures())->montantTotal($value->facture_id) - (new \App\Models\Factures())->montantHT($value->facture_id) }}</td>
-                            <td class="end bold">{{ (new \App\Models\Factures())->montantTotal($value->facture_id) }}</td>
-                            <td class="end bold">
+{{--                            <td class="center bold">{{ count((new \App\Models\Factures())->produitFacture($value->facture_id)) }}</td>--}}
+{{--                            <td class="end bold">{{ (new \App\Models\Factures())->montantHT($value->facture_id) }}</td>--}}
+                            <td class="end bold">{{ $MTVA }}</td>
+                            <td class="end bold">{{ $MTTCD }}</td>
+                            <td class="end bold">{{ $MTTCA }}</td>
+                            <td class="end bold">{{ $TCNET }}</td>
+                            <td class="center">
                                 @foreach($users as $cl)
                                     @if ($cl->id==$value->iduser)
-                                        {{ $cl->firstname }} {{ $cl->lastname }}
+{{--                                        {{ $cl->firstname }}--}}
+                                        {{ $cl->lastname }}
                                     @endif
                                 @endforeach
                             </td>
                         </tr>
+
                     @endif
 
                 @endforeach
+                <tr>
+                    <th colspan="2" rowspan="1"></th>
+                    <td class="end bold">Total &nbsp;&nbsp;&nbsp;</td>
+                    <td class="end bold">{{ number_format($TMTVA, 2, '.', ' ')  }}</td>
+                    <td class="end bold">{{ number_format($TMTTCD, 2, '.', ' ')  }}</td>
+                    <td class="end bold">{{ number_format($TMTTCA, 2, '.', ' ')  }}</td>
+                    <td class="end bold">{{ number_format($TTCNET, 2, '.', ' ')  }}</td>
+                    <th colspan="1" rowspan="1"></th>
 
+                </tr>
                 </tbody>
             </table>
         </div>

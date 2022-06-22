@@ -9,10 +9,12 @@ use App\Models\Factures;
 use App\Models\Pocedes;
 use App\Models\Produit_Factures;
 use App\Models\Produits;
+use App\Models\User;
 use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use phpDocumentor\Reflection\Types\AbstractList;
 use phpDocumentor\Reflection\Types\Array_;
 use Yajra\DataTables\DataTables;
@@ -39,39 +41,18 @@ class ProduitController extends Controller
 
             $product2 = [];
             $data = [];
-            $saleDevis = Pocedes::all();
-            $sateFacture = Produit_Factures::all();
-            $products = Produits::join('categories', 'categories.categorie_id', 'produits.idcategorie')
+//            $saleDevis = Pocedes::all();
+//            $sateFacture = Produit_Factures::all();
+//            $data = Produits::orderBy('produits.created_at', 'desc')
+//                ->select('categories.titre_cat','produits.*','users.*','categories.iduser as usercatid')
+            ;
+            $data = Produits::join('categories', 'categories.categorie_id', 'produits.idcategorie')
                 ->join('users', 'users.id', 'produits.iduser')
                 ->orderBy('produits.created_at', 'desc')
-                ->get();
-
+                ->select('categories.titre_cat','categories.categorie_id','produits.*','users.firstname')
+            ;
             $stock = 0;
 
-            foreach ($products as $key => $value) {
-                $product = new Array_();
-
-                foreach ($sateFacture as $sf) {
-                    if ($sf->idproduit == $value->produit_id) {
-                        $stock += $sf->quantite;
-                    }
-                }
-                $product->key = $key;
-                $product->produit_id = $value->produit_id;
-                $product->idcategorie = $value->idcategorie;
-                $product->reference = $value->reference;
-                $product->titre_produit = $value->titre_produit;
-                $product->quantite = $value->quantite_produit;
-                $product->prix = $value->prix_produit;
-                $product->description = $value->description_produit;
-                $product->categorie = $value->titre_cat;
-                $product->stock = $value->quantite_produit - $stock;
-                $product->username = $value->firstname;
-//                $product->action = $value->quantite_produit-$stock;
-
-                $data[$key] = $product;
-
-            }
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($value) {
@@ -81,8 +62,40 @@ class ProduitController extends Controller
 //                    $actionBtn = '<div class="d-flex"><a href="javascript:void(0)" class="edit btn btn-warning btn-sm"><i class="fa fa-edit"></i></a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm ml-1"  onclick="deleteFun()"><i class="fa fa-trash"></i></a></div>';
                     return (string)$action;
                 })
+                ->addColumn('stock', function ($value) {
+                    $sateFacture = Produit_Factures::all();
+                    $stock = 0;
+                    foreach ($sateFacture as $sf) {
+                        if ($sf->idproduit == $value->produit_id) {
+                            $stock += $sf->quantite;
+                        }
+                    }
+//                    $actionBtn = '<div class="d-flex"><a href="javascript:void(0)" class="edit btn btn-warning btn-sm"><i class="fa fa-edit"></i></a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm ml-1"  onclick="deleteFun()"><i class="fa fa-trash"></i></a></div>';
+                    return $value->quantite_produit - $stock;
+                })
+                ->addColumn('titre_cat', function ($value) {
+//                    $categories = Categories::where('categorie_id',$value->idcategorie)->get();
+//                    $actionBtn = '<div class="d-flex"><a href="javascript:void(0)" class="edit btn btn-warning btn-sm"><i class="fa fa-edit"></i></a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm ml-1"  onclick="deleteFun()"><i class="fa fa-trash"></i></a></div>';
+//                    str_limit($categories[0]->titre_cat, 30, '...');
+                    return $value->titre_cat;
+                })
+//                return str_limit($post->title, 30, '...');
+//                    })->implode('<br>');
+                ->addColumn('firstname', function ($value) {
+//                    $user = User::find($value->iduser);
+//                    $actionBtn = '<div class="d-flex"><a href="javascript:void(0)" class="edit btn btn-warning btn-sm"><i class="fa fa-edit"></i></a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm ml-1"  onclick="deleteFun()"><i class="fa fa-trash"></i></a></div>';
+                    return $value->firstname;
+                })
+                ->addColumn('description', function ($value) {
+                    return  Str::limit($value->description_produit , 20, '...');
+                })
 //                ->addColumn('action', 'produit_action')
+//                ->rawColumns(['action','titre_cat','firstname'])
                 ->rawColumns(['action'])
+                ->with('stock')
+                ->with('titre_cat')
+                ->with('firstname')
+                ->with('description')
                 ->make(true);
 //            $data=[];
 //            $data["data"]=$products;

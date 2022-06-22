@@ -64,7 +64,10 @@ class CategorieController extends Controller
     public function loadCategorie() {
         if (request()->ajax()) {
 
-            $data = Categories::join('users', 'users.id', 'categories.iduser')->get();
+            $data = Categories::join('users', 'users.id', 'categories.iduser')
+                ->select('categories.*', 'users.firstname')
+                ->orderBy('categories.created_at','desc')
+            ;
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function($value){

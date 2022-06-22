@@ -37,6 +37,7 @@ use App\Http\Middleware\MenuFournisseur;
 use App\Http\Middleware\MenuGestion;
 use App\Http\Middleware\MenuProduit;
 use App\Http\Middleware\MenuRapport;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -306,4 +307,11 @@ Route::prefix('dashboard')->group(function () {
 
     });
 
+});
+Route::get('clear', function() {
+Artisan::call('optimize');
+Artisan::call('cache:clear');
+Artisan::call('config:cache');
+Artisan::call('view:clear');
+return "Cleared!";
 });

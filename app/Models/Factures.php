@@ -27,7 +27,7 @@ class Factures extends Model
         'type_fact'
     ];
 
-    public function montantHT($id){
+    public static function montantHT($id){
         $pocedes = Produit_Factures::leftJoin('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $id)->get();
         $montantHT = 0;
 
@@ -41,7 +41,7 @@ class Factures extends Model
         return number_format($montantHT, 2, '.', '');
     }
 
-    public function montantTotal($id){
+    public static function montantTotal($id){
         $data = Factures::join('clients', 'clients.client_id', 'factures.idclient')
             ->join('users', 'users.id', 'factures.iduser')
             ->where('facture_id', $id)
@@ -75,13 +75,36 @@ class Factures extends Model
         return $montantTTC;
     }
 
-    public function Payer($id){
+    public static function Payer($id){
         $paye = Paiements::where('idfacture', $id)->sum('montant');
         return $paye;
     }
 
-    public function produitFacture($id){
+    public static function produitFacture($id){
         return Produit_Factures::leftJoin('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $id)->get();
     }
 
+    public static function totalAvoir($id)
+    {
+        $data = Avoirs::where('idfacture', $id)
+            ->get();
+        $total =0;
+        foreach ($data as $item){
+            $pocedes = (new ProduitAvoir)->produitFAvoir($item->avoir_id);
+            $montantHT = 0;
+            foreach ($pocedes as $p) {
+                $remise = ($p->prix * $p->quantite * $p->remise) / 100;
+                $montant = ($p->quantite * $p->prix) - $remise;
+                $montantHT += $montant;
+            }
+            if ($data[0]->tva_statut == 1) {
+                $total += (float)(new Taxe())->ApplyTVA($montantHT) + number_format($montantHT, 2, '.', '');
+            } elseif ($data[0]->tva_statut == 2) {
+                $total += (float)(new Taxe())->ApplyIS($montantHT) + number_format($montantHT, 2, '.', '');
+            }else {
+                $total +=  number_format($montantHT, 2, '.', '');
+            }
+        }
+        return $total;
+    }
 }

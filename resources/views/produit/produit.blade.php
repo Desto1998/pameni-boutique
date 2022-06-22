@@ -8,7 +8,7 @@
 {{--    <link href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet">--}}
 {{--    <link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet">--}}
  <!-- datatable css -->
-    <link href="{{ asset('datatable/css/jquery.dataTables.min.css') }}" rel="stylesheet">
+{{--    <link href="{{ asset('datatable/css/jquery.dataTables.min.css') }}" rel="stylesheet">--}}
 {{--    <link href="{{ asset('datatable/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet">--}}
 @stop
 @section('content')
@@ -136,7 +136,7 @@
                     </form>
                     <form method="post" action="{{ route('produit.store') }}" id="product-form-value">
 
-                        <div class="created-element" style="max-height: 400px;">
+                        <div class="created-element table-responsive" style="max-height: 400px;">
                             <table id="validated-element" style="width: 100%; border-collapse: collapse"
                                    class="table col-md-12 table-striped table-responsive">
                                 <thead class="bg-primary">
@@ -345,10 +345,11 @@
             $("#example").DataTable({
                 Processing: true,
                 searching: true,
+                serverSide: true,
                 LengthChange: true, // desactive le module liste deroulante(d'affichage du nombre de resultats par page)
                 iDisplayLength: 10, // Configure le nombre de resultats a afficher par page a 10
-                bRetrieve: true,
-                stateSave: true,
+                bRetrieve: false,
+                stateSave: false,
                 ajaxSetup:{
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -359,15 +360,15 @@
                 },
 
                 columns: [
-                    {data: 'DT_RowIndex',name:'DT_RowIndex'},
+                    {data: 'DT_RowIndex',name:'DT_RowIndex', orderable: true, searchable: false},
                     {data: 'reference',name:'reference'},
                     {data: 'titre_produit',name:'titre_produit'},
-                    {data: 'categorie',name:'categorie'},
-                    {data: 'quantite',name:'quantite'},
-                    {data: 'prix',name:'prix'},
-                    {data: 'stock',name:'stock'},
+                    {data: 'titre_cat',name:'titre_cat', orderable: true, searchable: true},
+                    {data: 'quantite_produit',name:'quantite_produit'},
+                    {data: 'prix_produit',name:'prix_produit'},
+                    {data: 'stock',name:'stock', orderable: true, searchable: true},
                     {data: 'description',name:'description'},
-                    {data: 'username',name:'username'},
+                    {data: 'firstname',name:'firstname', orderable: true, searchable: false},
                     {data: 'action', name: 'action', orderable: false, searchable: false},
 
                 ],
@@ -421,7 +422,7 @@
 
     </script>
     <script src="{{asset('template/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
-    <script src="{{asset('template/js/plugins-init/datatables.init.js')}}"></script>
+{{--    <script src="{{asset('template/js/plugins-init/datatables.init.js')}}"></script>--}}
 
     <script src="{{asset('template/vendor/sweetalert2/dist/sweetalert2.min.js')}}"></script>
     <!-- Selet search -->
@@ -436,7 +437,7 @@
 {{--    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>--}}
 {{--    <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>--}}
 
-{{--    <script src="{{ asset('datatable/js/jquery.dataTables.min.js') }}"></script>--}}
+    <script src="{{ asset('datatable/js/jquery.dataTables.min.js') }}"></script>
 {{--    <script src="{{ asset('datatable/js/bootstrap.min.js') }}"></script>--}}
 {{--    <script src="{{ asset('datatable/js/dataTables.bootstrap4.min.js') }}"></script>--}}
 

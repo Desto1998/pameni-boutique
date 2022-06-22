@@ -24,7 +24,7 @@ class ProduitAvoir extends Model
         'description_avoir',
     ];
 
-    public function produitFAvoir($id)
+    public static function produitFAvoir($id)
     {
         return ProduitAvoir::leftJoin('produits','produits.produit_id','produit_avoir.idproduit')->where('idavoir',$id)->get();
     }

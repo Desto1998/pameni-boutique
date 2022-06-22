@@ -24,7 +24,7 @@ class User_menus extends Model
      * position ou de code de chaque menu;
      * @return array @$data of int
      */
-    public function getUserMenu(){
+    public static function getUserMenu(){
 //        $iduser = Auth::user()->id;
 //        $menu = User_menus::join('menus','menus.menu_id','user_menus.idmenu')
 //            ->where('user_menus.userid',$iduser)

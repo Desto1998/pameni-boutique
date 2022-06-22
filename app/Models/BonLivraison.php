@@ -23,7 +23,7 @@ class BonLivraison extends Model
         'type_avoir',
     ];
 
-    public function getProduit($id){
+    public static function getProduit($id){
         $bon = BonLivraison::find($id);
         $produits = [];
         if (!empty($bon->iddevis)) {

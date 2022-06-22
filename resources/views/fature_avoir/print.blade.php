@@ -145,7 +145,7 @@
         <tr>
             <td class="for-logo">
                 @php
-                    $ImagePath = $_SERVER["DOCUMENT_ROOT"] . '/images/logo/logo_gssc.png';
+                    $ImagePath = $_SERVER["DOCUMENT_ROOT"] . '/public/images/logo/logo_gssc.png';
                 @endphp
 
                 {{--                    <img src="{{ asset('images/logo/logo_gssc.png') }}" class="logo" alt="Logo not found">--}}
@@ -285,7 +285,7 @@
         <tr>
             <td class="total">Net à déduire</td>
             <td class="number total">
-                {{ (new \App\Models\Avoirs())->montantTotal($data[0]->avoir_id) }}
+                {{ number_format( (new \App\Models\Avoirs())->montantTotal($data[0]->avoir_id),2,'.',' ') }}
             </td>
         </tr>
         </tbody>
@@ -358,10 +358,10 @@
 {{-- <div class="space-for-footer"></div> --}}
 <footer class="for-footer">
     @php
-        $ImagePath = $_SERVER["DOCUMENT_ROOT"] . '/images/logo/logo-partenaire-gsc.png';
+        $ImagePath = $_SERVER["DOCUMENT_ROOT"] . '/public/images/logo/logo-partenaire-gsc.png';
     @endphp
-    {{--        <img class="cachet-img" style="float: right; width: 250px;height: 200px" src="{{ $ImagePath }}" alt="Cachet introuvable.">--}}
-    <img style="width: 100%;" src="{{ asset('images/logo/logo-partenaire-gsc.png') }}" alt="logo Partenaire non trouvable">
+       <img style="width: 100%;" src="{{ $ImagePath }}" alt="Logo Partenaire non trouvable">
+    {{--     <img  src="{{ asset('images/logo/logo-partenaire-gsc.png') }}" alt="logo Partenaire non trouvable">--}}
     <table class="table-footer">
         <tr>
             <td>

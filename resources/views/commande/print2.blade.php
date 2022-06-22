@@ -150,7 +150,7 @@
         <tr>
             <td class="for-logo">
                 @php
-                    $ImagePath = $_SERVER["DOCUMENT_ROOT"] . '/images/logo/logo_gssc.png';
+                    $ImagePath = $_SERVER["DOCUMENT_ROOT"] . '/public/images/logo/logo_gssc.png';
                 @endphp
 
                 {{--                    <img src="{{ asset('images/logo/logo_gssc.png') }}" class="logo" alt="Logo not found">--}}
@@ -296,9 +296,11 @@
             <td class="total">Montant TTC</td>
             <td class="number total">
                 @if ($data[0]->tva_statut == 1)
-                    {{ number_format((( ($montantTVA * 19.25)/100)+$montantTVA)/ $request->montant,2,'.','') }}
+                    {{ number_format((( ($montantTVA * 19.25)/100)+$montantTVA)/ $request->montant,2,'.',' ') }}
+                @elseif ($data[0]->tva_statut == 2)
+                    {{ number_format((( ($montantTVA * 5.5)/100)+$montantTVA)/ $request->montant,2,'.',' ') }}
                 @else
-                    {{ number_format($montantTVA/ $request->montant ,2,'.','') }}
+                    {{ number_format($montantTVA/ $request->montant ,2,'.',' ') }}
                 @endif
             </td>
         </tr>
@@ -378,11 +380,11 @@
 {{-- <div class="space-for-footer"></div> --}}
 <footer class="for-footer">
     @php
-        $ImagePath = $_SERVER["DOCUMENT_ROOT"] . '/images/logo/logo-partenaire-gsc.png';
+        $ImagePath = $_SERVER["DOCUMENT_ROOT"] . '/public/images/logo/logo-partenaire-gsc.png';
     @endphp
-    {{--        <img class="cachet-img" style="float: right; width: 250px;height: 200px" src="{{ $ImagePath }}" alt="Cachet introuvable.">--}}
+          <img class="cachet-img" style="width: 100%;" src="{{ $ImagePath }}" alt="Logo Partenaire non trouvable">
     {{--    <img class="cachet-img" style="float: right; width: 200px; height: 120px" src="{{ asset('images/logo/cachet_gsc2.png') }}" alt="Cachet introuvable.">--}}
-    <img style="width: 100%;" src="{{ asset('images/logo/logo-partenaire-gsc.png') }}" alt="logo Partenaire non trouvable">
+   {{--   <img  src="{{ asset('images/logo/logo-partenaire-gsc.png') }}" alt="">--}}
     <table class="table-footer">
         <tr>
             <td>

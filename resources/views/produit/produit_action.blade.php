@@ -44,7 +44,7 @@
                                 class="text-danger">*</span></label>
                         <input type="number" name="quantite_produit" min="1"
                                id="quantite_produit{{ $value->produit_id }}"
-                               value="{{ $value->quantite }}" required
+                               value="{{ $value->quantite_produit }}" required
                                class="form-control">
                     </div>
                     <div class="form-group">
@@ -53,7 +53,7 @@
                                 class="text-danger">*</span></label>
                         <input type="number" name="prix_produit" min="0"
                                id="prix_produit{{ $value->produit_id }}" required
-                               value="{{ $value->prix }}" step="any"
+                               value="{{ $value->prix_produit }}" step="any"
                                class="form-control">
                     </div>
 
@@ -81,7 +81,7 @@
                         <textarea name="description_produit"
                                   id="description_produit{{ $value->produit_id }}"
                                   placeholder="Description"
-                                  class="form-control">{{ $value->description }}</textarea>
+                                  class="form-control">{{ $value->description_produit }}</textarea>
                     </div>
 
                     <div class="modal-footer">

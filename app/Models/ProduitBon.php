@@ -23,8 +23,8 @@ class ProduitBon extends Model
         'description_bon',
     ];
 
-    public function produitBon($id)
+    public static function produitBon($id)
     {
-        return $this::join('produits','produits.produit_id','produit_bon.idproduit')->where('idbonlivraison',$id)->get();
+        return ProduitBon::join('produits','produits.produit_id','produit_bon.idproduit')->where('idbonlivraison',$id)->get();
     }
 }

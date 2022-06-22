@@ -120,6 +120,7 @@
             $("#example").DataTable({
                 Processing: true,
                 searching: true,
+                serverSide: true,
                 LengthChange: true, // desactive le module liste deroulante(d'affichage du nombre de resultats par page)
                 iDisplayLength: 10, // Configure le nombre de resultats a afficher par page a 10
                 bRetrieve: true,
@@ -135,11 +136,11 @@
                 },
 
                 columns: [
-                    {data: 'DT_RowIndex',name:'DT_RowIndex'},
+                    {data: 'DT_RowIndex',name:'DT_RowIndex', orderable: true, searchable: false},
                     {data: 'code_cat',name:'code_cat'},
                     {data: 'titre_cat',name:'titre_cat'},
                     {data: 'description_cat',name:'description_cat'},
-                    {data: 'firstname',name:'firstname'},
+                    {data: 'firstname',name:'firstname', orderable: true, searchable: false},
                     {data: 'action', name: 'action', orderable: false, searchable: false},
 
                 ],

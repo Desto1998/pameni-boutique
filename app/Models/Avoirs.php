@@ -20,7 +20,7 @@ class Avoirs extends Model
         'iduser',
         'type_bon',
     ];
-    public function montantHT($id){
+    public static function montantHT($id){
         $pocedes = ProduitAvoir::where('idavoir', $id)->get();
         $montantHT = 0;
 
@@ -34,7 +34,7 @@ class Avoirs extends Model
         return number_format($montantHT, 2, '.', '');
     }
 
-    public function montantTotal($id){
+    public static function montantTotal($id){
         $data = Avoirs::where('avoir_id', $id)->get();
         $pocedes = ProduitAvoir::where('idavoir', $id)->get();
         $montantTVA = 0;
