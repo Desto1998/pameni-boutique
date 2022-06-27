@@ -76,7 +76,8 @@
                 LengthChange: true, // desactive le module liste deroulante(d'affichage du nombre de resultats par page)
                 iDisplayLength: 10, // Configure le nombre de resultats a afficher par page a 10
                 bRetrieve: true,
-                stateSave: true,
+                stateSave: false,
+                serverSide:true,
                 ajaxSetup:{
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -88,17 +89,17 @@
                 },
 
                 columns: [
-                    {data: 'DT_RowIndex',name:'DT_RowIndex'},
+                    {data: 'DT_RowIndex',name:'caisse_id'},
                     {data: 'date_depot',name:'date_depot'},
                     {data: 'raison',name:'raison'},
                     {data: 'montant',name:'montant'},
                     {data: 'description',name:'description'},
                     {data: 'type',name:'type'},
-                    {data: 'firstname',name:'firstname'},
+                    {data: 'firstname',name:'users.firstname'},
                     // {data: 'action', name: 'action', orderable: false, searchable: false},
 
                 ],
-                order: []
+                order: ['0','desc']
             })
         }
         // load table on page load

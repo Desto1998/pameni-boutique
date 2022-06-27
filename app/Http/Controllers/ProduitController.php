@@ -48,7 +48,7 @@ class ProduitController extends Controller
             ;
             $data = Produits::join('categories', 'categories.categorie_id', 'produits.idcategorie')
                 ->join('users', 'users.id', 'produits.iduser')
-                ->orderBy('produits.created_at', 'desc')
+//                ->orderBy('produits.created_at', 'desc')
                 ->select('categories.titre_cat','categories.categorie_id','produits.*','users.firstname')
             ;
             $stock = 0;
@@ -87,14 +87,14 @@ class ProduitController extends Controller
                     return $value->firstname;
                 })
                 ->addColumn('description', function ($value) {
-                    return  Str::limit($value->description_produit , 20, '...');
+                    return  Str::limit($value->description_produit , 50, '...');
                 })
 //                ->addColumn('action', 'produit_action')
 //                ->rawColumns(['action','titre_cat','firstname'])
                 ->rawColumns(['action'])
                 ->with('stock')
-                ->with('titre_cat')
-                ->with('firstname')
+//                ->with('titre_cat')
+//                ->with('firstname')
                 ->with('description')
                 ->make(true);
 //            $data=[];

@@ -360,19 +360,19 @@
                 },
 
                 columns: [
-                    {data: 'DT_RowIndex',name:'DT_RowIndex', orderable: true, searchable: false},
+                    {data: 'DT_RowIndex',name:'produit_id', orderable: true, searchable: true},
                     {data: 'reference',name:'reference'},
                     {data: 'titre_produit',name:'titre_produit'},
-                    {data: 'titre_cat',name:'titre_cat', orderable: true, searchable: true},
+                    {data: 'titre_cat',name:'categories.titre_cat', orderable: true, searchable: true},
                     {data: 'quantite_produit',name:'quantite_produit'},
                     {data: 'prix_produit',name:'prix_produit'},
-                    {data: 'stock',name:'stock', orderable: true, searchable: true},
-                    {data: 'description',name:'description'},
-                    {data: 'firstname',name:'firstname', orderable: true, searchable: false},
+                    {data: 'stock',name:'stock', orderable: true, searchable: false},
+                    {data: 'description',name:'description_produit'},
+                    {data: 'firstname',name:'users.firstname', orderable: true, searchable: false},
                     {data: 'action', name: 'action', orderable: false, searchable: false},
 
                 ],
-                order: []
+                order: ['0','desc']
             })
 
         }

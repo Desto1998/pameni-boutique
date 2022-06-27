@@ -66,7 +66,7 @@ class CategorieController extends Controller
 
             $data = Categories::join('users', 'users.id', 'categories.iduser')
                 ->select('categories.*', 'users.firstname')
-                ->orderBy('categories.created_at','desc')
+//                ->orderBy('categories.created_at','desc')
             ;
             return Datatables::of($data)
                 ->addIndexColumn()

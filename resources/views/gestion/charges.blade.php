@@ -112,15 +112,16 @@
             // }
         }
         function loadCharges(){
-            $('#example').dataTable().fnClearTable();
-            $('#example').dataTable().fnDestroy();
+            // $('#example').dataTable().fnClearTable();
+            // $('#example').dataTable().fnDestroy();
             $("#example").DataTable({
                 Processing: true,
                 searching: true,
+                serverSide: true,
                 LengthChange: true, // desactive le module liste deroulante(d'affichage du nombre de resultats par page)
                 iDisplayLength: 10, // Configure le nombre de resultats a afficher par page a 10
                 bRetrieve: true,
-                stateSave: true,
+                stateSave: false,
                 ajaxSetup:{
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -132,15 +133,15 @@
                 },
 
                 columns: [
-                    {data: 'DT_RowIndex',name:'DT_RowIndex'},
+                    {data: 'DT_RowIndex',name:'charge_id'},
                     {data: 'titre',name:'titre'},
                     {data: 'description',name:'description'},
-                    {data: 'type',name:'type'},
-                    {data: 'firstname',name:'firstname'},
+                    {data: 'type',name:'type_charge'},
+                    {data: 'firstname',name:'users.firstname'},
                     {data: 'action', name: 'action', orderable: false, searchable: false},
 
                 ],
-                order: []
+                order: ['0','desc']
             })
         }
         // load table on page load
@@ -250,6 +251,6 @@
     </script>
     <!-- Datatable -->
     <script src="{{asset('template/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
-    <script src="{{asset('template/js/plugins-init/datatables.init.js')}}"></script>
+{{--    <script src="{{asset('template/js/plugins-init/datatables.init.js')}}"></script>--}}
     <script src="{{asset('template/vendor/sweetalert2/dist/sweetalert2.min.js')}}"></script>
 @endsection

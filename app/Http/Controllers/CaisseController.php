@@ -19,7 +19,10 @@ class CaisseController extends Controller
     //
     public function loadCaisses(Request $request){
         if ($request->ajax()) {
-            $data =Caisses::join('users','users.id','caisses.iduser')->orderBy('caisses.created_at','desc' )->get();
+            $data =Caisses::join('users','users.id','caisses.iduser')
+//                ->orderBy('caisses.created_at','desc' )
+                    ->select('caisses.*','users.firstname')
+            ;
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('type', function($value){

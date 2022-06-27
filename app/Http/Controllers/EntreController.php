@@ -20,7 +20,10 @@ class EntreController extends Controller
     {
         if (request()->ajax()) {
 
-            $data = Entrees::join('users', 'users.id', 'entrees.iduser')->orderBy('entrees.created_at', 'desc')->get();
+            $data = Entrees::join('users', 'users.id', 'entrees.iduser')
+//                ->orderBy('entrees.created_at', 'desc')
+                ->select('entrees.*','users.firstname')
+            ;
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($value) {

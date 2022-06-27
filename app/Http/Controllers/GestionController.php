@@ -23,11 +23,30 @@ class GestionController extends Controller
         return view('gestion.charges');
     }
 
-    public function loadCharges(){
+    public function loadCharges(Request $request){
+//        dd($request);
         if (request()->ajax()) {
 
-            $data =Charges::join('users','users.id','charges.iduser')->orderBy('charges.created_at','desc' )->get();
+            $data =Charges::join('users','users.id','charges.iduser')
+                ->select('charges.*','users.firstname');
+            if ($request->filled('type_charge')) {
+                if ($request->filled('type_charge')=="Charge fixe") {
+                    $data =Charges::join('users','users.id','charges.iduser')
+                        ->orderBy('charges.created_at','desc' )
+                        ->where('charges.type_charge', 1)
+                        ->select('charges.*','users.firstname');
+//                    $query->where('charges.type_charge', '=', 1);
+//                    $type = '<span class="text-success"> Charge fixe</span>';
+                }else{
+                    $data =Charges::join('users','users.id','charges.iduser')
+                        ->orderBy('charges.created_at','desc' )
+                        ->where('charges.type_charge', 2)
+                        ->select('charges.*','users.firstname');
+                }
+//                    $query->where('address.state', 'LIKE', "%{$request->get('state')}%");
+            }
             return Datatables::of($data)
+
                 ->addIndexColumn()
                 ->addColumn('type', function($value){
                     $type = '<span class="text-primary">Charge variable</span>';
@@ -94,9 +113,11 @@ public function loadTaches(){
     if (request()->ajax()) {
 
         $data = Taches::join('charges','charges.charge_id','taches.idcharge')
-            ->join('users','users.id','charges.iduser')
-            ->orderBy('taches.date_ajout','desc' )
-            ->get();
+            ->join('users','users.id','taches.iduser')
+            ->select('taches.*','users.firstname','charges.titre')
+//            ->orderBy('taches.date_ajout','desc' )
+//            ->get()
+        ;
 
         return Datatables::of($data)
             ->addIndexColumn()
@@ -122,7 +143,9 @@ public function loadTaches(){
                 $total = $value->nombre*$value->prix;
                 return $total;
             })
-            ->rawColumns(['action','total','statut'])
+            ->with('total')
+//            ->with('statut')
+            ->rawColumns(['action','statut'])
             ->make(true);
 
     }

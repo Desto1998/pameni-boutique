@@ -126,7 +126,8 @@
                 LengthChange: true, // desactive le module liste deroulante(d'affichage du nombre de resultats par page)
                 iDisplayLength: 10, // Configure le nombre de resultats a afficher par page a 10
                 bRetrieve: true,
-                stateSave: true,
+                stateSave: false,
+                serverSide: true,
                 ajaxSetup: {
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -138,19 +139,19 @@
                 },
 
                 columns: [
-                    {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                    {data: 'DT_RowIndex', name: 'tache_id'},
                     {data: 'date_debut', name: 'date_debut'},
                     {data: 'raison', name: 'raison'},
-                    {data: 'titre', name: 'titre'},
+                    {data: 'titre', name: 'charges.titre'},
                     {data: 'nombre', name: 'nombre'},
                     {data: 'prix', name: 'prix'},
-                    {data: 'total', name: 'total'},
-                    {data: 'statut', name: 'statut'},
-                    {data: 'firstname', name: 'firstname'},
+                    {data: 'total', name: 'total' ,orderable: true, searchable: false},
+                    {data: 'statut', name: 'statut', orderable: true, searchable: true},
+                    {data: 'firstname', name: 'users.firstname'},
                     {data: 'action', name: 'action', orderable: false, searchable: false},
 
                 ],
-                order: []
+                order: ['0','desc']
             })
         }
 
