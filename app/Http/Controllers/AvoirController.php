@@ -135,8 +135,8 @@ class AvoirController extends Controller
 
                 return (new Avoirs())->montantTotal($value->avoir_id);
 
-            })
-            ->rawColumns(['action', 'montantHT', 'montantTTC', 'statut', 'facture'])
+            })->with('client')->with('montantHT')->with('montantTTC')
+            ->rawColumns(['action', 'statut', 'facture'])
             ->make(true);
     }
 

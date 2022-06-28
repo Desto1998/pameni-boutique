@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
+use App\Http\Controllers\NotificationController;
 use App\Models\User_menus;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -59,12 +60,13 @@ class LoginController extends Controller
             }
             session()->regenerate();
             session(['USERMENU' => $data]);
+            session(['NOTIFY' => (new NotificationController())->makeNotification()]);
             return back();
 //            dd($user);
 
         }else{
 
-            return back()->with('error','Adresse email ou mot de passe incorrect.');
+            return back()->with('Error','Adresse email ou mot de passe incorrect.');
 
         }
 

@@ -29,7 +29,10 @@ class ClientController extends Controller
         if (request()->ajax()) {
 
             $data = Clients::leftJoin('pays','pays.pays_id','clients.idpays')
-            ->join('users', 'users.id', 'clients.iduser')->orderBy('clients.date_ajout','desc')->get();
+            ->join('users', 'users.id', 'clients.iduser')
+                ->select('clients.*','users.firstname','pays.nom_pays')
+//                ->orderBy('clients.date_ajout','desc')->get()
+        ;
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function($row){
@@ -47,7 +50,9 @@ class ClientController extends Controller
                     $phone = $row->phone_1_client.' / '.$row->phone_2_client;
                     return $phone;
                 })
-                ->rawColumns(['action','nom','phone'])
+                ->with('phone')
+                ->with('nom')
+                ->rawColumns(['action'])
                 ->make(true);
 
         }

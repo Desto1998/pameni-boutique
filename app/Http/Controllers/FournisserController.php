@@ -26,7 +26,8 @@ class FournisserController extends Controller
         if (request()->ajax()) {
             $data = Fournisseurs::leftJoin('pays', 'pays.pays_id', 'fournisseurs.idpays')
                 ->Join('users', 'users.id', 'fournisseurs.iduser')
-                ->orderBy('fournisseurs.date_ajout_fr', 'desc')
+//                ->orderBy('fournisseurs.date_ajout_fr', 'desc')
+                ->select('fournisseurs.*','users.firstname','pays.nom_pays')
                 ->get();
             return Datatables::of($data)
                 ->addIndexColumn()
@@ -48,7 +49,9 @@ class FournisserController extends Controller
                     $phone = $row->phone_1_fr . ' / ' . $row->phone_2_fr;
                     return $phone;
                 })
-                ->rawColumns(['action', 'nom', 'phone'])
+                ->with('phone')
+                ->with('nom')
+                ->rawColumns(['action'])
                 ->make(true);
 
         }

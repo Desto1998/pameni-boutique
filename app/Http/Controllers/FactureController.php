@@ -23,6 +23,7 @@ use http\Env\Response;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use PDF;
 use PhpParser\Node\Expr\Array_;
 use Yajra\DataTables\DataTables;
@@ -48,14 +49,14 @@ class FactureController extends Controller
         if ($id <= 0) {
             $data = Factures::join('clients', 'clients.client_id', 'factures.idclient')
                 ->join('users', 'users.id', 'factures.iduser')
-                ->orderBy('factures.created_at', 'desc')
-                ->get();
+                ->select('factures.*', 'users.firstname','clients.nom_client','clients.prenom_client','clients.raison_s_client')
+            ;
         } else {
             $data = Factures::join('clients', 'clients.client_id', 'factures.idclient')
                 ->join('users', 'users.id', 'factures.iduser')
                 ->where('factures.idclient', $id)
-                ->orderBy('factures.created_at', 'desc')
-                ->get();
+                ->select('factures.*', 'users.firstname','clients.nom_client','clients.prenom_client','clients.raison_s_client')
+            ;
         }
 
 //        $product  = new Array_();
@@ -63,7 +64,7 @@ class FactureController extends Controller
             ->addIndexColumn()
             //Ajoute de la colonne action
             ->addColumn('action', function ($value) {
-                $categories = Categories::all();
+//                $categories = Categories::all();
                 $paiements = Paiements::where('idfacture', $value->facture_id)->get();
                 if ($value->type_fact===2) {
                     $pocedes = Produit_Factures::where('idfacture', $value->facture_id)->get();
@@ -72,7 +73,7 @@ class FactureController extends Controller
                     $pocedes = Produit_Factures::join('produits', 'produits.produit_id', 'produit_factures.idproduit')->where('idfacture', $value->facture_id)->get();
 
                 }
-                $action = view('facture.action', compact('value', 'categories', 'pocedes', 'paiements'));
+                $action = view('facture.action', compact('value',  'pocedes', 'paiements'));
 //                    $actionBtn = '<div class="d-flex"><a href="javascript:void(0)" class="edit btn btn-warning btn-sm"><i class="fa fa-edit"></i></a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm ml-1"  onclick="deleteFun()"><i class="fa fa-trash"></i></a></div>';
                 return (string)$action;
             })
@@ -124,7 +125,10 @@ class FactureController extends Controller
                 return (new Factures())->montantTotal($value->facture_id);
 
             })
-            ->rawColumns(['action', 'montantHT', 'montantTTC', 'statut', 'paye'])
+            ->addColumn('objet_limit', function ($value) {
+                return  Str::limit($value->objet , 60, '...');
+            })->with('montantHT')->with('montantTTC')->with('objet_limit')
+            ->rawColumns(['action', 'statut', 'paye'])
             ->make(true);
     }
 

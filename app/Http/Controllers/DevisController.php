@@ -22,6 +22,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
 use DateTime;
+use Illuminate\Support\Str;
 use PDF;
 use phpDocumentor\Reflection\Types\AbstractList;
 use phpDocumentor\Reflection\Types\Array_;
@@ -49,14 +50,16 @@ class DevisController extends Controller
         if ($id<=0) {
             $data = Devis::join('clients', 'clients.client_id', 'devis.idclient')
                 ->join('users', 'users.id', 'devis.iduser')
-                ->orderBy('devis.created_at', 'desc')
-                ->get();
+                ->select('devis.*', 'users.firstname','clients.nom_client','clients.prenom_client','clients.raison_s_client')
+//                ->get()
+            ;
         }else{
             $data = Devis::join('clients', 'clients.client_id', 'devis.idclient')
                 ->join('users', 'users.id', 'devis.iduser')
                 ->where('devis.idclient',$id)
-                ->orderBy('devis.created_at', 'desc')
-                ->get();
+                ->select('devis.*', 'users.firstname','clients.nom_client','clients.prenom_client','clients.raison_s_client')
+//                ->get()
+            ;
         }
 
 
@@ -65,7 +68,7 @@ class DevisController extends Controller
             ->addIndexColumn()
             //Ajoute de la colonne action
             ->addColumn('action', function ($value) {
-                $categories = Categories::all();
+//                $categories = Categories::all();
                 if ($value->type_devis==2) {
                     $pocedes = Pocedes::where('iddevis', $value->devis_id)->get();
                     $complements = Complements::where('iddevis', $value->devis_id)->get();
@@ -75,7 +78,7 @@ class DevisController extends Controller
                     $complements = Complements::join('produits', 'produits.produit_id', 'complements.idproduit')->where('iddevis', $value->devis_id)->get();
 
                 }
-                $action = view('devis.action', compact('value', 'categories', 'pocedes', 'complements'));
+                $action = view('devis.action', compact('value', 'pocedes', 'complements'));
 
 //                    $actionBtn = '<div class="d-flex"><a href="javascript:void(0)" class="edit btn btn-warning btn-sm"><i class="fa fa-edit"></i></a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm ml-1"  onclick="deleteFun()"><i class="fa fa-trash"></i></a></div>';
                 return (string)$action;
@@ -137,7 +140,10 @@ class DevisController extends Controller
                 return number_format($montantTTC, 2, '.', '');
 
             })
-            ->rawColumns(['action', 'montantHT', 'montantTTC', 'statut'])
+            ->addColumn('objet_limit', function ($value) {
+                return  Str::limit($value->objet , 60, '...');
+            })->with('montantHT')->with('montantTTC')->with('objet_limit')
+            ->rawColumns(['action','statut'])
             ->make(true);
     }
 

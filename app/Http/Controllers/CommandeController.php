@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use DateTime;
+use Illuminate\Support\Str;
 use PDF;
 use Yajra\DataTables\DataTables;
 
@@ -41,13 +42,13 @@ class CommandeController extends Controller
             $data = Commandes::join('fournisseurs', 'fournisseurs.fournisseur_id', 'commandes.idfournisseur')
                 ->join('users', 'users.id', 'commandes.iduser')
                 ->where('commandes.idfournisseur',$id)
-                ->orderBy('commandes.created_at', 'desc')
-                ->get();
+                ->select('commandes.*', 'users.firstname','fournisseurs.nom_fr','fournisseurs.prenom_fr','fournisseurs.raison_s_fr')
+            ;
         }else{
             $data = Commandes::join('fournisseurs', 'fournisseurs.fournisseur_id', 'commandes.idfournisseur')
                 ->join('users', 'users.id', 'commandes.iduser')
-                ->orderBy('commandes.created_at', 'desc')
-                ->get();
+                ->select('commandes.*', 'users.firstname','fournisseurs.nom_fr','fournisseurs.prenom_fr','fournisseurs.raison_s_fr')
+            ;
         }
 
 //        $product  = new Array_();
@@ -55,10 +56,10 @@ class CommandeController extends Controller
             ->addIndexColumn()
             //Ajoute de la colonne action
             ->addColumn('action', function ($value) {
-                $categories = Categories::all();
+//                $categories = Categories::all();
 //                $paiements = Paiements::where('idfacture', $value->facture_id)->get();
                 $pocedes = Comportes::join('produits', 'produits.produit_id', 'comportes.idproduit')->where('idcommande', $value->commande_id)->get();
-                $action = view('commande.action', compact('value', 'categories', 'pocedes'));
+                $action = view('commande.action', compact('value', 'pocedes'));
 //                    $actionBtn = '<div class="d-flex"><a href="javascript:void(0)" class="edit btn btn-warning btn-sm"><i class="fa fa-edit"></i></a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm ml-1"  onclick="deleteFun()"><i class="fa fa-trash"></i></a></div>';
                 return (string)$action;
             })
@@ -117,8 +118,10 @@ class CommandeController extends Controller
 
                 return number_format($montantTTC, 2, '.', '');
 
-            })
-            ->rawColumns(['action', 'montantHT', 'montantTTC', 'statut'])
+            })->addColumn('objet_limit', function ($value) {
+                return  Str::limit($value->objet , 60, '...');
+            })->with('montantHT')->with('montantTTC')->with('objet_limit')
+            ->rawColumns(['action', 'statut'])
             ->make(true);
     }
 

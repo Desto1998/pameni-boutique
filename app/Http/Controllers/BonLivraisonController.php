@@ -19,6 +19,7 @@ use DateTime;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use PDF;
 use Yajra\DataTables\DataTables;
 
@@ -72,10 +73,9 @@ class BonLivraisonController extends Controller
                         ->where('factures.facture_id',$value->idfacture)
                         ->get();
                 }
-                $categories = Categories::all();
                 $paiements = Paiements::where('idfacture', $value->facture_id)->get();
                 $pocedes = (new BonLivraison())->getProduit($value->bonlivraison_id);
-                $action = view('bon_livraison.action', compact('value', 'categories', 'pocedes', 'paiements','devis'));
+                $action = view('bon_livraison.action', compact('value', 'pocedes', 'paiements','devis'));
 //                    $actionBtn = '<div class="d-flex"><a href="javascript:void(0)" class="edit btn btn-warning btn-sm"><i class="fa fa-edit"></i></a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm ml-1"  onclick="deleteFun()"><i class="fa fa-trash"></i></a></div>';
                 return (string)$action;
             })
@@ -128,7 +128,9 @@ class BonLivraisonController extends Controller
                 }
                 return $statut;
             })
-
+            ->addColumn('objet_limit', function ($value) {
+                return  Str::limit($value->objet , 60, '...');
+            })->with('client')
             ->rawColumns(['action', 'statut','client','devis'])
             ->make(true)
         ;

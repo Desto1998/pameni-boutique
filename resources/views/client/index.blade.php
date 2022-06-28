@@ -153,7 +153,8 @@
                 LengthChange: true, // desactive le module liste deroulante(d'affichage du nombre de resultats par page)
                 iDisplayLength: 10, // Configure le nombre de resultats a afficher par page a 10
                 bRetrieve: true,
-                stateSave: true,
+                stateSave: false,
+                serverSide: true,
                 ajaxSetup:{
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -164,9 +165,9 @@
 
                 },
                 columns: [
-                    {data: 'DT_RowIndex',name:'DT_RowIndex'},
-                    {data: 'nom',name:'nom'},
-                    {data: 'phone',name:'phone'},
+                    {data: 'DT_RowIndex',name:'client_id'},
+                    {data: 'nom',name:'raison_s_client'},
+                    {data: 'phone',name:'phone_1_client'},
                     {data: 'email_client',name:'email_client'},
                     // {data: 'nom_pays',name:'nom_pays'},
                     {data: 'ville_client',name:'ville_client'},
@@ -175,7 +176,7 @@
                     {data: 'action', name: 'action', orderable: false, searchable: false},
 
                 ],
-                order: []
+                order: ['0','desc']
             })
         }
         $(document).ready(function () {

@@ -131,7 +131,8 @@
                 LengthChange: true, // desactive le module liste deroulante(d'affichage du nombre de resultats par page)
                 iDisplayLength: 10, // Configure le nombre de resultats a afficher par page a 10
                 bRetrieve: true,
-                stateSave: true,
+                stateSave: false,
+                serverSide: true,
                 ajaxSetup:{
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -142,19 +143,19 @@
                 },
 
                 columns: [
-                    {data: 'DT_RowIndex',name:'DT_RowIndex'},
+                    {data: 'DT_RowIndex',name:'devis_id'},
                     {data: 'reference_devis',name:'reference_devis'},
-                    {data: 'client',name:'client'},
-                    {data: 'objet',name:'objet'},
+                    {data: 'client',name:'clients.raison_s_client'},
+                    {data: 'objet_limit',name:'objet'},
                     {data: 'date_devis',name:'date_devis'},
                     {data: 'statut',name:'statut'},
                     {data: 'montantHT',name:'montantHT'},
                     {data: 'montantTTC',name:'montantTTC'},
-                    {data: 'firstname',name:'firstname'},
+                    {data: 'firstname',name:'users.firstname'},
                     {data: 'action', name: 'action', orderable: false, searchable: false},
 
                 ],
-                order: []
+                order: ['0','desc']
             })
 
         }
