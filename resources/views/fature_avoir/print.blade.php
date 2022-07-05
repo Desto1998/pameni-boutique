@@ -173,8 +173,8 @@
                 <div class="devis-details">
                     <strong style="text-decoration: underline">FACTURE AVOIR</strong><br>
                     <strong>{{ $data[0]->reference_avoir }}</strong><br>
-                    <strong>Contibibuable n°</strong><br>
-                    <strong>M06191391224E</strong><br>
+                    <strong>Contibibuable N°: </strong><strong>M06191391224E</strong><br>
+                    <strong>NC: RC/DLA/2019/B/2977</strong><br>
                 </div>
 
                 <div class="devis-details" style="margin-top: 15px">
@@ -215,7 +215,7 @@
             <th>Remise</th>
             {{--            <th>TVA</th>--}}
             <th>M. HT(FCFA)</th>
-            <th>M. TTC</th>
+            <th style="min-width: 80px">M. TTC</th>
             {{--                            <th><i class="fa fa-trash"></i></th>--}}
         </tr>
         </thead>

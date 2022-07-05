@@ -9,7 +9,7 @@
                title="Imprimer la proformat"><i
                     class="fa fa-file-pdf-o"></i></a>
             @if (Auth::user()->is_admin==1 || $value->statut <=1)
-                @if(Auth::user()->is_admin==1 || Auth::user()->id===$value->id)
+                @if(Auth::user()->is_admin==1 || Auth::user()->id===$value->iduser)
                     <a href="{{ route('devis.edit',['id' =>$value->devis_id]) }}" class="btn btn-warning btn-xs ml-1"
                        title="Editer le devis"><i
                             class="fa fa-edit"></i></a>

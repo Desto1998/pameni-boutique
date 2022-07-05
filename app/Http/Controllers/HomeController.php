@@ -14,6 +14,7 @@ use App\Models\Taches;
 use DateInterval;
 use DateTime;
 use Illuminate\Http\Request;
+use Mailjet\Response;
 
 class HomeController extends Controller
 {
@@ -39,9 +40,9 @@ class HomeController extends Controller
         $sortie = (new CaisseController())->sortie(date('m'));
         $clients = Clients::all();
         $fournisseurs = Fournisseurs::all();
-        $devis = Devis::all();
-        $factures =Factures::all();
-        $commandes= Commandes::all();
+//        $devis = Devis::all();
+//        $factures =Factures::all();
+//        $commandes= Commandes::all();
         $devisNV = Devis::where('statut',0)->get();
         $commandesNV = Commandes::where('statut',0)->get();
         $factureNV = Factures::where('statut',0)->get();
@@ -84,6 +85,31 @@ class HomeController extends Controller
     public function text()
     {
         return redirect(route('home'))->with('warning','Un bon test reuissi toujours!');
+    }
+
+    public function loadDepences(Request $request){
+        if ($request->ajax()) {
+            $request->validate([
+                'date' => 'required'
+            ]);
+            $data=[];
+            $date ='';
+            $date .= $request->date[5];
+            $date .= $request->date[6];
+//            $date = new DateTime($date);
+//            $date->sub(new DateInterval("P1D"));
+//                dd($date);
+//            $date = date("m", strtotime($date->format('m')));
+//            $solde = (new CaisseController())->soldeCaisse();
+            $entre = (new CaisseController())->entree((Int)$date);
+            $sortie = (new CaisseController())->sortie((Int)$date);
+            $taches = Taches::whereMonth('created_at',(Int)$date )->get();
+            $data['entre'] = $entre;
+            $data['sortie'] = $sortie;
+            $data['tache'] = count($taches);
+            $data['mois'] = $date;
+            return Response()->json($data);
+        }
     }
 
 }

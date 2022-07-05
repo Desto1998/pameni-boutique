@@ -181,8 +181,8 @@
                 <div class="devis-details">
                     <strong style="text-decoration: underline">BON DE LIVRAISON</strong><br>
                     <strong>{{ $data[0]->reference_bl }}</strong><br>
-                    <strong>Contibibuable n°</strong><br>
-                    <strong>M06191391224E</strong><br>
+                    <strong>Contibibuable N°: </strong><strong>M06191391224E</strong><br>
+                    <strong>NC: RC/DLA/2019/B/2977</strong><br>
                 </div>
 
             </td>

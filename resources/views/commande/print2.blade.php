@@ -180,8 +180,8 @@
                 <div class="devis-details">
                     <strong style="text-decoration: underline">BON DE COMMANDE</strong><br>
                     <strong>{{ $data[0]->reference_commande }}</strong><br>
-                    <strong>Contibibuable N°</strong><br>
-                    <strong>M06191391224E</strong><br>
+                    <strong>Contibibuable N°: </strong><strong>M06191391224E</strong><br>
+                    <strong>NC: RC/DLA/2019/B/2977</strong><br>
                     <strong>Devis/Proformat N°: @isset($piece[0]) {{ $piece[0]->ref }} du: {{ $piece[0]->date_piece }}@endisset</strong><br>
                     <strong>Délai de livraison: {{ $data[0]->delai_liv }}</strong><br>
                 </div>
@@ -215,7 +215,7 @@
             <th>Remise</th>
             {{--            <th>TVA</th>--}}
             <th>M. HT({{ $request->currency }})</th>
-            <th>M. TTC</th>
+            <th style="min-width: 80px">M. TTC</th>
             {{--                            <th><i class="fa fa-trash"></i></th>--}}
         </tr>
         </thead>

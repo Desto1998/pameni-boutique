@@ -22,11 +22,19 @@
 
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-12 text-center">
-                                <label class="text-center fs-3 font-weight-bold">Statut de la caisse du mois en cours</label>
-{{--                                <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Tooltip on top">--}}
-{{--                                    Tooltip on top--}}
-{{--                                </button>--}}
+                            <div class="col-md-12 d-lg-flex d-md-flex row-cols-sm-6 mb-3">
+                                <div class="col-md-6 col-sm-12">
+                                    <label class="text-center fs-3 font-weight-bold">Statut de la caisse du mois en cours</label>
+                                </div>
+                                <div class="col-md-6 col-sm-12 justify-content-end">
+                                    <form method="post" id="date-form"  class="d-flex">
+                                        <label for="date">Mois <span class="text-danger">*</span></label> &nbsp;&nbsp;&nbsp;&nbsp;
+                                        <input type="month" name="date" max="{{ date('Y-m') }}" title="sélectionez un mois" required id="date" class="form-control w-50">&nbsp;&nbsp;
+                                        <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Cliquer pour afficher les détails de caisse pour le mois sélectioné">
+                                            <i class="fa fa-sign-in"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
 
                             <div class="col-lg-3 col-sm-6">
@@ -53,7 +61,7 @@
                                             </div>
                                             <div class="stat-content d-inline-block">
                                                 <div class="stat-text">Entrées</div>
-                                                <div class="stat-digit">{{ $entre }}</div>
+                                                <div class="stat-digit" id="entre">{{ $entre }}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -68,7 +76,7 @@
                                             </div>
                                             <div class="stat-content d-inline-block">
                                                 <div class="stat-text">Sorties</div>
-                                                <div class="stat-digit">{{ $sortie }}</div>
+                                                <div class="stat-digit" id="sortie">{{ $sortie }}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -83,7 +91,7 @@
                                             </div>
                                             <div class="stat-content d-inline-block">
                                                 <div class="stat-text">Dépenses</div>
-                                                <div class="stat-digit">{{ count($taches) }}</div>
+                                                <div class="stat-digit" id="tache">{{ count($taches) }}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -269,3 +277,46 @@
     </div>
 
 @stop
+@section('script')
+    <script>
+        $('#date-form').on('submit', function (e){
+            e.preventDefault()
+            $('#date-form .btn-primary').attr("disabled", true).html("En cours...")
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            let data = $('#date-form').serialize();
+
+            $.ajax({
+                type: "POST",
+                url: "{{ route('load.dep') }}",
+                data: data,
+                dataType: 'json',
+                success: function (res) {
+                    console.log(res);
+                    if (res) {
+                        $('#date-form .btn-primary').attr("disabled", false).html("<i class='fa fa-sign-in'></i>")
+
+                        $('#entre').html(res.entre);
+                        $('#sortie').html(res.sortie);
+                        $('#tache').html(res.tache);
+                        // $('#tache').html(res.mois);
+                        toastr.success("Depenses chargées avec succès!");
+                    }else {
+                        $('#date-form .btn-primary').attr("disabled", false).html("<i class='fa fa-sign-in'></i>")
+
+                    }
+                },
+                error: function (resp) {
+                    console(resp);
+                    sweetAlert("Désolé!", "Une erreur s'est produite. Veillez actualiser la page.", "error");
+                    $('#date-form .btn-primary').attr("disabled", false).html("<i class='fa fa-sign-in'></i>")
+                }
+            });
+
+            return false;
+        });
+    </script>
+@endsection
