@@ -193,7 +193,7 @@
                                                             <li class="col-md-5">{{ $value->objet }}</li>
                                                             <li class="col-md-2">{{ $value->reference_devis }}</li>
                                                             <li class="col-md-2">{{ $value->date_devis }}</li>
-                                                            <li class="col-md-3">{{ $value->lastname }}  {{ $value->lastname }}</li>
+                                                            <li class="col-md-3">{{ $value->lastname }}  {{ $value->firstname }}</li>
                                                         </ul>
                                                     </a>
                                                 @endforeach
@@ -208,7 +208,7 @@
                                                             <li class="col-md-5">{{ $value->objet }}</li>
                                                             <li class="col-md-2">{{ $value->reference_fact }}</li>
                                                             <li class="col-md-2">{{ $value->date_fact }}</li>
-                                                            <li class="col-md-3">{{ $value->lastname }}  {{ $value->lastname }}</li>
+                                                            <li class="col-md-3">{{ $value->lastname }}  {{ $value->fisrtname }}</li>
                                                         </ul>
                                                     </a>
                                                 @endforeach
