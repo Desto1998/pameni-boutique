@@ -46,6 +46,7 @@ create table clients
     type_client     varchar(50) null,
     iduser          int null,
     iddevise        int null,
+    idpoint         int not null,
     created_at      TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
     updated_at      DATETIME     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -74,6 +75,7 @@ create table fournisseurs
     type_fr        varchar(50) null,
     iduser         int         not null,
     iddevise       int null,
+    idpoint         int not null,
     created_at     TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
     updated_at     DATETIME     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -90,6 +92,7 @@ create table categories
     description_cat varchar(1000) null,
     actualNum       int       default 0,
     iduser          int,
+    idpoint         int not null,
     created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at      DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -110,6 +113,7 @@ create table produits
     prix_produit        float         not null,
     idcategorie         int null,
     iduser              int           not null,
+    idpoint         int not null,
     created_at          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at          DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -124,6 +128,7 @@ create table charges
     type_charge int,
     alerte      int,
     iduser      int,
+    idpoint         int not null,
     created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at  DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -143,6 +148,7 @@ create table taches
     idcharge   int   not null,
     iduser     int   not null,
     statut     int       default 1,
+    idpoint         int not null,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -166,6 +172,7 @@ create table devis
     date_paie            date null,
     echeance             date null,
     iduser               int         not null,
+    idpoint         int not null,
     created_at           TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at           DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -187,6 +194,7 @@ create table factures
     condition_financiere varchar(1000) null,
     iduser               int         not null,
     iddevis              int null,
+    idpoint         int not null,
     created_at           TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at           DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -237,6 +245,7 @@ create table paiements
     iddevis       int null,
     idfacture     int null,
     iduser        int          not null,
+    idpoint         int not null,
     created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at    DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -277,6 +286,7 @@ create table commandes
     note               varchar(1000) null,
     lieu_liv           varchar(1000) null,
     iduser             int           not null,
+    idpoint         int not null,
     created_at         TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at         DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -377,6 +387,7 @@ create table caisses
     idpaiement     int null,
     type_operation int   not null,
     iduser         int   not null,
+    idpoint         int not null,
     created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at     DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -391,6 +402,7 @@ create table entrees
     date_entre        date,
     statut_entre      int       default 1,
     iduser            int          not null,
+    idpoint         int not null,
     created_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at        DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -407,6 +419,7 @@ create table avoirs
     tva_statut      int       default 0,
     idfacture       int           not null,
     iduser          int           not null,
+    idpoint         int not null,
     created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at      DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -439,6 +452,7 @@ create table bon_livraisons
     delai_liv       varchar(1000) null,
     lieu_liv        varchar(1000) null,
     iduser          int         not null,
+    idpoint         int not null,
     created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at      DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -478,6 +492,7 @@ create table log_factures
     log_iduser               int  not null,
     log_idfacture            int null,
     iduser                   int  not null,
+    idpoint         int not null,
     created_at               TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at               DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -519,6 +534,7 @@ create table proformats
     date_paie            date null,
     echeance             date null,
     iduser               int         not null,
+    idpoint         int not null,
     created_at           TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at           DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -538,6 +554,7 @@ create table facture_divers
     condition_financiere varchar(1000) null,
     iduser               int         not null,
     idproformat               int         default null,
+    idpoint         int not null,
     created_at           TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at           DATETIME  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -613,3 +630,23 @@ ALTER TABLE `avoirs`
 
 ALTER TABLE `bon_livraisons`
     ADD COLUMN `type_bon` INT DEFAULT 0 AFTER `iduser`;
+
+-- Table point de vente
+
+drop table if exists points;
+create table points
+(
+    point_id int primary key AUTO_INCREMENT,
+    nom_point    varchar(255) null,
+    email_point       varchar(255) null,
+    phone_1_point     varchar(20) not null,
+    phone_2_point     varchar(20) null,
+    ville_point       varchar(255) null,
+    adresse_point     varchar(255) null,
+    logo_point        varchar(255) null,
+    date_ajout_point  date        not null,
+    postale        varchar(50) null,
+    iduser         int         not null,
+    created_at     TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
+    updated_at     DATETIME     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;

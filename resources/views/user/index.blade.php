@@ -1,36 +1,22 @@
-@extends('layouts.app')
+@extends('_layouts.app')
 @section('title','| UTILISATEURS')
 @section('css_before')
-    <link href="{{asset('template/vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">
-    <link href="{{asset('template/vendor/sweetalert2/dist/sweetalert2.min.css')}}" rel="stylesheet">
+
 
 @stop
 @section('content')
-    <div class="container-fluid">
-        <div class="row page-titles mx-0">
-            <div class="col-sm-6 p-md-0">
-                <div class="welcome-text">
-                    <h4>Liste des utilisateurs</h4>
-                    {{--                    <p class="mb-0">Your business dashboard template</p>--}}
-                </div>
-            </div>
-            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="javascript:void(0)">Dashboard</a></li>
-                    <li class="breadcrumb-item active"><a href="javascript:void(0)">Users</a></li>
-                </ol>
-            </div>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-md-12">
-                <div class="card px-3">
+    <div class="content-wrapper">
+        <div class="row">
+            <div class="col-lg-12 grid-margin">
+                <div class="card">
                     <div class="card-body">
+                        <h4>Liste des utilisateurs</h4>
                         <a href="{{ route('user.add') }}" title="Ajouter un utilisateur"
                            class="btn btn-primary mb-3 float-right">
                             <i class="fa fa-plus"></i>&nbsp;&nbsp;Nouveau
                         </a>
                         <div class="table-responsive">
-                            <table id="example" class="display text-center" style="min-width: 845px">
+                            <table id="example" class="display text-center expandable-table" style="min-width: 845px">
                                 <thead class="bg-primary">
                                 <tr>
                                     <th>#</th>
@@ -102,69 +88,22 @@
 
                                                 @endif
                                             @endif
-                                            <a href="javascript:void(0)" data-toggle="modal"
-                                               data-target="#menusModal{{ $value->id }}"
-                                               class="btn btn-outline-warning btn-sm mx-1" title="Definir les accès au menu"><i
-                                                    class="fa fa-universal-access"></i></a>
+
                                         </td>
                                     </tr>
-                                    <!-- Modal add categorie -->
-                                    <div class="modal fade" data-backdrop="static" data-keyboard="false"
-                                         id="menusModal{{ $value->id }}">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title">Definition des accès menu pour: {{ $value->email }}</h5>
-                                                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form action="{{ route('set.user.menu') }}" method="post" id="menu-form">
-                                                        @csrf
-                                                        <input type="hidden" value="{{ $value->id }}" name="userid">
-                                                        @foreach($menus as $m)
-                                                            @php
-                                                              $checked = '';
-                                                              foreach ($usermenu as $um){
-                                                                  if ($um->userid==$value->id && $um->idmenu==$m->menu_id) {
-                                                                     $checked = 'checked';
-                                                                  }
-                                                              }
 
-                                                            @endphp
-                                                            <div class="form-group">
-                                                                <label title="{{ $m->description }}">
-                                                                    <input type="checkbox" class="checkbox" {{ $checked }} name="idmenu[]" value="{{ $m->menu_id }}">
-                                                                    &nbsp; &nbsp; {{ $m->label }}
-                                                                </label>
-                                                            </div>
-                                                        @endforeach
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary"
-                                                                    data-dismiss="modal">Annuler
-                                                            </button>
-                                                            <button type="submit" class="btn btn-primary">Enregistrer
-                                                            </button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
 
                                 @endforeach
                                 </tbody>
 
                             </table>
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
+
 
 @endsection
 @section('script')
@@ -216,8 +155,5 @@
         }
     </script>
     <!-- Datatable -->
-    <script src="{{asset('template/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
-    <script src="{{asset('template/js/plugins-init/datatables.init.js')}}"></script>
-    <script src="{{asset('template/vendor/sweetalert2/dist/sweetalert2.min.js')}}"></script>
 
 @endsection

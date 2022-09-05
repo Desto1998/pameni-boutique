@@ -21,7 +21,7 @@ class LicenceCheck
     {
         $deploy_date = '2022-04-10';
         $date = new DateTime($deploy_date);
-        $nbjour = 90;
+        $nbjour = 365;
         $date->add(new DateInterval("P{$nbjour}D"));
         $date = date("Y-m-d", strtotime($date->format('Y-m-d')));
         if ($date<=date('Y-m-d')) {

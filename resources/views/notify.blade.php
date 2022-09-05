@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('_layouts.app')
 @section('title','| NOTIFICATIONS')
 @section('css_before')
     <link href="{{asset('template/vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">

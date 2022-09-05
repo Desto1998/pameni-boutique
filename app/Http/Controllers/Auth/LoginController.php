@@ -49,18 +49,7 @@ class LoginController extends Controller
         {
             $user = auth()->user();
             $data = [];
-            $iduser = Auth::user()->id;
-            $menu = User_menus::join('menus','menus.menu_id','user_menus.idmenu')
-                ->where('user_menus.userid',$iduser)
-                ->select('menus.code')
-                ->get()
-            ;
-            foreach ($menu as $key=>$item){
-                $data[$key] = $item->code;
-            }
-            session()->regenerate();
-            session(['USERMENU' => $data]);
-            session(['NOTIFY' => (new NotificationController())->makeNotification()]);
+
             return back();
 //            dd($user);
 

@@ -25,6 +25,8 @@ class CreateUsersTable extends Migration
             $table->string('phone')->default('');
             $table->integer('is_active')->default(0);
             $table->integer('is_admin')->default(0);
+            $table->integer('is_s_admin')->default(0);
+            $table->integer('idpoint')->default(0);
             $table->foreignId('idrole');
 //            $table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();

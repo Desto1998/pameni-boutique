@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('_layouts.app')
 @section('title','| UTILISATEUR-EDIT')
 @section('css_before')
 

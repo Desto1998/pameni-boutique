@@ -1,69 +1,87 @@
-@extends('layouts.guest')
+@extends('_layouts.guest')
 
 @section('content')
-
-    <div class="authincation h-100 mt-5">
-        <div class="container-fluid h-100">
-            <div class="row justify-content-center h-100 align-items-center">
-                <div class="col-md-4">
-                    <div class="authincation-content">
-                        <div class="row no-gutters">
-                            <div class="col-xl-12">
-                                <div class="auth-form">
-{{--                                    <h4 class="text-center mb-4"></h4>--}}
-                                    @include('_partial._flash-message')
-                                    <form method="POST" action="{{ route('login') }}">
-                                        <div class="form-group">
-                                            @csrf
-                                            <label><strong>Email</strong></label>
-                                            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" placeholder="example@gmail.com" required autocomplete="email" autofocus>
-
-                                            @error('email')
-                                            <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                            @enderror
-                                        </div>
-                                        <div class="form-group">
-                                            <label><strong>Mot de passe</strong></label>
-                                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="Mot de passe">
-
-                                            @error('password')
-                                            <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                            @enderror
-                                        </div>
-                                        <div class="form-row d-flex justify-content-between mt-4 mb-2">
-                                            <div class="form-group">
-                                                <div class="form-check ml-2">
-{{--                                                    <input class="form-check-input" type="checkbox" id="basic_checkbox_1">--}}
-                                                    <input class="form-check-input" type="checkbox" name="remember" id="basic_checkbox_1" {{ old('remember') ? 'checked' : '' }}>
-                                                    <label class="form-check-label" for="basic_checkbox_1">Se souvenir de moi</label>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @if (Route::has('password.request'))
-                                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                                        {{ __('Mot de passe oublié?') }}
-                                                    </a>
-                                                @endif
-{{--                                                <a href="page-forgot-password.html">Forgot Password?</a>--}}
-                                            </div>
-                                        </div>
-                                        <div class="text-center">
-                                            <button type="submit" class="btn btn-primary btn-block">Se connecter</button>
-                                        </div>
-                                    </form>
-
-                                </div>
+    <div class="container-scroller">
+        <div class="container-fluid page-body-wrapper full-page-wrapper">
+            <div class="content-wrapper d-flex align-items-center auth px-0">
+                <div class="row w-100 mx-0">
+                    <div class="col-lg-4 col-md-6 col-sm-12 mx-auto">
+                        <div class="auth-form-light text-left py-3 px-4 px-sm-5">
+                            <div class="brand-logo">
+                                <img src="{{ asset('images/logo.svg') }}" alt="logo">
                             </div>
+{{--                            <h4>Connexion</h4>--}}
+                            <h6 class="font-weight-light">Connectez vous pour continuer.</h6>
+                            @include('_partial._flash-message')
+                            <form method="POST" action="{{ route('login') }}" class="pt-3">
+                                <div class="form-group">
+                                    @csrf
+                                    <label class="label"><strong>Email</strong></label>
+                                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" placeholder="example@gmail.com" required autocomplete="email" autofocus>
+
+                                    @error('email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                                <div class="form-group">
+                                    <label class="label"><strong>Mot de passe</strong></label>
+                                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="Mot de passe">
+
+                                    @error('password')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                                <div class="my-2 d-flex justify-content-between align-items-center">
+                                    <div class="form-check">
+                                        <label class="form-check-label text-muted">
+                                            <input type="checkbox" class="form-check-input" name="remember" {{ old('remember') ? 'checked' : '' }}>
+                                            Se souvenir de moi
+                                        </label>
+                                    </div>
+                                    @if (Route::has('password.request'))
+                                        <a class="auth-link text-black" href="{{ route('password.request') }}">
+                                            {{ __('Mot de passe oublié?') }}
+                                        </a>
+                                    @endif
+                                </div>
+                                <div class="text-center mt-3 mb-3">
+                                    <button type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">Se connecter</button>
+                                </div>
+                                @if (Route::has('password.request'))
+                                    <a class="auth-link text-black text-center mt-2" href="{{ route('site.home') }}">
+                                        {{ __('Revenir à la boutique?') }}
+                                    </a>
+                                @endif
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+{{--    <div class="authincation h-100 mt-5">--}}
+{{--        <div class="container-fluid h-100">--}}
+{{--            <div class="row justify-content-center h-100 align-items-center">--}}
+{{--                <div class="col-md-4">--}}
+{{--                    <div class="authincation-content">--}}
+{{--                        <div class="row no-gutters">--}}
+{{--                            <div class="col-xl-12">--}}
+{{--                                <div class="auth-form">--}}
+{{--                                    <h4 class="text-center mb-4"></h4>--}}
+{{--                                   --}}
+
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </div>--}}
 
 {{--<div class="container">--}}
 {{--    <div class="row justify-content-center">--}}

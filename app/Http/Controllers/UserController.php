@@ -16,9 +16,8 @@ class UserController extends Controller
     protected function index()
     {
         $users = User::all();
-        $menus = Menus::all();
-        $usermenu = User_menus::all();
-        return view('user.index', compact('users','menus','usermenu'));
+
+        return view('user.index', compact('users'));
     }
 
 

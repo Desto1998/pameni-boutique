@@ -17,7 +17,8 @@
         "laravel/ui": "^3.4",
         "mailjet/mailjet-apiv3-php": "^1.5",
         "php-http/curl-client": "^2.2",
-        "yajra/laravel-datatables-oracle": "^9.19"
+        "yajra/laravel-datatables-oracle": "^9.19",
+      "ext-mbstring": "*"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
